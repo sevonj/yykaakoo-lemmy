@@ -2,7 +2,7 @@
 import type { FeedLayoutType } from '@/views/FrontpageView.vue';
 import { ref } from 'vue';
 
-const feedLayout = ref<FeedLayoutType>("Grid");
+const feedLayout = ref<FeedLayoutType>("List");
 
 const emit = defineEmits({
     layoutChanged(payload: { feedLayout: FeedLayoutType }) { true }

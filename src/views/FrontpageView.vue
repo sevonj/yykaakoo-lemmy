@@ -13,7 +13,7 @@ const posts = ref<PostView[]>([]);
 let feed_cursor: PaginationCursor | undefined = undefined;
 const sortType = ref<SortType>("Active");
 
-const feedLayout = ref<FeedLayoutType>("Grid");
+const feedLayout = ref<FeedLayoutType>("List");
 
 //let openedPost: number | null = null;
 //const postRefs = useTemplateRef('posts');
