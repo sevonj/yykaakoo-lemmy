@@ -1,26 +1,87 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import SiteNav from './components/SiteNav.vue';
+import { LemmyHttp } from 'lemmy-js-client';
+import { getCurrentInstance } from 'vue';
+import SiteAside from './components/SiteAside.vue';
+import SiteHead from './components/SiteHead.vue';
+
+const instance = getCurrentInstance();
+const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
+
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
+  <div class="wrapper">
+
+    <div class="left-aside">
+      <Suspense>
+        <SiteAside />
+      </Suspense>
+    </div>
+
+    <div class="main">
+
+
+      <Suspense>
+        <SiteHead />
+      </Suspense>
+
+      <SiteNav />
+
+      <RouterView />
+
+      <div style="flex-grow: 1;"></div>
+      <!--main>
+      <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
       <nav>
         <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <RouterLink to="/about">Profile</RouterLink>
       </nav>
+      <HelloWorld msg="You did it!" />
+    </main-->
     </div>
-  </header>
 
-  <RouterView />
+    <div class="right-aside"></div>
+
+
+  </div>
 </template>
 
-<style scoped>
+<style>
+.wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: 4px;
+}
+
+.main {
+  background: #000;
+  flex-grow: 1;
+  max-width: 1280px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.left-aside {
+  width: 256px;
+  top: 32px;
+  flex-shrink: 0;
+}
+
+.right-aside {
+  margin-left: 32px;
+  top: 32px;
+  width: 256px;
+}
+</style>
+
+<!--style scoped>
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -82,4 +143,4 @@ nav a:first-of-type {
     margin-top: 1rem;
   }
 }
-</style>
+</style-->

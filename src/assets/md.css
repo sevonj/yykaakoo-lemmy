@@ -1,0 +1,15 @@
+.md * {
+    max-width: 100%;
+    font-size: .98em;
+}
+
+.md img {
+    max-height: 500px;
+}
+
+.md a {
+
+    font-family: monospace;
+}
+
+.md ol {}
