@@ -46,12 +46,12 @@ function closeComments() {
 </script>
 
 <template>
-    <article>
+    <article :style="is_open ? 'grid-column: 1/-1;' : ''">
         <div class="article-horizontal">
 
             <VoteBlock />
 
-            <SpeechBubble>
+            <SpeechBubble :style="is_open ? 'min-height: 500px;' : ''">
 
                 <template v-slot:top>
                     <p>!{{ postView.community.name }}@{{ postView.community.instance_id }}</p>
@@ -67,19 +67,19 @@ function closeComments() {
                     </div>
                     <div v-if="postView.post.body">
                         <div v-if="!is_open" style="max-height: 200px; overflow: hidden;">
-                            <VueMarkdown class="post-body" :source="postView.post.body" />
+                            <VueMarkdown class="post-body md" :source="postView.post.body" />
                         </div>
-                        <VueMarkdown v-else class="post-body" :source="postView.post.body" />
+                        <VueMarkdown v-else class="post-body md" :source="postView.post.body" />
                     </div>
+
+                <a style="margin-left: 28px; text-align: end;" v-if="!is_open" @click="openComments">Open</a>
+                <a style="margin-left: 28px; text-align: end;" v-else @click="closeComments">Close</a>
                 </template>
 
                 <template v-slot:bottom>
                     <div style="flex-grow: 1;"></div>
                     <p>Score: {{ postView.counts.upvotes }}/{{ postView.counts.downvotes }}</p>
                     <p>Comments: {{ postView.counts.comments }}</p>
-
-                    <a v-if="!is_open" @click="openComments">Open</a>
-                    <a v-else @click="closeComments">Close</a>
                 </template>
 
             </SpeechBubble>
@@ -111,6 +111,7 @@ function closeComments() {
 </style>
 <style scoped>
 article {
+    overflow: hidden;
     min-height: 200px;
     display: flex;
     flex-direction: column;
@@ -123,7 +124,10 @@ article {
     gap: 3px;
 }
 
-.post-body {}
+.post-body {
+    max-width: 100%;
+    overflow: hidden;
+}
 
 .post-title {
     font-size: 1.4em;

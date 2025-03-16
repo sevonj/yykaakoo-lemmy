@@ -12,20 +12,23 @@ const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
 const posts = ref<PostView[]>([]);
 let feed_cursor: PaginationCursor | undefined = undefined;
 const sortType = ref<SortType>("Active");
-let openedPost: number | null = null;
-const postRefs = useTemplateRef('posts');
 
-function closePost() {
-  if (!openedPost || !postRefs.value) {
-    return
-  }
-  postRefs.value.find(comp => comp?.postView.post.id == openedPost)?.closeComments();
-}
+const feedLayout = ref<FeedLayoutType>("Grid");
 
-function onPostOpen(post_id: number) {
-  closePost()
-  openedPost = post_id;
-}
+//let openedPost: number | null = null;
+//const postRefs = useTemplateRef('posts');
+
+//function closePost() {
+//  if (!openedPost || !postRefs.value) {
+//    return
+//  }
+//  postRefs.value.find(comp => comp?.postView.post.id == openedPost)?.closeComments();
+//}
+
+//function onPostOpen(post_id: number) {
+//  closePost()
+//  openedPost = post_id;
+//}
 
 async function extendFeed() {
   const getPostsForm: GetPosts = {
@@ -46,28 +49,32 @@ async function resetFeed() {
   extendFeed();
 }
 
-function set_sort(payload: { sortType: SortType }) {
+function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType;
   resetFeed();
+}
+
+function setLayout(payload: { feedLayout: FeedLayoutType }) {
+  feedLayout.value = payload.feedLayout;
 }
 
 extendFeed();
 
 </script>
 
-<template>
-  <FeedSortBar @changed="set_sort" />
-  <main>
-    <FeedActionsElevator />
-    <a @click="closePost">closePost</a>
+<script lang="ts">
+export type FeedLayoutType = "Grid" | "List";
+</script>
 
-    <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" ref="posts"
-      @opened="onPostOpen" />
+<template>
+  <FeedSortBar @changed="setSort" />
+  <FeedActionsElevator @layout-changed="setLayout" />
+  <main :style="feedLayout == 'Grid' ? 'grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);' : ''">
+
+    <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" />
+    <a class="more-posts-link" @click="extendFeed">Get more posts</a>
 
   </main>
-
-  <a @click="extendFeed">Get more posts</a>
-
 
 </template>
 
@@ -75,7 +82,6 @@ extendFeed();
 <style scoped>
 main {
   display: grid;
-  no-grid-template-columns: auto auto auto;
   gap: 1em;
 }
 
@@ -84,5 +90,10 @@ main {
   aspect-ratio: 4 / 3;
   aspect-ratio: 1;
   aspect-ratio: 6 / 1;
+}
+
+.more-posts-link {
+  text-align: center;
+  aspect-ratio: 1;
 }
 </style>

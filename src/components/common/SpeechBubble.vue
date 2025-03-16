@@ -57,7 +57,6 @@
 .speechbub-bottom {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
 }
 
 .speechbub-bottom>* {
