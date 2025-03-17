@@ -1,3 +1,5 @@
+[![GH Pages Deployment](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml)
+___
 # yykaakoo-lemmy
 
 This template should help get you started developing with Vue 3 in Vite.
