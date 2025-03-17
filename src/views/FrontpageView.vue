@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import FeedActionsElevator from '@/components/FeedActionsElevator.vue';
+import FeedSelector from '@/components/FeedSelector.vue';
 import FeedSortBar from '@/components/FeedSortBar.vue';
 import PostTile from '@/components/PostTile.vue';
 import { LemmyHttp, type GetPosts, type PaginationCursor, type PostView, type SortType } from "lemmy-js-client";
@@ -9,6 +9,7 @@ import { getCurrentInstance, onMounted, ref, toRef, useTemplateRef } from 'vue';
 
 const sortType = ref<SortType>("Active");
 const feedLayout = ref<FeedLayoutType>("Grid");
+const feedLocation = ref<FeedLocation>("Local");
 
 function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType;
@@ -19,13 +20,33 @@ function setLayout(payload: { feedLayout: FeedLayoutType }) {
   feedLayout.value = payload.feedLayout;
 }
 
+function setFeedLocation(payload: { feedLocation: FeedLocation }) {
+  feedLocation.value = payload.feedLocation;
+  resetFeed();
+}
+
 const instance = getCurrentInstance();
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
 
 const posts = ref<PostView[]>([]);
-let feed_cursor: PaginationCursor | undefined = undefined;
+let feedCursor: PaginationCursor | undefined = undefined;
 
 let isFetchingMorePosts = false
+
+function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
+  switch (feedLocation.value) {
+    case "All":
+      getPostsForm.type_ = "All"
+      break;
+    case "Local":
+      getPostsForm.type_ = "Local"
+      break;
+    case "Subscribed":
+      getPostsForm.type_ = "Subscribed"
+      break;
+  }
+  return getPostsForm;
+}
 
 async function loadMorePosts() {
   if (isFetchingMorePosts) {
@@ -33,21 +54,26 @@ async function loadMorePosts() {
   }
   isFetchingMorePosts = true;
 
-  const getPostsForm: GetPosts = {
+  let getPostsForm = mapFeedLocation({
     sort: sortType.value,
-    type_: "Local",
-    page_cursor: feed_cursor,
-  };
+  });
+
+  if (feedCursor) {
+    getPostsForm.page_cursor = feedCursor;
+  }
+
+  console.log(getPostsForm);
+
 
   let response = await client.getPosts(getPostsForm);
   posts.value = posts.value.concat(response.posts);
-  feed_cursor = response.next_page;
+  feedCursor = response.next_page;
   isFetchingMorePosts = false;
 }
 
 async function resetFeed() {
   posts.value = [];
-  feed_cursor = undefined;
+  feedCursor = undefined;
   loadMorePosts();
 }
 
@@ -76,9 +102,11 @@ loadMorePosts();
 
 <script lang="ts">
 export type FeedLayoutType = "Grid" | "List";
+export type FeedLocation = "All" | "Local" | "Subscribed";
 </script>
 
 <template>
+  <FeedSelector :feed-location="toRef(feedLocation)" @changed="setFeedLocation" />
   <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
   <!--FeedActionsElevator :feed-layout="toRef(feedLayout)" @layout-changed="setLayout" /-->
   <main :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
