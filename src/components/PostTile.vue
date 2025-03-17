@@ -35,10 +35,7 @@ function closeComments() {
 
 <template>
     <article :style="is_open ? 'grid-column: 1/-1;' : ''">
-        <!--div class="article-horizontal">
-
-            <VoteBlock /-->
-
+       
         <SpeechBubble @click="openComments" :class="!is_open ? 'post-bubble' : ''">
 
             <template v-slot:top>
@@ -50,6 +47,7 @@ function closeComments() {
 
                 <div :class="is_open ? 'full-image' : 'thumbnail'">
                     <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url">
+                    <VueMarkdown v-else-if="!is_open" class="post-body md" :source="postView.post.body" />
                 </div>
 
                 <h1 class="post-title">{{ postView.post.name }}</h1>
