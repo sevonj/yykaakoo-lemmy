@@ -16,11 +16,13 @@ defineProps<{
 </template>
 
 <style>
+
 .avatar {
     width: 32px;
     aspect-ratio: 1;
     background: orangered;
     overflow: hidden;
+    border: 1px solid #444;
 }
 
 .avatar-placeholder {

@@ -4,11 +4,11 @@ import { type PostView } from "lemmy-js-client";
 import Badge from "./common/Badge.vue";
 import SpeechBubble from "./common/SpeechBubble.vue";
 import UserMeta from './common/UserMeta.vue'
-import { ref, type Ref } from "vue";
+import { nextTick, ref, type Ref } from "vue";
 import VueMarkdown from "vue-markdown-render";
 import CommentsThread from './CommentsThread.vue'
 import { XMarkIcon, ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/vue/24/solid";
-import { nextTick } from "process";
+//import { nextTick } from "process";
 
 const props = defineProps<{
     postView: PostView,
@@ -32,27 +32,20 @@ async function openComments() {
     emit('opened', props.postView.post.id);
     is_open.value = true;
 
-    let pos = htmlPostArticle.value?.offsetTop;
-    if (!pos) {
-        return
-    }
-    window.scrollTo({
-        top: pos + 400,
-        behavior: "smooth"
-    });
+    nextTick(scrollToSelf);
 }
 
 function closeComments() {
     is_open.value = false;
 
-    let pos = htmlPostArticle.value?.offsetTop;
-    if (!pos) {
-        return
-    }
-    window.scrollTo({
-        top: pos - 400,
-        behavior: "smooth"
-    });
+    nextTick(scrollToSelf);
+}
+
+function scrollToSelf() {
+    htmlPostArticle.value?.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    })
 }
 
 </script>

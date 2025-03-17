@@ -27,6 +27,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    margin-top: 4px;
 }
 
 .speechbub-top {
@@ -47,7 +48,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    border-color: #fff4;
     border-color: #444;
     border-width: 0 1px 1px 1px;
     border-style: solid;
@@ -65,7 +65,7 @@
 }
 
 .speechbub-below-spike {
-    margin: 0 8px 0 16px;
+    margin: 0 0 0 16px;
     border-bottom: 24px solid black;
     border-left: 24px solid transparent;
     background: #444;

@@ -3,10 +3,9 @@ import type { LemmyHttp, GetComments, CommentView } from 'lemmy-js-client';
 import { ref, getCurrentInstance, type Ref } from 'vue';
 import VueMarkdown from 'vue-markdown-render';
 import SpeechBubble from './common/SpeechBubble.vue';
-import VoteBlock from "./common/VoteBlock.vue";
 import UserMeta from './common/UserMeta.vue'
 import Badge from './common/Badge.vue';
-import { ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/vue/24/solid";
+import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/vue/24/solid";
 
 const instance = getCurrentInstance();
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
@@ -51,7 +50,6 @@ async function getReplies() {
             <VueMarkdown :source="commentView.comment.content" class="md" />
         </template>
         <template v-slot:below>
-            <div style="flex-grow: 1;"></div>
 
             <div class="flex-row" style="">
                 <ArrowUpIcon class="meta-icon" />
@@ -62,14 +60,11 @@ async function getReplies() {
                 <ArrowDownIcon class="meta-icon" />
                 <p>{{ commentView.counts.downvotes }}</p>
             </div>
-
-            <div class="flex-row" style="">
-                <ChatBubbleLeftIcon class="meta-icon" />
-                <p>{{ commentView.counts.child_count }}</p>
-            </div>
+            
+            <div style="flex-grow: 1;"></div>
 
             <a v-if="commentView.counts.child_count > 0 && replies.length == 0" @click="getReplies">
-                show
+                Fetch replies ({{ commentView.counts.child_count }})
             </a>
         </template>
     </SpeechBubble>
