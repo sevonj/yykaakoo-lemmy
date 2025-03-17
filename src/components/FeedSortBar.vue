@@ -3,38 +3,41 @@
 import type { SortType } from 'lemmy-js-client';
 import { ref, type Ref } from 'vue'
 
-const sortType = ref<SortType>("Hot");
 
-const emit = defineEmits({
-    changed(payload: { sortType: SortType }) { true }
+defineProps<{
+    sortType: Ref<SortType, SortType>,
+}>()
+
+defineEmits({
+    changed(_payload: { sortType: SortType }) { true }
 });
 
 </script>
 
 <template>
-    <form id="feedsortbar" @change="$emit('changed', { sortType })">
+    <form id="feedsortbar" @change="$emit('changed', { sortType: sortType.value })">
 
         <p class="title">SORT</p>
 
-        <input type="radio" id="active" value="Active" v-model="sortType" />
+        <input type="radio" id="active" value="Active" v-model="sortType.value" />
         <label for="active">Active discussion</label>
 
-        <input type="radio" id="hot" value="Hot" v-model="sortType" />
+        <input type="radio" id="hot" value="Hot" v-model="sortType.value" />
         <label for="hot">Hot</label>
 
-        <input type="radio" id="new" value="New" v-model="sortType" />
+        <input type="radio" id="new" value="New" v-model="sortType.value" />
         <label for="new">New</label>
 
-        <input type="radio" id="scaled" value="Scaled" v-model="sortType" />
+        <input type="radio" id="scaled" value="Scaled" v-model="sortType.value" />
         <label for="scaled">Scaled</label>
 
-        <input type="radio" id="new-comments" value="NewComments" v-model="sortType" />
+        <input type="radio" id="new-comments" value="NewComments" v-model="sortType.value" />
         <label for="new-comments">New comments</label>
 
-        <input type="radio" id="top" value="TopDay" v-model="sortType" />
+        <input type="radio" id="top" value="TopDay" v-model="sortType.value" />
         <label for="top">Top day</label>
 
-        <input type="radio" id="controversial" value="Controversial" v-model="sortType" />
+        <input type="radio" id="controversial" value="Controversial" v-model="sortType.value" />
         <label for="controversial">Controversial</label>
 
     </form>

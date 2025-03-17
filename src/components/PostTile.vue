@@ -8,6 +8,7 @@ import { ref, type Ref } from "vue";
 import VueMarkdown from "vue-markdown-render";
 import CommentsThread from './CommentsThread.vue'
 import { XMarkIcon, ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon } from "@heroicons/vue/24/solid";
+import { nextTick } from "process";
 
 const props = defineProps<{
     postView: PostView,
@@ -19,25 +20,46 @@ const emit = defineEmits({
 
 defineExpose({ closeComments })
 
+const htmlPostArticle = ref<HTMLElement | null>(null)
+
 let is_open: Ref<boolean, boolean> = ref(false);
 
 async function openComments() {
+    if (is_open.value) {
+        return;
+    }
     console.log("getting comments");
     emit('opened', props.postView.post.id);
     is_open.value = true;
+
+    let pos = htmlPostArticle.value?.offsetTop;
+    if (!pos) {
+        return
+    }
+    window.scrollTo({
+        top: pos + 400,
+        behavior: "smooth"
+    });
 }
 
 function closeComments() {
     is_open.value = false;
+
+    let pos = htmlPostArticle.value?.offsetTop;
+    if (!pos) {
+        return
+    }
+    window.scrollTo({
+        top: pos - 400,
+        behavior: "smooth"
+    });
 }
 
 </script>
 
 <template>
-    <article :style="is_open ? 'grid-column: 1/-1;' : ''">
-       
+    <article :style="is_open ? 'grid-column: 1/-1;' : ''" ref="htmlPostArticle">
         <SpeechBubble @click="openComments" :class="!is_open ? 'post-bubble' : ''">
-
             <template v-slot:top>
                 <p>!{{ postView.community.name }}@{{ postView.community.instance_id }}</p>
                 <p>{{ postView.counts.published }}</p>
@@ -47,7 +69,8 @@ function closeComments() {
 
                 <div :class="is_open ? 'full-image' : 'thumbnail'">
                     <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url">
-                    <VueMarkdown v-else-if="!is_open" class="post-body md" :source="postView.post.body" />
+                    <VueMarkdown v-else-if="!is_open && postView.post.body" class="post-body md"
+                        :source="postView.post.body" />
                 </div>
 
                 <h1 class="post-title">{{ postView.post.name }}</h1>
@@ -176,6 +199,7 @@ article {
 .full-image {
     background: black;
     width: 100%;
+    max-height: 60vh;
     aspect-ratio: 3 / 2;
     display: flex;
     justify-content: center;

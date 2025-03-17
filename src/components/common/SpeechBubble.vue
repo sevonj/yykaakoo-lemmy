@@ -34,7 +34,7 @@
     display: flex;
     flex-direction: column;
     padding: 0 4px;
-    border: 1px solid #fff4;
+    border: 1px solid #444;
     border-bottom: 0;
     border-radius: 8px 8px 0 0;
 }
@@ -48,6 +48,7 @@
     flex-direction: column;
     justify-content: space-between;
     border-color: #fff4;
+    border-color: #444;
     border-width: 0 1px 1px 1px;
     border-style: solid;
     border-radius: 0 0 8px 8px;
@@ -67,7 +68,7 @@
     margin: 0 8px 0 16px;
     border-bottom: 24px solid black;
     border-left: 24px solid transparent;
-    background: #fff4;
+    background: #444;
 }
 
 .speechbub-below-spike-inner {

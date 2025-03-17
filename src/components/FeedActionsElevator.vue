@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { FeedLayoutType } from '@/views/FrontpageView.vue';
-import { ref } from 'vue';
+import { type Ref } from 'vue';
 
-const feedLayout = ref<FeedLayoutType>("Grid");
+defineProps<{
+    feedLayout: Ref<FeedLayoutType, FeedLayoutType>,
+}>()
 
-const emit = defineEmits({
+defineEmits({
     layoutChanged(payload: { feedLayout: FeedLayoutType }) { true }
 });
 
@@ -14,15 +16,11 @@ const emit = defineEmits({
     <div class="post-actions-elev-cont">
         <div class="post-actions-elev-subcont">
             <div class="post-actions-elev">
-                <!--a> thread top</a>
-                <a> close thread</a-->
-
-
-                <form id="feedsortbar" @change="$emit('layoutChanged', { feedLayout })">
-                    <input type="radio" id="Grid" value="Grid" v-model="feedLayout" />
+                <form id="feedsortbar" @change="$emit('layoutChanged', { feedLayout: feedLayout.value })">
+                    <input type="radio" id="Grid" value="Grid" v-model="feedLayout.value" />
                     <label for="Grid">View Grid</label>
 
-                    <input type="radio" id="List" value="Hot" v-model="feedLayout" />
+                    <input type="radio" id="List" value="Hot" v-model="feedLayout.value" />
                     <label for="List">View List</label>
                 </form>
             </div>
@@ -57,7 +55,6 @@ const emit = defineEmits({
 </style>
 
 <style scoped>
-
 form {
     display: flex;
     flex-direction: column;

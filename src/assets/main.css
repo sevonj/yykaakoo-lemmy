@@ -13,7 +13,7 @@ body {
   background: #000;
   display: flex;
   justify-content: flex-start;
-
+  min-height: 150vh;
   margin: 0 auto;
 }
 

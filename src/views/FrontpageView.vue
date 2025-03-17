@@ -4,15 +4,14 @@ import FeedActionsElevator from '@/components/FeedActionsElevator.vue';
 import FeedSortBar from '@/components/FeedSortBar.vue';
 import PostTile from '@/components/PostTile.vue';
 import { LemmyHttp, type GetPosts, type PaginationCursor, type PostView, type SortType } from "lemmy-js-client";
-import { getCurrentInstance, ref, useTemplateRef } from 'vue';
+import { getCurrentInstance, ref, toRef, useTemplateRef } from 'vue';
 
 const instance = getCurrentInstance();
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
 
 const posts = ref<PostView[]>([]);
 let feed_cursor: PaginationCursor | undefined = undefined;
-const sortType = ref<SortType>("Hot");
-
+const sortType = ref<SortType>("Active");
 const feedLayout = ref<FeedLayoutType>("Grid");
 
 //let openedPost: number | null = null;
@@ -33,7 +32,7 @@ const feedLayout = ref<FeedLayoutType>("Grid");
 async function extendFeed() {
   const getPostsForm: GetPosts = {
     sort: sortType.value,
-    type_: "All",
+    type_: "Local",
     page_cursor: feed_cursor,
   };
 
@@ -67,14 +66,16 @@ export type FeedLayoutType = "Grid" | "List";
 </script>
 
 <template>
-  <FeedSortBar @changed="setSort" />
-  <FeedActionsElevator @layout-changed="setLayout" />
-  <main :style="feedLayout == 'Grid' ? 'grid-template-columns: minmax(280px, 1fr) minmax(280px, 1fr) minmax(280px, 1fr);' : ''">
+  <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+  <FeedActionsElevator :feed-layout="toRef(feedLayout)" @layout-changed="setLayout" />
+  <main :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
 
-    <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" />
+    <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id"/>
     <a class="more-posts-link" @click="extendFeed">Get more posts</a>
 
   </main>
+
+  <div style="min-height: 100vh;"></div>
 
 </template>
 
@@ -82,7 +83,18 @@ export type FeedLayoutType = "Grid" | "List";
 <style scoped>
 main {
   display: grid;
-  gap: 1em;
+  gap: .5rem;
+  max-width: 1500px;
+  max-width: 100vw;
+  margin: auto;
+}
+
+.feed-list {
+  grid-template-columns: auto;
+}
+
+.feed-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .post-card {
