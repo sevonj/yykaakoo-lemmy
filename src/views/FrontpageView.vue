@@ -80,7 +80,7 @@ export type FeedLayoutType = "Grid" | "List";
 
 <template>
   <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
-  <FeedActionsElevator :feed-layout="toRef(feedLayout)" @layout-changed="setLayout" />
+  <!--FeedActionsElevator :feed-layout="toRef(feedLayout)" @layout-changed="setLayout" /-->
   <main :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
 
     <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id" />
