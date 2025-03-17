@@ -11,9 +11,9 @@ const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
 
 const posts = ref<PostView[]>([]);
 let feed_cursor: PaginationCursor | undefined = undefined;
-const sortType = ref<SortType>("Active");
+const sortType = ref<SortType>("Hot");
 
-const feedLayout = ref<FeedLayoutType>("List");
+const feedLayout = ref<FeedLayoutType>("Grid");
 
 //let openedPost: number | null = null;
 //const postRefs = useTemplateRef('posts');

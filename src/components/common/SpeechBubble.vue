@@ -7,17 +7,16 @@
 
     <div class="speechbub">
         <div class="speechbub-top meta">
-            <div style="overflow: hidden;">
                 <slot name="top"></slot>
-            </div>
-            <div class="speechbub-top-end"></div>
         </div>
         <div class="speechbub-mid">
             <slot name="content"></slot>
         </div>
-        <div class="speechbub-bottom meta">
-            <div class="speechbub-bottom-spike"></div>
-            <slot name="bottom"></slot>
+        <div class="speechbub-below meta">
+            <div class="speechbub-below-spike">
+                <div class="speechbub-below-spike-inner"></div>
+            </div>
+            <slot name="below"></slot>
         </div>
     </div>
 
@@ -31,45 +30,51 @@
 }
 
 .speechbub-top {
-    background: #47443b;
+    background: #232323;
     display: flex;
-    justify-content: space-between;
-}
-
-.speechbub-top-end {
-    width: 24px;
-    height: 24px;
-    border-top: 24px solid black;
-    border-left: 24px solid transparent;
+    flex-direction: column;
+    padding: 0 4px;
+    border: 1px solid #fff4;
+    border-bottom: 0;
+    border-radius: 8px 8px 0 0;
 }
 
 .speechbub-mid {
-    padding-left: 4px;
     flex-grow: 1;
     gap: 8px;
     color: beige;
-    background: #5f5c55;
+    background: #232323;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    border-color: #fff4;
+    border-width: 0 1px 1px 1px;
+    border-style: solid;
+    border-radius: 0 0 8px 8px;
 }
 
-.speechbub-bottom {
+.speechbub-below {
     display: flex;
     justify-content: space-between;
+    max-height: 24px;
 }
 
-.speechbub-bottom>* {
+.speechbub-below>* {
     margin-right: 32px;
 }
 
-.speechbub-bottom-spike {
-    width: 32px;
-    height: 32px;
-    margin-right: 8px;
+.speechbub-below-spike {
+    margin: 0 8px 0 16px;
+    border-bottom: 24px solid black;
+    border-left: 24px solid transparent;
+    background: #fff4;
+}
 
-    border-bottom: 32px solid black;
-    border-left: 32px solid transparent;
-    background: #5f5c55;
+.speechbub-below-spike-inner {
+    position: relative;
+    left: -23px;
+    top: -2px;
+    border-bottom: 24px solid transparent;
+    border-left: 24px solid #232323;
 }
 </style>

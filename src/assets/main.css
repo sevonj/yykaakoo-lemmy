@@ -39,11 +39,18 @@ main {
   flex: 1;
 }
 
-.meta {
-  font-family: monospace;
+.no-shrink {
+  flex-shrink: 0;
 }
 
-a,
+.meta {
+}
+
+.meta-icon {
+  padding: 3px 0;
+  flex-shrink: 0;
+}
+
 .green {
   text-decoration: none;
   color: hsla(160, 100%, 37%, 1);

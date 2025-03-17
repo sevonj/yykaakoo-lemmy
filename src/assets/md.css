@@ -1,6 +1,7 @@
 .md * {
     max-width: 100%;
     font-size: .98em;
+    padding: 4px;
 }
 
 .md img {

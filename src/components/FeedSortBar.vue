@@ -3,7 +3,7 @@
 import type { SortType } from 'lemmy-js-client';
 import { ref, type Ref } from 'vue'
 
-const sortType = ref<SortType>("Active");
+const sortType = ref<SortType>("Hot");
 
 const emit = defineEmits({
     changed(payload: { sortType: SortType }) { true }
