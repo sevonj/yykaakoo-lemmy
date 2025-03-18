@@ -1,8 +1,4 @@
-<script setup lang="ts"></script>
-
-<script lang="ts">
-export type FeedLayoutType = 'Grid' | 'List'
-export type FeedLocation = 'All' | 'Local' | 'Subscribed'
+<script setup lang="ts">
 </script>
 
 <template>

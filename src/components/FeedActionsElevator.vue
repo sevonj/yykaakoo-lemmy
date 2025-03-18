@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeedLayoutType } from '@/views/FrontpageView.vue'
+import type { FeedLayoutType } from './FeedComponent.vue';
 import { type Ref } from 'vue'
 
 defineProps<{
@@ -64,11 +64,11 @@ input {
   display: none;
 }
 
-input:checked + label {
+input:checked+label {
   font-weight: 900;
 }
 
-input + label {
+input+label {
   padding-left: 12px;
   color: gray;
   font-size: 1.5em;
