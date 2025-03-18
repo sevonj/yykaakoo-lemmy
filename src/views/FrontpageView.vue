@@ -54,7 +54,7 @@ async function loadMorePosts() {
   }
   isFetchingMorePosts = true;
 
-  let getPostsForm = mapFeedLocation({
+  const getPostsForm = mapFeedLocation({
     sort: sortType.value,
   });
 
@@ -65,7 +65,7 @@ async function loadMorePosts() {
   console.log(getPostsForm);
 
 
-  let response = await client.getPosts(getPostsForm);
+  const response = await client.getPosts(getPostsForm);
   posts.value = posts.value.concat(response.posts);
   feedCursor = response.next_page;
   isFetchingMorePosts = false;

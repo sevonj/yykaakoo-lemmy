@@ -37,11 +37,10 @@ async function getReplies() {
 
 <template>
 
-
-
     <SpeechBubble>
-        <template v-slot:top>
+        <template v-slot:above>
             <p> >> {{ commentView.comment.path }}</p>
+            <p> {{ commentView.comment.published }}</p>
             <Badge v-if="commentView.comment.deleted" text="deleted" />
             <Badge v-if="commentView.comment.removed" text="removed" />
             <Badge v-if="commentView.comment.distinguished" text="distinguished" />
@@ -60,7 +59,7 @@ async function getReplies() {
                 <ArrowDownIcon class="meta-icon" />
                 <p>{{ commentView.counts.downvotes }}</p>
             </div>
-            
+
             <div style="flex-grow: 1;"></div>
 
             <a v-if="commentView.counts.child_count > 0 && replies.length == 0" @click="getReplies">
@@ -69,9 +68,8 @@ async function getReplies() {
         </template>
     </SpeechBubble>
 
-
     <UserMeta :person="commentView.creator">
-        <template v-slot="badges">
+        <template v-slot:badges>
             <Badge v-if="commentView.creator_is_moderator" text="mod" />
             <Badge v-if="commentView.creator_is_admin" text="admin" />
             <Badge v-if="commentView.creator_banned_from_community" text="banned" />

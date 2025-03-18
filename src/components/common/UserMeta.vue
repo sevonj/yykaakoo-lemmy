@@ -1,19 +1,43 @@
 <script setup lang="ts">
-import type { Person } from 'lemmy-js-client';
+import type { Community, Person } from 'lemmy-js-client';
 import UserAvatar from '../UserAvatar.vue'
+import UserLink from './UserLink.vue';
+import CommunityLink from './CommunityLink.vue';
 
 defineProps<{
-    person: Person;
-}>()
+  person: Person,
+  community?: Community,
+}>();
 
 </script>
 
 <template>
-    <div class="meta" style="display: flex; flex-direction: row; gap: 1em; align-items: center;">
-        <UserAvatar :person />
-        <p>@{{ person.name }}@{{ person.instance_id }}</p>
-
-        <slot name="badges"></slot>
-
+  <div class="meta user-meta-cont">
+    <UserAvatar :person />
+    <div class="user-meta-links">
+      <UserLink :person />
+      <span v-if="community">to
+        <CommunityLink :community />
+      </span>
     </div>
+  </div>
 </template>
+
+
+<style>
+.user-meta-cont {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+}
+
+.user-meta-links {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap-mode: nowrap;
+  line-height: 15px;
+}
+</style>

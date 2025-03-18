@@ -15,7 +15,7 @@
 nav {
     display: flex;
     align-items: center;
-    gap: 1em;
+    gap: 8px;
     font-size: larger;
     flex-grow: 0;
 }

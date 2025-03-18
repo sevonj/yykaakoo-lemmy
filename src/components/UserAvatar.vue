@@ -20,6 +20,7 @@ defineProps<{
 .avatar {
     width: 32px;
     aspect-ratio: 1;
+    min-width: 32px;
     background: orangered;
     overflow: hidden;
     border: 1px solid #444;
