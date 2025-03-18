@@ -1,59 +1,21 @@
 <script setup lang="ts">
-import SiteNav from './components/SiteNav.vue';
-import { LemmyHttp } from 'lemmy-js-client';
-import { getCurrentInstance } from 'vue';
-import SiteAside from './components/SiteAside.vue';
-import SiteHead from './components/SiteHead.vue';
-
-const instance = getCurrentInstance();
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
-
-
+import SiteNav from './components/SiteNav.vue'
+import SiteHead from './components/SiteHead.vue'
 </script>
 
 <template>
-
   <Suspense>
     <SiteHead />
   </Suspense>
 
-  <SiteNav />
+  <Suspense>
+    <SiteNav />
+  </Suspense>
 
-  <RouterView />
-
-
+  <Suspense>
+    <RouterView />
+  </Suspense>
 </template>
-
-<style>
-.wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  gap: 4px;
-}
-
-.main {
-  background: #000;
-  flex-grow: 1;
-  max-width: 1280px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.left-aside {
-  width: 256px;
-  top: 32px;
-  flex-shrink: 0;
-}
-
-.right-aside {
-  margin-left: 32px;
-  top: 32px;
-  width: 256px;
-}
-</style>
 
 <!--style scoped>
 header {

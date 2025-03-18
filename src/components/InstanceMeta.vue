@@ -1,70 +1,88 @@
 <script setup lang="ts">
-import type { GetSiteResponse } from 'lemmy-js-client';
-import UserAvatar from './UserAvatar.vue';
-import Badge from './common/Badge.vue';
-import StatBadge from './common/StatBadge.vue';
+import type { GetSiteResponse } from 'lemmy-js-client'
+import UserAvatar from './UserAvatar.vue'
+import Badge from './common/Badge.vue'
+import StatBadge from './common/StatBadge.vue'
 
 const props = defineProps<{
-    site: GetSiteResponse
+  site: GetSiteResponse
 }>()
-
 </script>
 <template>
+  <div style="display: flex; gap: 3px; flex-wrap: wrap">
+    <StatBadge class="flex-1" title="software" :text="'lemmy_' + site.version" />
+    <StatBadge
+      class="flex-1"
+      title="communities"
+      :text="site.site_view.counts.communities.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="mau"
+      :text="site.site_view.counts.users_active_month.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="nsfw"
+      :text="site.site_view.local_site.enable_nsfw.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="downvotes"
+      :text="site.site_view.local_site.enable_downvotes.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="federated"
+      :text="site.site_view.local_site.federation_enabled.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="private"
+      :text="site.site_view.local_site.private_instance.toString()"
+    />
+    <StatBadge class="flex-1" title="est." :text="site.site_view.local_site.published" />
+  </div>
 
-    <div style="display: flex; gap: 3px; flex-wrap: wrap;">
-        <StatBadge class="flex-1" title="software" :text="'lemmy_' + site.version" />
-        <StatBadge class="flex-1" title="communities" :text="site.site_view.counts.communities.toString()" />
-        <StatBadge class="flex-1" title="mau" :text="site.site_view.counts.users_active_month.toString()" />
-        <StatBadge class="flex-1" title="nsfw" :text="site.site_view.local_site.enable_nsfw.toString()" />
-        <StatBadge class="flex-1" title="downvotes" :text="site.site_view.local_site.enable_downvotes.toString()" />
-        <StatBadge class="flex-1" title="federated" :text="site.site_view.local_site.federation_enabled.toString()" />
-        <StatBadge class="flex-1" title="private" :text="site.site_view.local_site.private_instance.toString()" />
-        <StatBadge class="flex-1" title="est." :text="site.site_view.local_site.published" />
+  <div class="flex-row">
+    <div class="v-text">
+      <h3>Admins</h3>
     </div>
-
-    <div class="flex-row">
-        <div class="v-text">
-            <h3>Admins</h3>
-        </div>
-        <ul class="flex-1">
-            <li v-for="admin in site.admins">
-                <UserAvatar :person="admin.person" />
-                <p class="meta">@{{ admin.person.name }}</p>
-            </li>
-        </ul>
-    </div>
-
-
-
+    <ul class="flex-1">
+      <li v-for="admin in site.admins">
+        <UserAvatar :person="admin.person" />
+        <p class="meta">@{{ admin.person.name }}</p>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <style>
 .v-text {
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
 }
 </style>
 
 <style scoped>
 ul {
-    padding: 0;
-    list-style-type: none;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    background: black;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  background: black;
 }
 
 li {
-    display: flex;
-    gap: .5em;
-    background: darkslategray;
-    transition: .2s;
+  display: flex;
+  gap: 0.5em;
+  background: darkslategray;
+  transition: 0.2s;
 }
 
 li:hover {
-    outline: 3px solid black;
-    transform: translate(1em, 0);
-
+  outline: 3px solid black;
+  transform: translate(1em, 0);
 }
 </style>

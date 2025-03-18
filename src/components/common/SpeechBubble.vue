@@ -42,7 +42,7 @@
   max-height: 24px;
 }
 
-.speechbub-below>* {
+.speechbub-below > * {
   margin-right: 32px;
 }
 

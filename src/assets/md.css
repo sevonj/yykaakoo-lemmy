@@ -1,16 +1,16 @@
 .md * {
-    max-width: 100%;
-    font-size: .98em;
-    padding: 4px;
+  max-width: 100%;
+  font-size: 0.98em;
+  padding: 4px;
 }
 
 .md img {
-    max-height: 500px;
+  max-height: 500px;
 }
 
 .md a {
-
-    font-family: monospace;
+  font-family: monospace;
 }
 
-.md ol {}
+.md ol {
+}

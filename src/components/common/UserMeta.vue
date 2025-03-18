@@ -1,14 +1,13 @@
 <script setup lang="ts">
-import type { Community, Person } from 'lemmy-js-client';
+import type { Community, Person } from 'lemmy-js-client'
 import UserAvatar from '../UserAvatar.vue'
-import UserLink from './UserLink.vue';
-import CommunityLink from './CommunityLink.vue';
+import UserLink from '../links/UserLink.vue'
+import CommunityLink from '../links/CommunityLink.vue'
 
 defineProps<{
-  person: Person,
-  community?: Community,
-}>();
-
+  person: Person
+  community?: Community
+}>()
 </script>
 
 <template>
@@ -22,7 +21,6 @@ defineProps<{
     </div>
   </div>
 </template>
-
 
 <style>
 .user-meta-cont {

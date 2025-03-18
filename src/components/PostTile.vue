@@ -1,81 +1,89 @@
 <script setup lang="ts">
-
-import { type PostView } from "lemmy-js-client";
-import Badge from "./common/Badge.vue";
-import SpeechBubble from "./common/SpeechBubble.vue";
+import { type PostView } from 'lemmy-js-client'
+import Badge from './common/Badge.vue'
+import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
-import { nextTick, ref, type Ref } from "vue";
-import VueMarkdown from "vue-markdown-render";
+import { nextTick, ref, type Ref } from 'vue'
+import VueMarkdown from 'vue-markdown-render'
 import CommentsThread from './CommentsThread.vue'
-import { XMarkIcon, ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon, LinkIcon } from "@heroicons/vue/24/solid";
-import { useRoute } from 'vue-router';
-import ExternalLink from "./common/ExternalLink.vue";
+import {
+  XMarkIcon,
+  ChatBubbleLeftIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  LinkIcon,
+} from '@heroicons/vue/24/solid'
+import { useRoute } from 'vue-router'
+import ExternalLink from './common/ExternalLink.vue'
 
-const baseUrl = import.meta.env.BASE_URL;
+const baseUrl = import.meta.env.BASE_URL
 
-const route = useRoute();
+const route = useRoute()
 
 const props = defineProps<{
-  postView: PostView,
+  postView: PostView
 }>()
 
 const emit = defineEmits({
-  opened(_post_id: number) { return true; }
+  opened(_post_id: number) {
+    return true
+  },
 })
 
 defineExpose({ closeComments })
 
 const htmlPostArticle = ref<HTMLElement | null>(null)
 
-const is_open: Ref<boolean, boolean> = ref(false);
+const is_open: Ref<boolean, boolean> = ref(false)
 
 async function openComments(): Promise<void> {
   if (is_open.value) {
-    return;
+    return
   }
-  console.log("getting comments");
-  emit('opened', props.postView.post.id);
-  is_open.value = true;
+  console.log('getting comments')
+  emit('opened', props.postView.post.id)
+  is_open.value = true
 
-  nextTick(scrollToSelf);
+  nextTick(scrollToSelf)
 }
 
 function closeComments(): void {
-  is_open.value = false;
+  is_open.value = false
 
-  nextTick(scrollToSelf);
+  nextTick(scrollToSelf)
 }
 
 function scrollToSelf(): void {
   htmlPostArticle.value?.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    behavior: 'smooth',
+    block: 'start',
   })
 }
-
 </script>
 
 <template>
   <article :class="is_open ? 'post-expanded' : ''" ref="htmlPostArticle">
     <SpeechBubble @click="openComments" :class="!is_open ? 'post-bubble' : ''">
-
       <template v-slot:above>
         <p class="meta">{{ postView.counts.published }}</p>
       </template>
 
       <template v-slot:content>
-
         <div v-if="!is_open" class="post-preview">
-          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url">
-          <VueMarkdown v-else-if="postView.post.body" class="post-body md" :source="postView.post.body" />
+          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
+          <VueMarkdown
+            v-else-if="postView.post.body"
+            class="post-body md"
+            :source="postView.post.body"
+          />
         </div>
 
         <div v-else-if="postView.post.thumbnail_url" class="full-image">
-          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url">
+          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
         </div>
 
-        <h1 class="post-title" style="text-overflow: ellipsis; overflow: hidden;">
-          <LinkIcon v-if="postView.post.url" style="max-height: .8em;" />
+        <h1 class="post-title" style="text-overflow: ellipsis; overflow: hidden">
+          <LinkIcon v-if="postView.post.url" style="max-height: 0.8em" />
           {{ postView.post.name }}
         </h1>
 
@@ -89,7 +97,7 @@ function scrollToSelf(): void {
       </template>
 
       <template v-slot:below>
-        <div style="flex-grow: 1;"></div>
+        <div style="flex-grow: 1"></div>
 
         <div class="flex-row" style="">
           <ArrowUpIcon class="meta-icon" />
@@ -106,7 +114,6 @@ function scrollToSelf(): void {
           <p>{{ postView.counts.comments }}</p>
         </div>
       </template>
-
     </SpeechBubble>
 
     <UserMeta :person="postView.creator" :community="postView.community">
@@ -126,8 +133,6 @@ function scrollToSelf(): void {
       <XMarkIcon />
     </div>
     <CommentsThread v-if="is_open" :post_id="postView.post.id" />
-
-
   </article>
 </template>
 <style scoped>
@@ -145,11 +150,11 @@ article {
 
 .post-bubble {
   cursor: pointer;
-  transition: transform .1s;
+  transition: transform 0.1s;
 }
 
 .post-bubble:hover {
-  transform: scale(.995);
+  transform: scale(0.995);
 }
 
 .article-horizontal {
@@ -169,7 +174,7 @@ article {
   height: 3em;
   max-height: 3em;
   overflow: hidden;
-  text-overflow: "...";
+  text-overflow: '...';
 }
 
 .thread-close-div {
@@ -179,7 +184,7 @@ article {
   float: right;
   display: flex;
   justify-content: end;
-  transition: .2s;
+  transition: 0.2s;
 }
 
 .thread-close-div:hover {
@@ -187,7 +192,7 @@ article {
   color: black;
 }
 
-.thread-close-div>* {
+.thread-close-div > * {
   max-height: 24px;
 }
 
@@ -202,7 +207,7 @@ article {
   overflow: hidden;
 }
 
-.post-preview>* {
+.post-preview > * {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -227,7 +232,6 @@ article {
   gap: 4px;
   border-radius: 8px;
   padding: 4px;
-  ;
 }
 
 .post-preview-link * {
@@ -247,7 +251,7 @@ article {
   overflow: hidden;
 }
 
-.full-image>* {
+.full-image > * {
   object-fit: contain;
   width: 100%;
   height: 100%;

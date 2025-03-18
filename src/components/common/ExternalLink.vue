@@ -1,21 +1,16 @@
 <script setup lang="ts">
-
 defineProps<{
   url: string
-}>();
-
+}>()
 </script>
 
 <template>
-
   <a :href="url">
     <div class="ext-link-block">
-      <p> {{ url }} </p>
+      <p>{{ url }}</p>
     </div>
   </a>
-
 </template>
-
 
 <style>
 .ext-link-block {
