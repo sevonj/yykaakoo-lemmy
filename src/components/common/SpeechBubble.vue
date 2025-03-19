@@ -25,16 +25,18 @@
 
 .speechbub-above {
   display: flex;
-  max-height: 16px;
-  align-items: center;
+  max-height: 12px;
+  align-items: end;
   justify-content: end;
+  padding-right: 8px;
 }
 
 .speechbub {
-  background: #232323;
-  border: 1px solid #444;
-  border-radius: 8px;
+  background: #222;
+  border: 1px solid #333;
+  border-radius: 12px;
   overflow: hidden;
+  color: #ddd;
 }
 
 .speechbub-below {
@@ -43,7 +45,7 @@
   max-height: 24px;
 }
 
-.speechbub-below > * {
+.speechbub-below>* {
   margin-right: 32px;
 }
 
@@ -51,7 +53,7 @@
   margin: 0 0 0 16px;
   border-bottom: 24px solid #0c0c0e;
   border-left: 24px solid transparent;
-  background: #444;
+  background: #333;
 }
 
 .speechbub-below-spike-inner {
@@ -59,6 +61,6 @@
   left: -23px;
   top: -2px;
   border-bottom: 24px solid transparent;
-  border-left: 24px solid #232323;
+  border-left: 24px solid #222;
 }
 </style>
