@@ -18,8 +18,9 @@ body {
 }
 
 main {
-  background: #000;
+  background: #0c0c0e;
   padding: 0.5em;
+  outline: 1px solid #1f1f24;
 }
 
 #app {
@@ -66,6 +67,10 @@ a.meta:hover {
 .meta-icon {
   padding: 3px 0;
   flex-shrink: 0;
+}
+
+#app {
+  max-width: 100%;
 }
 
 @media (min-width: 1024px) {

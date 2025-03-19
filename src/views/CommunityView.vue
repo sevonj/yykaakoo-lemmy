@@ -6,27 +6,23 @@ import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const communityIdentifier = route.params.communityIdentifier?.toString()
+const identifier = route.params.identifier?.toString()
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
 
 const getCommunityForm: GetCommunity = {
-  name: communityIdentifier,
+  name: identifier,
 }
 const comm = await client.getCommunity(getCommunityForm)
 </script>
 
 <template>
-  <main>
-    <FeedComponent>
-      <!--:community-identifier="communityIdentifier"-->
-
-      <template v-slot:locationHeader>
-        <CommunityHeader :comm="comm" :identifier="communityIdentifier" />
-      </template>
-    </FeedComponent>
-  </main>
+  <FeedComponent>
+    <template v-slot:locationHeader>
+      <CommunityHeader :comm :identifier />
+    </template>
+  </FeedComponent>
   <div style="min-height: 100vh"></div>
 </template>
 

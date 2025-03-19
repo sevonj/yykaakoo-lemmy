@@ -13,15 +13,14 @@ import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-let communityIdentifier = route.params.communityIdentifier?.toString()
+let identifier = route.params.identifier?.toString()
 let listingType = route.query.listingType?.toString()
 
 function generateFeedLocation(): FeedLocation {
-  if (communityIdentifier) {
-    return { type: 'Community', identifier: communityIdentifier }
+  if (identifier) {
+    return { type: 'Community', identifier }
   }
   if (listingType) {
-    console.log('TyPe', listingType)
     switch (listingType) {
       case 'All':
         return { type: 'All' }
@@ -49,7 +48,7 @@ watch(
 watch(
   () => route.params.communityIdentifier,
   (newValue) => {
-    communityIdentifier = newValue?.toString()
+    identifier = newValue?.toString()
     feedLocation.value = generateFeedLocation()
     resetFeed()
   },
@@ -153,25 +152,30 @@ export type FeedLocation =
 </script>
 
 <template>
-  <FeedNav :location="toRef(feedLocation)" @changed="setFeedLocation" />
-
-  <slot name="locationHeader"></slot>
-
-  <div v-if="feedLocation.type == 'Subscribed'">
-    <p>You are not logged in.</p>
+  <div style="padding: 0px 8px">
+    <FeedNav :location="toRef(feedLocation)" @changed="setFeedLocation" />
+    <slot name="locationHeader"></slot>
   </div>
-  <div v-else>
-    <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
-    <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-      <PostTile
-        v-for="postView in posts"
-        :post-view="postView"
-        :key="postView.post.id"
-        :id="postView.post.id"
-      />
-      <a ref="morePostsDetector" class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+
+  <main>
+    <div v-if="feedLocation.type == 'Subscribed'">
+      <p>You are not logged in.</p>
     </div>
-  </div>
+    <div v-else>
+      <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+      <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
+        <PostTile
+          v-for="postView in posts"
+          :post-view="postView"
+          :key="postView.post.id"
+          :id="postView.post.id"
+          :feed-location="feedLocation"
+        />
+        <a ref="morePostsDetector" class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+      </div>
+    </div>
+    <div style="min-height: 100vh"></div>
+  </main>
 </template>
 
 <style>

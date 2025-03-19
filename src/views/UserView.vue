@@ -1,8 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import UserHeader from '@/components/headers/UserHeader.vue'
+import type { GetPersonDetails, LemmyHttp } from 'lemmy-js-client'
+import { getCurrentInstance } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const identifier = route.params.identifier?.toString()
+
+const instance = getCurrentInstance()
+const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+
+const getPersonForm: GetPersonDetails = {
+  username: identifier,
+}
+console.log('AAAAAÄÄÄÄÖÖÖ', getPersonForm)
+const user = await client.getPersonDetails(getPersonForm)
+</script>
 
 <template>
   <main>
-    <p>User profile page for @{{ $route.params.username }}@{{ $route.params.instance }}</p>
+    <UserHeader :user :identifier />
   </main>
 
   <div style="min-height: 100vh"></div>

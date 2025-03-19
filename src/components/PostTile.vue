@@ -13,19 +13,17 @@ import {
   ArrowDownIcon,
   LinkIcon,
 } from '@heroicons/vue/24/solid'
-import { useRoute } from 'vue-router'
 import ExternalLink from './common/ExternalLink.vue'
-
-const baseUrl = import.meta.env.BASE_URL
-
-const route = useRoute()
+import type { FeedLocation } from './FeedComponent.vue'
 
 const props = defineProps<{
   postView: PostView
+  feedLocation: FeedLocation
 }>()
 
 const emit = defineEmits({
-  opened(_post_id: number) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  opened(post_id: number) {
     return true
   },
 })
@@ -59,6 +57,16 @@ function scrollToSelf(): void {
     block: 'start',
   })
 }
+
+function isExternalLink(): boolean {
+  if (!props.postView.post.url_content_type) {
+    return false
+  }
+  if (props.postView.post.url_content_type.startsWith('image/')) {
+    return false
+  }
+  return true
+}
 </script>
 
 <template>
@@ -83,7 +91,7 @@ function scrollToSelf(): void {
         </div>
 
         <h1 class="post-title" style="text-overflow: ellipsis; overflow: hidden">
-          <LinkIcon v-if="postView.post.url" style="max-height: 0.8em" />
+          <LinkIcon v-if="isExternalLink()" style="max-height: 0.8em" />
           {{ postView.post.name }}
         </h1>
 
@@ -116,16 +124,15 @@ function scrollToSelf(): void {
       </template>
     </SpeechBubble>
 
-    <UserMeta :person="postView.creator" :community="postView.community">
+    <UserMeta
+      :person="postView.creator"
+      :community="feedLocation.type != 'Community' ? postView.community : undefined"
+    >
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />
         <Badge v-if="postView.creator_is_admin" text="admin" />
         <Badge v-if="postView.creator_banned_from_community" text="banned" />
       </template>
-
-      <!--template v-slot:user_community>
-        <a :href=" communityUrl()" class="meta-link">{{ communityIdentifier() }}</a>
-      </template-->
     </UserMeta>
 
     <div @click="closeComments" v-if="is_open" class="thread-close-div">

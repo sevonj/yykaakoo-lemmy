@@ -11,9 +11,9 @@ const router = createRouter({
       component: FeedView,
     },
     {
-      path: '/!:communityIdentifier?',
+      path: '/!:identifier?',
       name: 'community',
-      component: FeedView,
+      component: CommunityView,
     },
     {
       path: '/about',
@@ -24,7 +24,7 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
-      path: '/@:username@:instance',
+      path: '/@:identifier',
       name: 'user',
       component: () => import('../views/UserView.vue'),
     },

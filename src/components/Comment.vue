@@ -21,7 +21,7 @@ const getCommentsForm: GetComments = {
   max_depth: 1,
 }
 
-let replies: Ref<CommentView[], CommentView[]> = ref([])
+const replies: Ref<CommentView[], CommentView[]> = ref([])
 
 async function getReplies() {
   console.log('getting comments')
@@ -38,11 +38,11 @@ async function getReplies() {
     <template v-slot:above>
       <p>>> {{ commentView.comment.path }}</p>
       <p>{{ commentView.comment.published }}</p>
-      <Badge v-if="commentView.comment.deleted" text="deleted" />
-      <Badge v-if="commentView.comment.removed" text="removed" />
-      <Badge v-if="commentView.comment.distinguished" text="distinguished" />
     </template>
     <template v-slot:content>
+      <Badge v-if="commentView.comment.deleted" text="Deleted by author." />
+      <Badge v-if="commentView.comment.removed" text="Removed by a mod or an admin." />
+      <Badge v-if="commentView.comment.distinguished" text="distinguished" />
       <VueMarkdown :source="commentView.comment.content" class="md" />
     </template>
     <template v-slot:below>

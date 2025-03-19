@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import type { GetCommunityResponse } from 'lemmy-js-client'
-import UserMeta from '../common/UserMeta.vue'
-import Badge from '../common/Badge.vue'
+import type { GetPersonDetailsResponse } from 'lemmy-js-client'
 import VueMarkdown from 'vue-markdown-render'
 import { ref } from 'vue'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid'
 
-defineProps<{
-  comm: GetCommunityResponse
+const props = defineProps<{
+  user: GetPersonDetailsResponse
   identifier: string
 }>()
 
@@ -16,61 +14,62 @@ const showDescription = ref(false)
 function toggleDescription(): void {
   showDescription.value = !showDescription.value
 }
+
+function displayName(): string {
+  if (props.user.person_view.person.display_name) {
+    return props.user.person_view.person.display_name
+  }
+  return props.user.person_view.person.name
+}
 </script>
 
 <template>
   <div class="community-header">
     <div class="community-header-titleblock">
       <div class="community-header-icon">
-        <img v-if="comm.community_view.community.icon" :src="comm.community_view.community.icon" />
+        <img v-if="user.person_view.person.avatar" :src="user.person_view.person.avatar" />
       </div>
 
       <div class="community-header-title">
-        <h1>{{ comm.community_view.community.title }}</h1>
+        <h1>{{ displayName() }}</h1>
         <p>!{{ identifier }}</p>
       </div>
     </div>
 
     <div>
-      <h3>Moderators</h3>
-      <div class="community-header-modblock">
-        <UserMeta
-          v-for="mod in comm.moderators"
-          :person="mod.moderator"
-          :key="mod.moderator.actor_id"
-          :avatar-only="true"
-        />
-      </div>
+      <h3>Moderates</h3>
+      <!--div class="community-header-modblock">
+        <UserMeta v-for="mod in user.moderates" :person="mod.moderator" :key="mod.moderator.actor_id"
+          :avatar-only=true />
+      </div-->
     </div>
 
-    <div>
+    <!--div>
       <h3>Languages</h3>
       <div class="community-header-langblock">
-        <p v-if="comm.discussion_languages.length == 0">None</p>
-        <Badge
-          v-for="langId in comm.discussion_languages"
-          :text="langId.toString()"
-          :key="langId"
-        />
+        <p v-if="user.person_view.person.la.length == 0">None</p>
+        <Badge v-for="langId in user.discussion_languages" :text="langId.toString()" :key="langId" />
       </div>
-    </div>
+    </div-->
 
-    <!--div v-if="comm.community_view.community.description" class="community-header-descblock">
-      <a @click="toggleDescription" style="display: flex; align-items: center;">
-        <h3 style="margin-right: 4px;">Description</h3>
+    <div v-if="user.person_view.person.bio" class="community-header-descblock">
+      <a @click="toggleDescription" style="display: flex; align-items: center">
+        <h3 style="margin-right: 4px">Bio</h3>
         <ChevronUpIcon class="expand-icon" v-if="showDescription" />
         <ChevronDownIcon class="expand-icon" v-else />
       </a>
-      <VueMarkdown v-if="showDescription" class="md community-header-desc"
-        :source="comm.community_view.community.description" />
-    </div-->
+      <VueMarkdown
+        v-if="showDescription"
+        class="md community-header-desc"
+        :source="user.person_view.person.bio"
+      />
+    </div>
   </div>
 </template>
 
 <style>
 .community-header {
-  margin-top: -8px;
-  margin-bottom: 16px;
+  margin: 8px 0;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;

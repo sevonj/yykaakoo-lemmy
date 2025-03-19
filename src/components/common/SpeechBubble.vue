@@ -27,6 +27,7 @@
   display: flex;
   max-height: 16px;
   align-items: center;
+  justify-content: end;
 }
 
 .speechbub {
@@ -48,7 +49,7 @@
 
 .speechbub-below-spike {
   margin: 0 0 0 16px;
-  border-bottom: 24px solid black;
+  border-bottom: 24px solid #0c0c0e;
   border-left: 24px solid transparent;
   background: #444;
 }

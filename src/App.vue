@@ -4,9 +4,9 @@ import SiteHead from './components/SiteHead.vue'
 </script>
 
 <template>
-  <Suspense>
+  <!--Suspense>
     <SiteHead />
-  </Suspense>
+  </Suspense-->
 
   <Suspense>
     <SiteNav />

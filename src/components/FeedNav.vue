@@ -2,7 +2,7 @@
 import type { FeedLocation } from './FeedComponent.vue'
 import { type Ref } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   location: Ref<FeedLocation, FeedLocation>
 }>()
 
@@ -12,19 +12,6 @@ defineEmits({
     return true
   },
 })
-
-function locationName(): string {
-  switch (props.location.value.type) {
-    case 'All':
-      return 'All'
-    case 'Local':
-      return 'From this instance'
-    case 'Subscribed':
-      return 'Followed communities'
-    case 'Community':
-      return `!${props.location.value.identifier}`
-  }
-}
 </script>
 
 <template>
@@ -60,25 +47,33 @@ function locationName(): string {
         >Communities</a
       >
     </div>
-    <h1>{{ locationName() }}</h1>
   </div>
 </template>
 
 <style>
 .feed-nav {
+  margin-bottom: 16px;
 }
 
 .feed-nav-link-cont {
   display: flex;
   gap: 8px;
+  align-items: end;
+  flex-wrap: wrap;
 }
 
 .feed-nav-link {
-  font-size: large;
+  font-size: x-large;
+  text-decoration: none;
 }
 
 .feed-nav-link-selected {
   font-weight: bold;
   color: white;
+}
+
+.feed-nav-commid {
+  font-size: large;
+  margin-bottom: 4px;
 }
 </style>
