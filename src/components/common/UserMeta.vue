@@ -15,7 +15,8 @@ defineProps<{
     <UserAvatar :person />
     <div class="user-meta-links">
       <UserLink :person />
-      <span v-if="community">to
+      <span v-if="community"
+        >to
         <CommunityLink :community />
       </span>
     </div>

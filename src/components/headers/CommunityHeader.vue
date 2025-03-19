@@ -1,20 +1,15 @@
 <script setup lang="ts">
-import type { GetCommunityResponse } from 'lemmy-js-client';
-
+import type { GetCommunityResponse } from 'lemmy-js-client'
 
 defineProps<{
-  comm: GetCommunityResponse,
-  identifier?: string,
-}>();
-
-
-
+  comm: GetCommunityResponse
+  identifier?: string
+}>()
 </script>
 
 <template>
   <div class="community-title">
-    <RouterLink to="/"> Back </RouterLink>
-    <h1>{{ identifier }}</h1>
+    <img v-if="comm.community_view.community.icon" :src="comm.community_view.community.icon" />
   </div>
 </template>
 

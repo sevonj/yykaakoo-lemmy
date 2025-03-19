@@ -1,20 +1,37 @@
 <script setup lang="ts">
-
 import { LemmyHttp } from 'lemmy-js-client'
-
 import { getCurrentInstance } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
 
 const site = await client.getSite()
 
+function isRouteBrowse(): boolean {
+  switch (route.name) {
+    case 'frontpage':
+      return true
+    case 'community':
+      return true
+  }
+  return false
+}
 </script>
 
 <template>
   <nav>
-    <RouterLink to="/" class="nav-instance-home">
-      <img v-if="site.site_view.site.icon" class="nav-instance-logo" :src="site.site_view.site.icon">
+    <RouterLink
+      to="/"
+      class="nav-instance-home"
+      :class="isRouteBrowse() ? 'router-link-active' : ''"
+    >
+      <img
+        v-if="site.site_view.site.icon"
+        class="nav-instance-logo"
+        :src="site.site_view.site.icon"
+      />
       <h1>Browse</h1>
     </RouterLink>
     <RouterLink to="/messages">Messages</RouterLink>
@@ -41,7 +58,7 @@ nav {
   gap: 4px;
 }
 
-.nav-instance-home>img {
+.nav-instance-home > img {
   max-height: 100%;
 }
 

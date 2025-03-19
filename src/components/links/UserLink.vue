@@ -10,13 +10,13 @@ function hostname(): string {
 }
 
 function identifier(): string {
-  return `@${props.person.name}@${new URL(props.person.actor_id).hostname}`;
+  return `@${props.person.name}@${new URL(props.person.actor_id).hostname}`
 }
 </script>
 
 <template>
-
-  <RouterLink :to="identifier()" class="meta"><span class="meta-highlight">@{{ props.person.name }}</span>@{{ hostname()
-    }}</RouterLink>
-
+  <RouterLink :to="identifier()" class="meta"
+    ><span class="meta-highlight">@{{ props.person.name }}</span
+    >@{{ hostname() }}</RouterLink
+  >
 </template>

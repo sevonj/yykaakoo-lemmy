@@ -1,19 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import FrontpageView from '../views/FrontpageView.vue'
 import CommunityView from '@/views/CommunityView.vue'
+import FeedView from '../views/FeedView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
+      path: '',
       name: 'frontpage',
-      component: FrontpageView,
+      component: FeedView,
     },
     {
-      path: '/!:communityIdentifier',
+      path: '/!:communityIdentifier?',
       name: 'community',
-      component: CommunityView,
+      component: FeedView,
     },
     {
       path: '/about',

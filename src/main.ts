@@ -9,7 +9,8 @@ import router from './router'
 
 const app = createApp(App)
 
-const instance_url = 'https://sopuli.xyz'
+//const instance_url = 'https://sopuli.xyz'
+const instance_url = 'https://lemmy.world'
 app.config.globalProperties.$instance_url = instance_url
 app.config.globalProperties.$client = new LemmyHttp(instance_url)
 

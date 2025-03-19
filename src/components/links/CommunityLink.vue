@@ -10,14 +10,13 @@ function hostname(): string {
 }
 
 function identifier(): string {
-  return `!${props.community.name}@${new URL(props.community.actor_id).hostname}`;
+  return `!${props.community.name}@${new URL(props.community.actor_id).hostname}`
 }
 </script>
 
 <template>
-
-  <RouterLink :to="identifier()" class="meta"><span class="meta-highlight">!{{ props.community.name }}</span>@{{
-    hostname()
-  }}</RouterLink>
-
+  <RouterLink :to="identifier()" class="meta"
+    ><span class="meta-highlight">!{{ props.community.name }}</span
+    >@{{ hostname() }}</RouterLink
+  >
 </template>

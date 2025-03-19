@@ -1,48 +1,84 @@
 <script setup lang="ts">
-import type { FeedLocation } from './FeedComponent.vue';
+import type { FeedLocation } from './FeedComponent.vue'
 import { type Ref } from 'vue'
 
 const props = defineProps<{
-  feedLocation: Ref<FeedLocation, FeedLocation>
+  location: Ref<FeedLocation, FeedLocation>
 }>()
 
 defineEmits({
-  changed(_payload: { feedLocation: FeedLocation }) {
-    true
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  changed(payload: { feedLocation: FeedLocation }) {
+    return true
   },
 })
 
 function locationName(): string {
-  switch (props.feedLocation.value) {
+  switch (props.location.value.type) {
     case 'All':
       return 'All'
     case 'Local':
-      return 'Local'
+      return 'From this instance'
     case 'Subscribed':
-      return 'Followed'
+      return 'Followed communities'
+    case 'Community':
+      return `!${props.location.value.identifier}`
   }
 }
 </script>
 
 <template>
-  <div id="feed-location-selector">
-    <form @change="$emit('changed', { feedLocation: feedLocation.value })">
-      <input type="radio" id="All" value="All" v-model="feedLocation.value" />
-      <label for="All">All</label>
+  <div class="feed-nav">
+    <div class="feed-nav-link-cont">
+      <RouterLink
+        to="/?listingType=All"
+        class="feed-nav-link"
+        @click="$emit('changed', { feedLocation: { type: 'All' } })"
+        :class="location.value.type == 'All' ? 'feed-nav-link-selected' : ''"
+        >All</RouterLink
+      >
 
-      <input type="radio" id="Local" value="Local" v-model="feedLocation.value" />
-      <label for="Local">At Sopuli</label>
+      <RouterLink
+        to="/?listingType=Local"
+        class="feed-nav-link"
+        @click="$emit('changed', { feedLocation: { type: 'Local' } })"
+        :class="location.value.type == 'Local' ? 'feed-nav-link-selected' : ''"
+        >Local</RouterLink
+      >
 
-      <input type="radio" id="Subscribed" value="Subscribed" v-model="feedLocation.value" />
-      <label for="Subscribed">Followed</label>
-    </form>
+      <RouterLink
+        to="/?listingType=Subscribed"
+        class="feed-nav-link"
+        @click="$emit('changed', { feedLocation: { type: 'Subscribed' } })"
+        :class="location.value.type == 'Subscribed' ? 'feed-nav-link-selected' : ''"
+        >Followed</RouterLink
+      >
+
+      <a
+        class="feed-nav-link"
+        :class="location.value.type == 'Community' ? 'feed-nav-link-selected' : ''"
+        >Communities</a
+      >
+    </div>
     <h1>{{ locationName() }}</h1>
   </div>
 </template>
 
 <style>
-#feed-location-selector {
+.feed-nav {
+}
+
+.feed-nav-link-cont {
   display: flex;
-  flex-direction: column;
+  gap: 8px;
+}
+
+.feed-nav-link {
+  font-size: large;
+}
+
+.feed-nav-link-selected {
+  font-weight: bold;
+  color: white;
 }
 </style>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeedLayoutType } from './FeedComponent.vue';
+import type { FeedLayoutType } from './FeedComponent.vue'
 import { type Ref } from 'vue'
 
 defineProps<{
@@ -7,8 +7,9 @@ defineProps<{
 }>()
 
 defineEmits({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   layoutChanged(payload: { feedLayout: FeedLayoutType }) {
-    true
+    return true
   },
 })
 </script>
@@ -17,11 +18,21 @@ defineEmits({
   <div class="post-actions-elev-cont">
     <div class="post-actions-elev-subcont">
       <div class="post-actions-elev">
-        <form id="feedsortbar" @change="$emit('layoutChanged', { feedLayout: feedLayout.value })">
-          <input type="radio" id="Grid" value="Grid" v-model="feedLayout.value" />
+        <form id="feedsortbar">
+          <input
+            type="radio"
+            id="Grid"
+            value="Grid"
+            @click="$emit('layoutChanged', { feedLayout: 'Grid' })"
+          />
           <label for="Grid">View Grid</label>
 
-          <input type="radio" id="List" value="Hot" v-model="feedLayout.value" />
+          <input
+            type="radio"
+            id="List"
+            value="Hot"
+            @click="$emit('layoutChanged', { feedLayout: 'List' })"
+          />
           <label for="List">View List</label>
         </form>
       </div>
@@ -64,11 +75,11 @@ input {
   display: none;
 }
 
-input:checked+label {
+input:checked + label {
   font-weight: 900;
 }
 
-input+label {
+input + label {
   padding-left: 12px;
   color: gray;
   font-size: 1.5em;

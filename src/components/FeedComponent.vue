@@ -9,12 +9,51 @@ import {
   type PostView,
   type SortType,
 } from 'lemmy-js-client'
-import { getCurrentInstance, onMounted, ref, toRef } from 'vue'
+import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
+let communityIdentifier = route.params.communityIdentifier?.toString()
+let listingType = route.query.listingType?.toString()
+
+function generateFeedLocation(): FeedLocation {
+  if (communityIdentifier) {
+    return { type: 'Community', identifier: communityIdentifier }
+  }
+  if (listingType) {
+    console.log('TyPe', listingType)
+    switch (listingType) {
+      case 'All':
+        return { type: 'All' }
+      case 'Local':
+        return { type: 'Local' }
+      case 'Subscribed':
+        return { type: 'Subscribed' }
+    }
+  }
+  return { type: 'Local' }
+}
 
 const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
-const feedLocation = ref<FeedLocation>('Local')
+const feedLocation = ref<FeedLocation>(generateFeedLocation())
+
+watch(
+  () => route.query.listingType,
+  (newValue) => {
+    listingType = newValue?.toString()
+    feedLocation.value = generateFeedLocation()
+    resetFeed()
+  },
+)
+watch(
+  () => route.params.communityIdentifier,
+  (newValue) => {
+    communityIdentifier = newValue?.toString()
+    feedLocation.value = generateFeedLocation()
+    resetFeed()
+  },
+)
 
 function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType
@@ -25,17 +64,12 @@ function setSort(payload: { sortType: SortType }) {
 //  feedLayout.value = payload.feedLayout;
 //}
 
-function setFeedLocation(payload: { feedLocation: FeedLocation }) {
-  feedLocation.value = payload.feedLocation
-  resetFeed()
+function setFeedLocation(payload: { feedLocation: FeedLocation }): void {
+  //feedLocation.value = payload.feedLocation
+  //resetFeed()
 }
 
-
-const props = defineProps<{
-  communityIdentifier?: string
-}>()
-
-const instance = getCurrentInstance();
+const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
 
 const posts = ref<PostView[]>([])
@@ -44,20 +78,19 @@ let feedCursor: PaginationCursor | undefined = undefined
 let isFetchingMorePosts = false
 
 function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
-  if (props.communityIdentifier) {
-    getPostsForm.community_name = props.communityIdentifier
-  } else {
-    switch (feedLocation.value) {
-      case 'All':
-        getPostsForm.type_ = 'All'
-        break
-      case 'Local':
-        getPostsForm.type_ = 'Local'
-        break
-      case 'Subscribed':
-        getPostsForm.type_ = 'Subscribed'
-        break
-    }
+  switch (feedLocation.value.type) {
+    case 'All':
+      getPostsForm.type_ = 'All'
+      break
+    case 'Local':
+      getPostsForm.type_ = 'Local'
+      break
+    case 'Subscribed':
+      getPostsForm.type_ = 'Subscribed'
+      break
+    case 'Community':
+      getPostsForm.community_name = feedLocation.value.identifier
+      break
   }
   return getPostsForm
 }
@@ -95,7 +128,6 @@ const morePostsDetector = ref<HTMLElement | null>(null)
 const onIntersect = (entries: IntersectionObserverEntry[]) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      console.log('Element is in view!')
       loadMorePosts()
     }
   })
@@ -113,16 +145,32 @@ loadMorePosts()
 
 <script lang="ts">
 export type FeedLayoutType = 'Grid' | 'List'
-export type FeedLocation = 'All' | 'Local' | 'Subscribed'
+export type FeedLocation =
+  | { type: 'All' }
+  | { type: 'Local' }
+  | { type: 'Subscribed' }
+  | { type: 'Community'; identifier: string }
 </script>
 
 <template>
-  <FeedNav v-if="!communityIdentifier" :feed-location="toRef(feedLocation)" @changed="setFeedLocation" />
-  <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+  <FeedNav :location="toRef(feedLocation)" @changed="setFeedLocation" />
 
-  <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-    <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id" />
-    <a ref="morePostsDetector" class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+  <slot name="locationHeader"></slot>
+
+  <div v-if="feedLocation.type == 'Subscribed'">
+    <p>You are not logged in.</p>
+  </div>
+  <div v-else>
+    <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+    <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
+      <PostTile
+        v-for="postView in posts"
+        :post-view="postView"
+        :key="postView.post.id"
+        :id="postView.post.id"
+      />
+      <a ref="morePostsDetector" class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+    </div>
   </div>
 </template>
 
