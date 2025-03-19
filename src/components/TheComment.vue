@@ -73,7 +73,7 @@ async function getReplies() {
   </UserMeta>
 
   <div class="comment-reply-cont">
-    <Comment v-for="reply in replies" :comment-view="reply" :key="reply.comment.id" />
+    <TheComment v-for="reply in replies" :comment-view="reply" :key="reply.comment.id" />
   </div>
 </template>
 
