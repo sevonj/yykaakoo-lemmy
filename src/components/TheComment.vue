@@ -6,6 +6,7 @@ import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
 import Badge from './common/Badge.vue'
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/solid'
+import RelativeTimestamp from './common/RelativeTimestamp.vue'
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
@@ -36,8 +37,7 @@ async function getReplies() {
 <template>
   <SpeechBubble>
     <template v-slot:above>
-      <p>>> {{ commentView.comment.path }}</p>
-      <p>{{ commentView.comment.published }}</p>
+      <RelativeTimestamp :timestamp="commentView.comment.published" />
     </template>
     <template v-slot:content>
       <Badge v-if="commentView.comment.deleted" text="Deleted by author." />

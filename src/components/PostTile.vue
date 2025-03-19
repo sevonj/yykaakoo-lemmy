@@ -14,7 +14,8 @@ import {
   LinkIcon,
 } from '@heroicons/vue/24/solid'
 import ExternalLink from './common/ExternalLink.vue'
-import type { FeedLocation } from './FeedComponent.vue'
+import type { FeedLocation } from './TheFeed.vue'
+import RelativeTimestamp from './common/RelativeTimestamp.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -73,17 +74,13 @@ function isExternalLink(): boolean {
   <article :class="is_open ? 'post-expanded' : ''" ref="htmlPostArticle">
     <SpeechBubble @click="openComments" :class="!is_open ? 'post-bubble' : ''">
       <template v-slot:above>
-        <p class="meta">{{ postView.counts.published }}</p>
+        <RelativeTimestamp :timestamp="postView.counts.published" />
       </template>
 
       <template v-slot:content>
         <div v-if="!is_open" class="post-preview">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
-          <VueMarkdown
-            v-else-if="postView.post.body"
-            class="post-body md"
-            :source="postView.post.body"
-          />
+          <VueMarkdown v-else-if="postView.post.body" class="post-body md" :source="postView.post.body" />
         </div>
 
         <div v-else-if="postView.post.thumbnail_url" class="full-image">
@@ -124,10 +121,7 @@ function isExternalLink(): boolean {
       </template>
     </SpeechBubble>
 
-    <UserMeta
-      :person="postView.creator"
-      :community="feedLocation.type != 'Community' ? postView.community : undefined"
-    >
+    <UserMeta :person="postView.creator" :community="feedLocation.type != 'Community' ? postView.community : undefined">
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />
         <Badge v-if="postView.creator_is_admin" text="admin" />
@@ -199,7 +193,7 @@ article {
   color: black;
 }
 
-.thread-close-div > * {
+.thread-close-div>* {
   max-height: 24px;
 }
 
@@ -214,7 +208,7 @@ article {
   overflow: hidden;
 }
 
-.post-preview > * {
+.post-preview>* {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -258,7 +252,7 @@ article {
   overflow: hidden;
 }
 
-.full-image > * {
+.full-image>* {
   object-fit: contain;
   width: 100%;
   height: 100%;

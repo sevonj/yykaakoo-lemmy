@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeedLayoutType } from './FeedComponent.vue'
+import type { FeedLayoutType } from './TheFeed.vue'
 import { type Ref } from 'vue'
 
 defineProps<{
@@ -19,20 +19,10 @@ defineEmits({
     <div class="post-actions-elev-subcont">
       <div class="post-actions-elev">
         <form id="feedsortbar">
-          <input
-            type="radio"
-            id="Grid"
-            value="Grid"
-            @click="$emit('layoutChanged', { feedLayout: 'Grid' })"
-          />
+          <input type="radio" id="Grid" value="Grid" @click="$emit('layoutChanged', { feedLayout: 'Grid' })" />
           <label for="Grid">View Grid</label>
 
-          <input
-            type="radio"
-            id="List"
-            value="Hot"
-            @click="$emit('layoutChanged', { feedLayout: 'List' })"
-          />
+          <input type="radio" id="List" value="Hot" @click="$emit('layoutChanged', { feedLayout: 'List' })" />
           <label for="List">View List</label>
         </form>
       </div>
@@ -75,11 +65,11 @@ input {
   display: none;
 }
 
-input:checked + label {
+input:checked+label {
   font-weight: 900;
 }
 
-input + label {
+input+label {
   padding-left: 12px;
   color: gray;
   font-size: 1.5em;

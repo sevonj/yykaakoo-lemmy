@@ -63,17 +63,12 @@ function setSort(payload: { sortType: SortType }) {
 //  feedLayout.value = payload.feedLayout;
 //}
 
-function setFeedLocation(payload: { feedLocation: FeedLocation }): void {
-  //feedLocation.value = payload.feedLocation
-  //resetFeed()
-}
+const instance = getCurrentInstance();
+const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
 
-const instance = getCurrentInstance()
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
-
-const posts = ref<PostView[]>([])
-let feedCursor: PaginationCursor | undefined = undefined
-
+const posts = ref<PostView[]>([]);
+let feedCursor: PaginationCursor | undefined = undefined;
+let feedEnded = false;
 let isFetchingMorePosts = false
 
 function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
@@ -95,7 +90,7 @@ function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
 }
 
 async function loadMorePosts() {
-  if (isFetchingMorePosts) {
+  if (isFetchingMorePosts || feedEnded) {
     return
   }
   isFetchingMorePosts = true
@@ -108,12 +103,14 @@ async function loadMorePosts() {
     getPostsForm.page_cursor = feedCursor
   }
 
-  console.log(getPostsForm)
-
   const response = await client.getPosts(getPostsForm)
   posts.value = posts.value.concat(response.posts)
   feedCursor = response.next_page
   isFetchingMorePosts = false
+  console.log("CURSOR: ", response.next_page)
+  if (!response.next_page) {
+    feedEnded = true;
+  }
 }
 
 async function resetFeed() {
@@ -127,15 +124,15 @@ const morePostsDetector = ref<HTMLElement | null>(null)
 const onIntersect = (entries: IntersectionObserverEntry[]) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      loadMorePosts()
+      loadMorePosts();
     }
   })
 }
 
 onMounted(() => {
   if (morePostsDetector.value) {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 })
-    observer.observe(morePostsDetector.value)
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
+    observer.observe(morePostsDetector.value);
   }
 })
 
@@ -143,17 +140,17 @@ loadMorePosts()
 </script>
 
 <script lang="ts">
-export type FeedLayoutType = 'Grid' | 'List'
+export type FeedLayoutType = 'Grid' | 'List';
 export type FeedLocation =
   | { type: 'All' }
   | { type: 'Local' }
   | { type: 'Subscribed' }
-  | { type: 'Community'; identifier: string }
+  | { type: 'Community'; identifier: string };
 </script>
 
 <template>
   <div style="padding: 0px 8px">
-    <FeedNav :location="toRef(feedLocation)" @changed="setFeedLocation" />
+    <FeedNav :location="toRef(feedLocation)" />
     <slot name="locationHeader"></slot>
   </div>
 
@@ -164,14 +161,13 @@ export type FeedLocation =
     <div v-else>
       <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
       <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-        <PostTile
-          v-for="postView in posts"
-          :post-view="postView"
-          :key="postView.post.id"
-          :id="postView.post.id"
-          :feed-location="feedLocation"
-        />
-        <a ref="morePostsDetector" class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+        <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id"
+          :feed-location="feedLocation" />
+        <div ref="morePostsDetector">
+          <p v-if="feedEnded">You have reached the end.</p>
+          <p v-else-if="isFetchingMorePosts">Loading...</p>
+          <a v-else class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+        </div>
       </div>
     </div>
     <div style="min-height: 100vh"></div>

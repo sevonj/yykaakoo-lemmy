@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeedComponent from '@/components/FeedComponent.vue'
+import TheFeed from '@/components/TheFeed.vue'
 import CommunityHeader from '@/components/headers/CommunityHeader.vue'
 import type { GetCommunity, LemmyHttp } from 'lemmy-js-client'
 import { getCurrentInstance } from 'vue'
@@ -18,11 +18,11 @@ const comm = await client.getCommunity(getCommunityForm)
 </script>
 
 <template>
-  <FeedComponent>
+  <TheFeed>
     <template v-slot:locationHeader>
       <CommunityHeader :comm :identifier />
     </template>
-  </FeedComponent>
+  </TheFeed>
   <div style="min-height: 100vh"></div>
 </template>
 
