@@ -1,4 +1,4 @@
-[![GH Pages Deployment](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml)
+[![GH Pages Deployment](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml) [![CI](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml)
 ___
 # yykaakoo-lemmy
 
