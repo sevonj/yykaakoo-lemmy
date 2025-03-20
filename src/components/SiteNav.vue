@@ -22,16 +22,8 @@ function isRouteBrowse(): boolean {
 
 <template>
   <nav>
-    <RouterLink
-      to="/"
-      class="nav-instance-home"
-      :class="isRouteBrowse() ? 'router-link-active' : ''"
-    >
-      <img
-        v-if="site.site_view.site.icon"
-        class="nav-instance-logo"
-        :src="site.site_view.site.icon"
-      />
+    <RouterLink to="/" class="nav-instance-home" :class="isRouteBrowse() ? 'router-link-active' : ''">
+      <img v-if="site.site_view.site.icon" class="nav-instance-logo" :src="site.site_view.site.icon" />
       <p>Browse</p>
     </RouterLink>
     <RouterLink to="/messages">Messages</RouterLink>
@@ -50,6 +42,7 @@ nav {
   flex-grow: 0;
   background: var(--color-background-soft);
   color: var(--color-navlink);
+  overflow: scroll;
 }
 
 nav * {
@@ -64,7 +57,7 @@ nav * {
   gap: 4px;
 }
 
-.nav-instance-home > img {
+.nav-instance-home>img {
   max-height: 100%;
 }
 
