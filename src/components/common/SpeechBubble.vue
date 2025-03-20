@@ -20,7 +20,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
+  margin: 4px 0;
 }
 
 .speechbub-above {
@@ -45,7 +45,7 @@
   max-height: 24px;
 }
 
-.speechbub-below > * {
+.speechbub-below>* {
   margin-right: 32px;
 }
 
