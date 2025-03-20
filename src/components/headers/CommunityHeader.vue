@@ -2,20 +2,11 @@
 import type { GetCommunityResponse } from 'lemmy-js-client'
 import UserMeta from '../common/UserMeta.vue'
 import Badge from '../common/Badge.vue'
-import VueMarkdown from 'vue-markdown-render'
-import { ref } from 'vue'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid'
 
 defineProps<{
   comm: GetCommunityResponse
   identifier: string
 }>()
-
-const showDescription = ref(false)
-
-function toggleDescription(): void {
-  showDescription.value = !showDescription.value
-}
 </script>
 
 <template>
@@ -34,8 +25,12 @@ function toggleDescription(): void {
     <div>
       <h3>Moderators</h3>
       <div class="community-header-modblock">
-        <UserMeta v-for="mod in comm.moderators" :person="mod.moderator" :key="mod.moderator.actor_id"
-          :avatar-only="true" />
+        <UserMeta
+          v-for="mod in comm.moderators"
+          :person="mod.moderator"
+          :key="mod.moderator.actor_id"
+          :avatar-only="true"
+        />
       </div>
     </div>
 
@@ -43,7 +38,11 @@ function toggleDescription(): void {
       <h3>Languages</h3>
       <div class="community-header-langblock">
         <p v-if="comm.discussion_languages.length == 0">None</p>
-        <Badge v-for="langId in comm.discussion_languages" :text="langId.toString()" :key="langId" />
+        <Badge
+          v-for="langId in comm.discussion_languages"
+          :text="langId.toString()"
+          :key="langId"
+        />
       </div>
     </div>
 
@@ -66,7 +65,7 @@ function toggleDescription(): void {
   flex-wrap: wrap;
 }
 
-.community-header>* {
+.community-header > * {
   margin-right: 16px;
 }
 
@@ -101,7 +100,7 @@ function toggleDescription(): void {
   overflow: hidden;
 }
 
-.community-header-icon>* {
+.community-header-icon > * {
   width: 100%;
   height: 100%;
   object-fit: cover;

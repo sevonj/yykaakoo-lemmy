@@ -6,7 +6,7 @@ import CommunityLink from '../links/CommunityLink.vue'
 
 defineProps<{
   person: Person
-  community?: Community
+  comm?: Community
   avatarOnly?: boolean
 }>()
 </script>
@@ -16,9 +16,9 @@ defineProps<{
     <UserAvatar :person />
     <div v-if="!avatarOnly" class="user-meta-links">
       <UserLink :person />
-      <span v-if="community"
+      <span v-if="comm"
         >to
-        <CommunityLink :community />
+        <CommunityLink :comm />
       </span>
     </div>
   </div>

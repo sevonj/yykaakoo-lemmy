@@ -11,12 +11,36 @@ const props = defineProps<{
 <template>
   <div style="display: flex; gap: 3px; flex-wrap: wrap">
     <StatBadge class="flex-1" title="software" :text="'lemmy_' + site.version" />
-    <StatBadge class="flex-1" title="communities" :text="site.site_view.counts.communities.toString()" />
-    <StatBadge class="flex-1" title="mau" :text="site.site_view.counts.users_active_month.toString()" />
-    <StatBadge class="flex-1" title="nsfw" :text="site.site_view.local_site.enable_nsfw.toString()" />
-    <StatBadge class="flex-1" title="downvotes" :text="site.site_view.local_site.enable_downvotes.toString()" />
-    <StatBadge class="flex-1" title="federated" :text="site.site_view.local_site.federation_enabled.toString()" />
-    <StatBadge class="flex-1" title="private" :text="site.site_view.local_site.private_instance.toString()" />
+    <StatBadge
+      class="flex-1"
+      title="communities"
+      :text="site.site_view.counts.communities.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="mau"
+      :text="site.site_view.counts.users_active_month.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="nsfw"
+      :text="site.site_view.local_site.enable_nsfw.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="downvotes"
+      :text="site.site_view.local_site.enable_downvotes.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="federated"
+      :text="site.site_view.local_site.federation_enabled.toString()"
+    />
+    <StatBadge
+      class="flex-1"
+      title="private"
+      :text="site.site_view.local_site.private_instance.toString()"
+    />
     <StatBadge class="flex-1" title="est." :text="site.site_view.local_site.published" />
   </div>
 

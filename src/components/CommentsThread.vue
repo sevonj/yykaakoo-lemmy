@@ -33,7 +33,11 @@ fetchComments()
 
 <template>
   <div class="post-child-cont">
-    <CommentThe v-for="commentView in comments" :comment-view="commentView" :key="commentView.comment.id" />
+    <CommentThe
+      v-for="commentView in comments"
+      :comment-view="commentView"
+      :key="commentView.comment.id"
+    />
   </div>
 </template>
 

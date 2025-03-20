@@ -1,19 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CommunityView from '@/views/CommunityView.vue'
 import FeedView from '../views/FeedView.vue'
+import TempNotLoggedInView from '@/views/TempNotLoggedInView.vue'
+import TodoView from '@/views/TodoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '',
-      name: 'frontpage',
+      name: 'browse_frontpage',
       component: FeedView,
     },
     {
       path: '/!:identifier?',
-      name: 'community',
+      name: 'browse_community',
       component: CommunityView,
+    },
+    {
+      path: '/messages',
+      name: 'messages',
+      component: TempNotLoggedInView,
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: TempNotLoggedInView,
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: TodoView,
     },
     {
       path: '/about',

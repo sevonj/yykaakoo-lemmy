@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { Community } from 'lemmy-js-client'
-import CommunityHandle from '../textformat/CommunityHandle.vue'
 
 const props = defineProps<{
   comm: Community
@@ -9,14 +8,11 @@ const props = defineProps<{
 function hostname(): string {
   return new URL(props.comm.actor_id).hostname
 }
-
-function identifier(): string {
-  return `!${props.comm.name}@${hostname()}`
-}
 </script>
 
 <template>
-  <RouterLink class="meta" :to="identifier()">
-    <CommunityHandle :comm />
-  </RouterLink>
+  <span class="meta"
+    >!<span class="meta-highlight">{{ props.comm.name }}</span
+    >@{{ hostname() }}</span
+  >
 </template>

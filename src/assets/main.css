@@ -24,6 +24,7 @@ main {
 
 a {
   color: #aaa;
+  cursor: pointer;
 }
 
 .flex-row {
@@ -43,17 +44,23 @@ a {
   font-size: small;
 }
 
-a.meta {
+a.meta,
+.meta-link {
   color: var(--color-metalink);
   text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap-mode: nowrap;
+  max-width: 100%;
 }
 
-a.meta:hover {
+a.meta:hover,
+.meta-link:hover {
   color: var(--color-metalink-hover);
 }
 
 .meta-highlight {
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .meta-icon {
@@ -61,10 +68,41 @@ a.meta:hover {
   flex-shrink: 0;
 }
 
+.avatar {
+  overflow: hidden;
+  background: orangered;
+  border: 1px solid #444;
+}
+
+.avatar > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hide {
+  display: none;
+}
+
+.nav-active {
+  color: var(--color-navlink-active);
+}
+
+input + label {
+  color: var(--color-navlink);
+  cursor: pointer;
+}
+
+input:checked + label {
+  font-weight: bold;
+  color: var(--color-navlink-active);
+}
+
 #app {
   max-width: 100%;
 }
 
 @media (min-width: 1024px) {
-  #app {}
+  #app {
+  }
 }
