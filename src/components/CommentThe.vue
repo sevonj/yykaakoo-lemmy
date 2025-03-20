@@ -6,7 +6,7 @@ import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
 import Badge from './common/Badge.vue'
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/solid'
-import RelativeTimestamp from './common/RelativeTimestamp.vue'
+import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
@@ -25,7 +25,6 @@ const getCommentsForm: GetComments = {
 const replies: Ref<CommentView[], CommentView[]> = ref([])
 
 async function getReplies() {
-  console.log('getting comments')
   replies.value = (await client.getComments(getCommentsForm)).comments.filter(
     (comment) => comment.comment.id != props.commentView.comment.id,
   )
@@ -79,7 +78,8 @@ async function getReplies() {
 </template>
 
 <style>
-.comment-cont {}
+.comment-cont {
+}
 
 .comment-reply-cont {
   display: flex;

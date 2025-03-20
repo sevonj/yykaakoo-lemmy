@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeedThe from '@/components/FeedThe.vue';
+import FeedThe from '@/components/FeedThe.vue'
 </script>
 
 <template>

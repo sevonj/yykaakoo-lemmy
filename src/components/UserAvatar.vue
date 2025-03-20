@@ -8,14 +8,14 @@ defineProps<{
 </script>
 
 <template>
-  <div class="avatar">
+  <div class="user-avatar">
     <img v-if="person.avatar" :src="person.avatar" />
-    <UserIcon v-else class="avatar-placeholder" />
+    <UserIcon v-else class="user-avatar-placeholder" />
   </div>
 </template>
 
 <style>
-.avatar {
+.user-avatar {
   width: 32px;
   aspect-ratio: 1;
   min-width: 32px;
@@ -24,7 +24,7 @@ defineProps<{
   border: 1px solid #444;
 }
 
-.avatar-placeholder {
+.user-avatar-placeholder {
   color: #ffffff4f;
   width: 120%;
   position: relative;
@@ -33,7 +33,7 @@ defineProps<{
   object-fit: cover;
 }
 
-.avatar > img {
+.user-avatar > img {
   width: 100%;
   height: 100%;
   object-fit: cover;

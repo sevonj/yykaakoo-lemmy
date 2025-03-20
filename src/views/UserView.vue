@@ -13,7 +13,6 @@ const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
 const getPersonForm: GetPersonDetails = {
   username: identifier,
 }
-console.log('AAAAAÄÄÄÄÖÖÖ', getPersonForm)
 const user = await client.getPersonDetails(getPersonForm)
 </script>
 

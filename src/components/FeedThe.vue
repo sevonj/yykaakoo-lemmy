@@ -2,8 +2,12 @@
 import FeedNav from '@/components/FeedNav.vue'
 import FeedSortBar from '@/components/FeedSortBar.vue'
 import PostTile from '@/components/PostTile.vue'
+import CommunityHeader from './headers/CommunityHeader.vue'
+
 import {
   LemmyHttp,
+  type GetCommunity,
+  type GetCommunityResponse,
   type GetPosts,
   type PaginationCursor,
   type PostView,
@@ -15,6 +19,16 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 let identifier = route.params.identifier?.toString()
 let listingType = route.query.listingType?.toString()
+const instance = getCurrentInstance()
+const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+const posts = ref<PostView[]>([])
+let feedCursor: PaginationCursor | undefined = undefined
+let feedEnded = false
+let isFetchingMorePosts = false
+const sortType = ref<SortType>('Active')
+const feedLayout = ref<FeedLayoutType>('Grid')
+const feedLocation = ref<FeedLocation>(generateFeedLocation())
+let comm = await fetchComm()
 
 function generateFeedLocation(): FeedLocation {
   if (identifier) {
@@ -33,9 +47,15 @@ function generateFeedLocation(): FeedLocation {
   return { type: 'Local' }
 }
 
-const sortType = ref<SortType>('Active')
-const feedLayout = ref<FeedLayoutType>('Grid')
-const feedLocation = ref<FeedLocation>(generateFeedLocation())
+async function fetchComm(): Promise<GetCommunityResponse | null> {
+  if (!identifier) {
+    return null
+  }
+  const getCommunityForm: GetCommunity = {
+    name: identifier,
+  }
+  return await client.getCommunity(getCommunityForm)
+}
 
 watch(
   () => route.query.listingType,
@@ -45,11 +65,13 @@ watch(
     resetFeed()
   },
 )
+
 watch(
-  () => route.params.communityIdentifier,
-  (newValue) => {
+  () => route.params.identifier,
+  async (newValue) => {
     identifier = newValue?.toString()
     feedLocation.value = generateFeedLocation()
+    comm = await fetchComm()
     resetFeed()
   },
 )
@@ -58,18 +80,6 @@ function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType
   resetFeed()
 }
-
-//function setLayout(payload: { feedLayout: FeedLayoutType }) {
-//  feedLayout.value = payload.feedLayout;
-//}
-
-const instance = getCurrentInstance();
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client;
-
-const posts = ref<PostView[]>([]);
-let feedCursor: PaginationCursor | undefined = undefined;
-let feedEnded = false;
-let isFetchingMorePosts = false
 
 function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
   switch (feedLocation.value.type) {
@@ -107,15 +117,15 @@ async function loadMorePosts() {
   posts.value = posts.value.concat(response.posts)
   feedCursor = response.next_page
   isFetchingMorePosts = false
-  console.log("CURSOR: ", response.next_page)
   if (!response.next_page) {
-    feedEnded = true;
+    feedEnded = true
   }
 }
 
-async function resetFeed() {
+async function resetFeed(): Promise<void> {
   posts.value = []
   feedCursor = undefined
+  feedEnded = false
   loadMorePosts()
 }
 
@@ -124,15 +134,15 @@ const morePostsDetector = ref<HTMLElement | null>(null)
 const onIntersect = (entries: IntersectionObserverEntry[]) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      loadMorePosts();
+      loadMorePosts()
     }
   })
 }
 
 onMounted(() => {
   if (morePostsDetector.value) {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 });
-    observer.observe(morePostsDetector.value);
+    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 })
+    observer.observe(morePostsDetector.value)
   }
 })
 
@@ -140,18 +150,18 @@ loadMorePosts()
 </script>
 
 <script lang="ts">
-export type FeedLayoutType = 'Grid' | 'List';
+export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
   | { type: 'All' }
   | { type: 'Local' }
   | { type: 'Subscribed' }
-  | { type: 'Community'; identifier: string };
+  | { type: 'Community'; identifier: string }
 </script>
 
 <template>
   <div class="feed-header">
     <FeedNav :location="toRef(feedLocation)" />
-    <slot name="locationHeader"></slot>
+    <CommunityHeader v-if="comm" :comm :identifier />
   </div>
 
   <main>
@@ -161,13 +171,26 @@ export type FeedLocation =
     <div v-else>
       <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
       <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-        <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id"
-          :feed-location="feedLocation" />
+        <PostTile
+          v-for="postView in posts"
+          :post-view="postView"
+          :key="postView.post.id"
+          :id="postView.post.id"
+          :feed-location="feedLocation"
+        />
         <div ref="morePostsDetector">
           <p v-if="feedEnded">You have reached the end.</p>
           <p v-else-if="isFetchingMorePosts">Loading...</p>
           <a v-else class="more-posts-link" @click="loadMorePosts">Get more posts</a>
         </div>
+
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
     <div style="min-height: 100vh"></div>
@@ -176,7 +199,7 @@ export type FeedLocation =
 
 <style>
 .feed-header {
-  padding: 0 0 12px 8px;
+  padding: 8px 0 12px 8px;
   background: var(--color-background-soft);
 }
 

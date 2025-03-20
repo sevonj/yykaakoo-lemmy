@@ -1,9 +1,7 @@
 <script setup lang="ts">
-
 const props = defineProps<{
-  timestamp: string,
-}>();
-
+  timestamp: string
+}>()
 
 const units = [
   { unit: 'day', threshold: 24 * 60 * 60 * 1000 },
@@ -16,21 +14,22 @@ const units = [
 ]
 
 function timestampFormatted(): string {
-  const date = new Date(props.timestamp).getTime();
-  const now = Date.now();
-  const diff = now - date;
+  const date = new Date(props.timestamp).getTime()
+  const now = Date.now()
+  const diff = now - date
 
   for (let i = 0; i < units.length - 1; i++) {
     if (diff >= units[i].threshold) {
-      const value = Math.round(diff / units[i].threshold);
-      return new Intl.RelativeTimeFormat('en').format(-value, units[i].unit as Intl.RelativeTimeFormatUnit).toString();
+      const value = Math.round(diff / units[i].threshold)
+      return new Intl.RelativeTimeFormat('en')
+        .format(-value, units[i].unit as Intl.RelativeTimeFormatUnit)
+        .toString()
     }
   }
   return 'Just now'
 }
-
 </script>
 
 <template>
-  <p class="meta">{{ timestampFormatted() }}</p>
+  <span class="meta">{{ timestampFormatted() }}</span>
 </template>
