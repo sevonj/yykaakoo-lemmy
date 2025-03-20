@@ -117,7 +117,6 @@ async function loadMorePosts() {
   posts.value = posts.value.concat(response.posts)
   feedCursor = response.next_page
   isFetchingMorePosts = false
-  console.log('CURSOR: ', response.next_page)
   if (!response.next_page) {
     feedEnded = true
   }
