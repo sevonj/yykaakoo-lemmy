@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CommentView, GetComments, LemmyHttp, PostId } from 'lemmy-js-client'
-import TheComment from './TheComment.vue'
+import CommentThe from './CommentThe.vue'
 import { getCurrentInstance, ref } from 'vue'
 
 const instance = getCurrentInstance()
@@ -33,7 +33,7 @@ fetchComments()
 
 <template>
   <div class="post-child-cont">
-    <TheComment v-for="commentView in comments" :comment-view="commentView" :key="commentView.comment.id" />
+    <CommentThe v-for="commentView in comments" :comment-view="commentView" :key="commentView.comment.id" />
   </div>
 </template>
 

@@ -1,16 +1,8 @@
 @import './base.css';
 @import './md.css';
-@import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap');
-
-.instance-title {
-  font-family: 'Concert One';
-  text-trsansform: uppercase;
-  font-weight: 900;
-}
 
 body {
-  background: #232323;
-  background: #000;
+  background: var(--color-background);
   display: flex;
   justify-content: flex-start;
   min-height: 150vh;
@@ -18,9 +10,9 @@ body {
 }
 
 main {
-  background: #0c0c0e;
-  padding: 0.5em;
-  outline: 1px solid #1f1f24;
+  background: var(--color-background);
+  padding: 8px;
+  outline: 1px solid var(--color-border);
 }
 
 #app {
@@ -52,12 +44,12 @@ a {
 }
 
 a.meta {
-  color: #aaa;
+  color: var(--color-metalink);
   text-decoration: none;
 }
 
 a.meta:hover {
-  color: #f1f1f1;
+  color: var(--color-metalink-hover);
 }
 
 .meta-highlight {
@@ -74,6 +66,5 @@ a.meta:hover {
 }
 
 @media (min-width: 1024px) {
-  #app {
-  }
+  #app {}
 }

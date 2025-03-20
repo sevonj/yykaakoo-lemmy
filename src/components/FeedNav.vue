@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeedLocation } from './TheFeed.vue'
+import type { FeedLocation } from './FeedThe.vue'
 import { type Ref } from 'vue'
 
 defineProps<{
@@ -27,9 +27,7 @@ defineProps<{
 </template>
 
 <style>
-.feed-nav {
-  margin-bottom: 16px;
-}
+.feed-nav {}
 
 .feed-nav-link-cont {
   display: flex;
@@ -39,13 +37,14 @@ defineProps<{
 }
 
 .feed-nav-link {
-  font-size: x-large;
+  font-size: large;
   text-decoration: none;
+  color: var(--color-navlink);
 }
 
 .feed-nav-link-selected {
   font-weight: bold;
-  color: white;
+  color: var(--color-navlink-active);
 }
 
 .feed-nav-commid {

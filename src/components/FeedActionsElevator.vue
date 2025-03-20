@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { FeedLayoutType } from './TheFeed.vue'
+import type { FeedLayoutType } from './FeedThe.vue'
 import { type Ref } from 'vue'
 
 defineProps<{

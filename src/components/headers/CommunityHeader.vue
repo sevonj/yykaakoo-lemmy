@@ -34,12 +34,8 @@ function toggleDescription(): void {
     <div>
       <h3>Moderators</h3>
       <div class="community-header-modblock">
-        <UserMeta
-          v-for="mod in comm.moderators"
-          :person="mod.moderator"
-          :key="mod.moderator.actor_id"
-          :avatar-only="true"
-        />
+        <UserMeta v-for="mod in comm.moderators" :person="mod.moderator" :key="mod.moderator.actor_id"
+          :avatar-only="true" />
       </div>
     </div>
 
@@ -47,11 +43,7 @@ function toggleDescription(): void {
       <h3>Languages</h3>
       <div class="community-header-langblock">
         <p v-if="comm.discussion_languages.length == 0">None</p>
-        <Badge
-          v-for="langId in comm.discussion_languages"
-          :text="langId.toString()"
-          :key="langId"
-        />
+        <Badge v-for="langId in comm.discussion_languages" :text="langId.toString()" :key="langId" />
       </div>
     </div>
 
@@ -69,14 +61,12 @@ function toggleDescription(): void {
 
 <style>
 .community-header {
-  margin-top: -8px;
-  margin-bottom: 16px;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
 }
 
-.community-header > * {
+.community-header>* {
   margin-right: 16px;
 }
 
@@ -111,7 +101,7 @@ function toggleDescription(): void {
   overflow: hidden;
 }
 
-.community-header-icon > * {
+.community-header-icon>* {
   width: 100%;
   height: 100%;
   object-fit: cover;

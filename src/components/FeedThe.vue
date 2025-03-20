@@ -149,7 +149,7 @@ export type FeedLocation =
 </script>
 
 <template>
-  <div style="padding: 0px 8px">
+  <div class="feed-header">
     <FeedNav :location="toRef(feedLocation)" />
     <slot name="locationHeader"></slot>
   </div>
@@ -175,6 +175,11 @@ export type FeedLocation =
 </template>
 
 <style>
+.feed-header {
+  padding: 0 0 12px 8px;
+  background: var(--color-background-soft);
+}
+
 .feed {
   display: grid;
   gap: 0.5rem;

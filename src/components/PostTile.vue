@@ -14,7 +14,7 @@ import {
   LinkIcon,
 } from '@heroicons/vue/24/solid'
 import ExternalLink from './common/ExternalLink.vue'
-import type { FeedLocation } from './TheFeed.vue'
+import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './common/RelativeTimestamp.vue'
 
 const props = defineProps<{
@@ -138,7 +138,6 @@ function isExternalLink(): boolean {
 </template>
 <style scoped>
 article {
-  overflow: hidden;
   min-height: 200px;
   display: flex;
   flex-direction: column;
@@ -151,11 +150,6 @@ article {
 
 .post-bubble {
   cursor: pointer;
-  transition: transform 0.1s;
-}
-
-.post-bubble:hover {
-  transform: scale(0.995);
 }
 
 .article-horizontal {
