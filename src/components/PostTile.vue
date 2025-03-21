@@ -70,10 +70,10 @@ function isExternalLink(): boolean {
 </script>
 
 <template>
-  <article :class="isOpen ? 'post-expanded' : ''" ref="htmlPostArticle">
+  <article :class="isOpen ? 'post-expanded' : 'post-not-expanded'" ref="htmlPostArticle">
     <SpeechBubble
       @click="openComments"
-      :class="!isOpen ? 'post-bubble-not-expanded' : 'post-bubble-expanded'"
+      :class="isOpen ? 'post-bubble-expanded' : 'post-bubble-not-expanded'"
     >
       <template v-slot:content>
         <div v-if="!isOpen" class="post-preview">
@@ -149,12 +149,23 @@ article {
   min-height: 200px;
   display: flex;
   flex-direction: column;
+  border-radius: 12px;
 }
 
 .post-expanded {
   grid-column: 1/-1;
   margin-left: auto;
   margin-right: auto;
+}
+
+.post-not-expanded:hover {
+  transform: translate(0, -1px);
+  transition: 0.3s;
+}
+
+.post-not-expanded:active {
+  transform: translate(0, 10px);
+  transition: 0.1s;
 }
 
 @media (max-width: 460px) {
@@ -182,7 +193,6 @@ article {
 .post-title {
   margin: 0 8px 8px 8px;
   font-size: 1.2em;
-  overflow: hidden;
   text-overflow: ellipsis;
   overflow: hidden;
 }
