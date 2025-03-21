@@ -13,7 +13,7 @@ import {
   ArrowDownIcon,
   LinkIcon,
 } from '@heroicons/vue/24/solid'
-import ExternalLink from './common/ExternalLink.vue'
+import ExternalLink from './links/ExternalLink.vue'
 import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 
@@ -89,8 +89,10 @@ function isExternalLink(): boolean {
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
         </div>
 
+        <ExternalLink v-if="postView.post.url && isOpen" :url="postView.post.url" />
+
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
-          <LinkIcon v-if="isExternalLink()" style="max-height: 0.8em" />
+          <LinkIcon v-if="isExternalLink() && !isOpen" style="max-height: 0.8em" />
           {{ postView.post.name }}
         </h1>
 
@@ -98,8 +100,6 @@ function isExternalLink(): boolean {
           <div v-if="postView.post.body">
             <VueMarkdown class="post-body md" :source="postView.post.body" />
           </div>
-          <ExternalLink v-if="postView.post.url" :url="postView.post.url" />
-          <p>{{ postView.post.url }} | {{ postView.post.url_content_type }}</p>
         </div>
       </template>
 
@@ -145,6 +145,7 @@ function isExternalLink(): boolean {
 <style scoped>
 article {
   max-width: 1000px;
+  width: 100%;
   min-height: 200px;
   display: flex;
   flex-direction: column;
