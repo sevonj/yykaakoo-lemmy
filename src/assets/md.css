@@ -1,7 +1,10 @@
+.md {
+  padding: 4px 8px;
+}
+
 .md * {
   max-width: 100%;
   font-size: 0.98em;
-  padding: 4px 8px;
 }
 
 .md img {
@@ -9,8 +12,14 @@
 }
 
 .md a {
-  font-family: monospace;
 }
 
 .md ol {
+}
+
+.md blockquote {
+  border-left: 4px solid var(--color-border);
+  padding: 4px;
+  background-color: var(--color-background-mute);
+  color: var(--color-text-mute);
 }

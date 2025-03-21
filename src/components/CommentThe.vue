@@ -78,6 +78,6 @@ async function getReplies() {
 
 <style>
 .comment-cont {
-  margin-bottom: 4px;
+  margin-top: 4px;
 }
 </style>

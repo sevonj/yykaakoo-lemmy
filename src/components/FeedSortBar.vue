@@ -19,7 +19,7 @@ defineEmits({
 <template>
   <div>
     <div class="feedsortbar">
-      <p class="title">SORT</p>
+      <p class="title">Sort:</p>
       <form @change="$emit('changed', { sortType: sortTypeInternal })">
         <input type="radio" id="active" value="Active" v-model="sortTypeInternal" />
         <label for="active">Active discussion</label>
@@ -49,17 +49,15 @@ defineEmits({
 <style scoped>
 .feedsortbar {
   display: flex;
+  margin-bottom: 6px;
+  overflow: scroll;
+  text-wrap-mode: nowrap;
 }
 
 .title {
-  font-family: monospace;
-  font-weight: bolder;
   font-size: small;
-  height: 1.5em;
   align-self: center;
-  color: white;
-  padding: 0 8px;
-  border-right: 4px solid black;
+  padding: 0 4px;
 }
 
 input {
@@ -67,7 +65,7 @@ input {
 }
 
 input:checked + label {
-  color: white;
+  color: var(--color-navlink-active);
 }
 
 input + label {

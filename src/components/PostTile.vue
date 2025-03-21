@@ -188,8 +188,8 @@ article {
 }
 
 .post-title-closed {
-  max-height: 3em;
-  height: 3em;
+  max-height: 3.2em;
+  height: 3.2em;
 }
 
 .thread-close-div {
@@ -212,7 +212,6 @@ article {
 }
 
 .post-preview {
-  background: black;
   width: 100%;
   aspect-ratio: 3 / 2;
   max-height: 240px;
@@ -256,19 +255,17 @@ article {
 }
 
 .full-image {
-  background: black;
-  width: 100%;
-  max-height: 60vh;
-  aspect-ratio: 3 / 2;
+  background-color: var(--color-background);
+  flex-shrink: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  margin-bottom: 8px;
 }
 
 .full-image > * {
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
+  max-width: 100%;
+  max-height: 60vh;
 }
 </style>
