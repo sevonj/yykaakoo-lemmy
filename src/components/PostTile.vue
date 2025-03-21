@@ -33,20 +33,20 @@ defineExpose({ closeComments })
 
 const htmlPostArticle = ref<HTMLElement | null>(null)
 
-const is_open: Ref<boolean, boolean> = ref(false)
+const isOpen: Ref<boolean, boolean> = ref(false)
 
 async function openComments(): Promise<void> {
-  if (is_open.value) {
+  if (isOpen.value) {
     return
   }
   emit('opened', props.postView.post.id)
-  is_open.value = true
+  isOpen.value = true
 
   nextTick(scrollToSelf)
 }
 
 function closeComments(): void {
-  is_open.value = false
+  isOpen.value = false
 
   nextTick(scrollToSelf)
 }
@@ -70,32 +70,27 @@ function isExternalLink(): boolean {
 </script>
 
 <template>
-  <article :class="is_open ? 'post-expanded' : ''" ref="htmlPostArticle">
-    <SpeechBubble @click="openComments" :class="!is_open ? 'post-bubble' : ''">
-      <template v-slot:above>
-        <RelativeTimestamp :timestamp="postView.counts.published" />
-      </template>
-
+  <article :class="isOpen ? 'post-expanded' : ''" ref="htmlPostArticle">
+    <SpeechBubble
+      @click="openComments"
+      :class="!isOpen ? 'post-bubble-not-expanded' : 'post-bubble-expanded'"
+    >
       <template v-slot:content>
-        <div v-if="!is_open" class="post-preview">
+        <div v-if="!isOpen" class="post-preview">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
-          <VueMarkdown
-            v-else-if="postView.post.body"
-            class="post-body md"
-            :source="postView.post.body"
-          />
+          <VueMarkdown v-else-if="postView.post.body" class="post-body md" :source="postView.post.body" />
         </div>
 
         <div v-else-if="postView.post.thumbnail_url" class="full-image">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
         </div>
 
-        <h1 class="post-title" style="text-overflow: ellipsis; overflow: hidden">
+        <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
           <LinkIcon v-if="isExternalLink()" style="max-height: 0.8em" />
           {{ postView.post.name }}
         </h1>
 
-        <div v-if="is_open">
+        <div v-if="isOpen">
           <div v-if="postView.post.body">
             <VueMarkdown class="post-body md" :source="postView.post.body" />
           </div>
@@ -105,28 +100,27 @@ function isExternalLink(): boolean {
       </template>
 
       <template v-slot:below>
-        <div style="flex-grow: 1"></div>
+        <div class="flex-row flex-1" style="gap: 12px">
+          <div class="flex-row no-shrink" style="">
+            <ArrowUpIcon class="meta-icon" />
+            <p>{{ postView.counts.upvotes }}</p>
+          </div>
 
-        <div class="flex-row" style="">
-          <ArrowUpIcon class="meta-icon" />
-          <p>{{ postView.counts.upvotes }}</p>
+          <div class="flex-row no-shrink" style="">
+            <ArrowDownIcon class="meta-icon" />
+            <p>{{ postView.counts.downvotes }}</p>
+          </div>
+
+          <div class="flex-row no-shrink" style="">
+            <ChatBubbleLeftIcon class="meta-icon" />
+            <p>{{ postView.counts.comments }}</p>
+          </div>
         </div>
 
-        <div class="flex-row" style="">
-          <ArrowDownIcon class="meta-icon" />
-          <p>{{ postView.counts.downvotes }}</p>
-        </div>
-
-        <div class="flex-row" style="">
-          <ChatBubbleLeftIcon class="meta-icon" />
-          <p>{{ postView.counts.comments }}</p>
-        </div>
+        <RelativeTimestamp :timestamp="postView.counts.published" />
       </template>
     </SpeechBubble>
-    <UserMeta
-      :person="postView.creator"
-      :comm="feedLocation.type != 'Community' ? postView.community : undefined"
-    >
+    <UserMeta :person="postView.creator" :comm="feedLocation.type != 'Community' ? postView.community : undefined">
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />
         <Badge v-if="postView.creator_is_admin" text="admin" />
@@ -134,26 +128,35 @@ function isExternalLink(): boolean {
       </template>
     </UserMeta>
 
-    <div @click="closeComments" v-if="is_open" class="thread-close-div">
+    <div @click="closeComments" v-if="isOpen" class="thread-close-div">
       <p>Close thread</p>
       <XMarkIcon />
     </div>
-    <CommentsThread v-if="is_open" :post_id="postView.post.id" />
+    <CommentsThread v-if="isOpen" :post_id="postView.post.id" />
   </article>
 </template>
 <style scoped>
 article {
+  max-width: 1000px;
   min-height: 200px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
 }
 
 .post-expanded {
   grid-column: 1/-1;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.post-bubble {
+@media (max-width: 460px) {
+  .post-bubble-expanded {
+    margin-left: -9px;
+    margin-right: -9px;
+  }
+}
+
+.post-bubble-not-expanded {
   cursor: pointer;
 }
 
@@ -171,10 +174,14 @@ article {
 .post-title {
   margin: 0 8px 8px 8px;
   font-size: 1.2em;
-  height: 3em;
-  max-height: 3em;
   overflow: hidden;
-  text-overflow: '...';
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.post-title-closed {
+  max-height: 3em;
+  height: 3em;
 }
 
 .thread-close-div {
@@ -192,7 +199,7 @@ article {
   color: black;
 }
 
-.thread-close-div > * {
+.thread-close-div>* {
   max-height: 24px;
 }
 
@@ -207,7 +214,7 @@ article {
   overflow: hidden;
 }
 
-.post-preview > * {
+.post-preview>* {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -251,7 +258,7 @@ article {
   overflow: hidden;
 }
 
-.full-image > * {
+.full-image>* {
   object-fit: contain;
   width: 100%;
   height: 100%;

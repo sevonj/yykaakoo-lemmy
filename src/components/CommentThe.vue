@@ -36,27 +36,26 @@ async function getReplies() {
 <template>
   <div class="comment-cont">
     <SpeechBubble>
-      <template v-slot:above>
-        <RelativeTimestamp :timestamp="commentView.comment.published" />
-      </template>
       <template v-slot:content>
         <Badge v-if="commentView.comment.deleted" text="Deleted by author." />
         <Badge v-if="commentView.comment.removed" text="Removed by a mod or an admin." />
         <Badge v-if="commentView.comment.distinguished" text="distinguished" />
         <VueMarkdown :source="commentView.comment.content" class="md" />
       </template>
+
       <template v-slot:below>
-        <div class="flex-row" style="">
-          <ArrowUpIcon class="meta-icon" />
-          <p>{{ commentView.counts.upvotes }}</p>
-        </div>
+        <div class="flex-row flex-1" style="gap: 12px">
+          <div class="flex-row no-shrink" style="">
+            <ArrowUpIcon class="meta-icon" />
+            <p>{{ commentView.counts.upvotes }}</p>
+          </div>
 
-        <div class="flex-row" style="">
-          <ArrowDownIcon class="meta-icon" />
-          <p>{{ commentView.counts.downvotes }}</p>
+          <div class="flex-row no-shrink" style="">
+            <ArrowDownIcon class="meta-icon" />
+            <p>{{ commentView.counts.downvotes }}</p>
+          </div>
         </div>
-
-        <div style="flex-grow: 1"></div>
+        <RelativeTimestamp :timestamp="commentView.counts.published" />
       </template>
     </SpeechBubble>
 
@@ -79,13 +78,6 @@ async function getReplies() {
 
 <style>
 .comment-cont {
-}
-
-.comment-reply-cont {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  padding-top: 3px;
-  padding-left: 36px;
+  margin-bottom: 4px;
 }
 </style>
