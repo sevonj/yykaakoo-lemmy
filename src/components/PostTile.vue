@@ -83,8 +83,10 @@ function isExternalLink(): boolean {
             class="post-body md"
             :source="postView.post.body"
           />
+          <div v-if="isExternalLink()" class="post-preview-link-badge-cont">
+            <LinkIcon class="post-preview-link-badge" />
+          </div>
         </div>
-
         <div v-else-if="postView.post.thumbnail_url" class="full-image">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
         </div>
@@ -92,7 +94,6 @@ function isExternalLink(): boolean {
         <ExternalLink v-if="postView.post.url && isOpen" :url="postView.post.url" />
 
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
-          <LinkIcon v-if="isExternalLink() && !isOpen" style="max-height: 0.8em" />
           {{ postView.post.name }}
         </h1>
 
@@ -225,6 +226,22 @@ article {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.post-preview-link-badge-cont {
+  position: relative;
+  max-width: 0;
+  max-height: 0;
+  bottom: 28px;
+  left: 0px;
+}
+
+.post-preview-link-badge {
+  height: 24px;
+  width: 24px;
+  background: #000b;
+  padding: 4px;
+  border-radius: 8px;
 }
 
 .post-preview-link-cont {

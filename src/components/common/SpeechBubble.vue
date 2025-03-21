@@ -21,8 +21,8 @@
 }
 
 .speechbub {
-  background: var(--color-background-soft);
-  border: 1px solid var(--color-border);
+  background: var(--color-background-speechbub);
+  border: 1px solid var(--color-border-speechbub);
   border-radius: 12px;
   overflow: hidden;
   color: #ddd;
@@ -40,7 +40,7 @@
   border-bottom: 24px solid var(--color-background);
   border-left: 24px solid transparent;
   max-width: 24px;
-  background: var(--color-border);
+  background: var(--color-border-speechbub);
 }
 
 .speechbub-below-spike-inner {
@@ -48,6 +48,6 @@
   left: -23px;
   top: -2px;
   border-bottom: 24px solid transparent;
-  border-left: 24px solid var(--color-background-soft);
+  border-left: 24px solid var(--color-background-speechbub);
 }
 </style>

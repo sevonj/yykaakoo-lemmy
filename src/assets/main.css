@@ -7,6 +7,7 @@ body {
   justify-content: flex-start;
   min-height: 150vh;
   margin: 0 auto;
+  color: var(--color-text);
 }
 
 main {
@@ -23,7 +24,7 @@ main {
 }
 
 a {
-  color: #aaa;
+  color: var(--color-text);
   cursor: pointer;
 }
 
@@ -42,6 +43,12 @@ a {
 
 .meta {
   font-size: small;
+  color: var(--color-meta);
+}
+
+.meta-highlight {
+  font-weight: bold;
+  color: var(--color-meta-highlight);
 }
 
 a.meta,
@@ -57,10 +64,6 @@ a.meta,
 a.meta:hover,
 .meta-link:hover {
   color: var(--color-metalink-hover);
-}
-
-.meta-highlight {
-  font-weight: bold;
 }
 
 .meta-icon {
