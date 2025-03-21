@@ -10,9 +10,10 @@ const props = defineProps<{
   post_id: PostId
 }>()
 
-const emit = defineEmits({
-  opened(_post_id: number) {
-    true
+defineEmits({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  opened(post_id: number) {
+    return true
   },
 })
 

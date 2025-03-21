@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { SiteView } from 'lemmy-js-client'
-import { getCurrentInstance } from 'vue'
 
-const props = defineProps<{
+defineProps<{
   site_view: SiteView
 }>()
 </script>

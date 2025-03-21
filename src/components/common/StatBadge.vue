@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   title: string
   text: string
   color?: { type: string; default: 'white' }

@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { GetSiteResponse } from 'lemmy-js-client'
 import UserAvatar from './UserAvatar.vue'
-import Badge from './common/Badge.vue'
 import StatBadge from './common/StatBadge.vue'
 
-const props = defineProps<{
+defineProps<{
   site: GetSiteResponse
 }>()
 </script>
@@ -49,7 +48,7 @@ const props = defineProps<{
       <h3>Admins</h3>
     </div>
     <ul class="flex-1">
-      <li v-for="admin in site.admins">
+      <li v-for="admin in site.admins" :key="admin.person.id">
         <UserAvatar :person="admin.person" />
         <p class="meta">@{{ admin.person.name }}</p>
       </li>
