@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import SiteNav from './components/SiteNav.vue'
-import SiteHead from './components/SiteHead.vue'
 </script>
 
 <template>
