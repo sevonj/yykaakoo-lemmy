@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type PostView } from 'lemmy-js-client'
-import Badge from './common/Badge.vue'
+import Badge from './common/BadgeThe.vue'
 import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
 import { nextTick, ref, type Ref } from 'vue'
@@ -78,7 +78,11 @@ function isExternalLink(): boolean {
       <template v-slot:content>
         <div v-if="!isOpen" class="post-preview">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
-          <VueMarkdown v-else-if="postView.post.body" class="post-body md" :source="postView.post.body" />
+          <VueMarkdown
+            v-else-if="postView.post.body"
+            class="post-body md"
+            :source="postView.post.body"
+          />
         </div>
 
         <div v-else-if="postView.post.thumbnail_url" class="full-image">
@@ -120,7 +124,10 @@ function isExternalLink(): boolean {
         <RelativeTimestamp :timestamp="postView.counts.published" />
       </template>
     </SpeechBubble>
-    <UserMeta :person="postView.creator" :comm="feedLocation.type != 'Community' ? postView.community : undefined">
+    <UserMeta
+      :person="postView.creator"
+      :comm="feedLocation.type != 'Community' ? postView.community : undefined"
+    >
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />
         <Badge v-if="postView.creator_is_admin" text="admin" />
@@ -199,7 +206,7 @@ article {
   color: black;
 }
 
-.thread-close-div>* {
+.thread-close-div > * {
   max-height: 24px;
 }
 
@@ -214,7 +221,7 @@ article {
   overflow: hidden;
 }
 
-.post-preview>* {
+.post-preview > * {
   object-fit: cover;
   width: 100%;
   height: 100%;
@@ -258,7 +265,7 @@ article {
   overflow: hidden;
 }
 
-.full-image>* {
+.full-image > * {
   object-fit: contain;
   width: 100%;
   height: 100%;

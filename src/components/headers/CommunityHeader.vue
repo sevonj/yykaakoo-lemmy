@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { GetCommunityResponse } from 'lemmy-js-client'
 import UserMeta from '../common/UserMeta.vue'
-import Badge from '../common/Badge.vue'
+import Badge from '../common/BadgeThe.vue'
 
 defineProps<{
   comm: GetCommunityResponse

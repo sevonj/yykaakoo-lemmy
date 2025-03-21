@@ -4,7 +4,7 @@ import { ref, getCurrentInstance, type Ref } from 'vue'
 import VueMarkdown from 'vue-markdown-render'
 import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
-import Badge from './common/Badge.vue'
+import Badge from './common/BadgeThe.vue'
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/solid'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 
