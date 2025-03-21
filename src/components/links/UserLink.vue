@@ -16,7 +16,7 @@ function identifier(): string {
 </script>
 
 <template>
-  <RouterLink :to="identifier()">
+  <RouterLink class="meta" :to="identifier()">
     <UserHandle :person />
   </RouterLink>
 </template>
