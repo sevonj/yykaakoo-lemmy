@@ -78,6 +78,7 @@ function isExternalLink(): boolean {
       <template v-slot:content>
         <div v-if="!isOpen" class="post-preview">
           <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
+          <div v-else-if="isExternalLink()"></div>
           <VueMarkdown
             v-else-if="postView.post.body"
             class="post-body md"
@@ -226,9 +227,6 @@ article {
   width: 100%;
   aspect-ratio: 3 / 2;
   max-height: 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   overflow: hidden;
 }
 
@@ -242,8 +240,8 @@ article {
   position: relative;
   max-width: 0;
   max-height: 0;
-  bottom: 28px;
-  left: 0px;
+  bottom: 34px;
+  left: 4px;
 }
 
 .post-preview-link-badge {
