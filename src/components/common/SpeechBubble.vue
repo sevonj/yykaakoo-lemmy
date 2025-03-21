@@ -1,8 +1,5 @@
 <template>
   <div class="speechbub-cont">
-    <div class="speechbub-above">
-      <slot name="above"></slot>
-    </div>
     <div class="speechbub">
       <slot name="content"></slot>
     </div>
@@ -20,15 +17,7 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  margin: 4px 0;
-}
-
-.speechbub-above {
-  display: flex;
-  max-height: 12px;
-  align-items: end;
-  justify-content: end;
-  padding-right: 8px;
+  margin-bottom: 3px;
 }
 
 .speechbub {
@@ -43,16 +32,14 @@
   display: flex;
   justify-content: space-between;
   max-height: 24px;
-}
-
-.speechbub-below>* {
-  margin-right: 32px;
+  padding-right: 8px;
 }
 
 .speechbub-below-spike {
   margin: 0 0 0 16px;
   border-bottom: 24px solid var(--color-background);
   border-left: 24px solid transparent;
+  max-width: 24px;
   background: var(--color-border);
 }
 

@@ -10,9 +10,10 @@ const props = defineProps<{
   post_id: PostId
 }>()
 
-const emit = defineEmits({
-  opened(_post_id: number) {
-    true
+defineEmits({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  opened(post_id: number) {
+    return true
   },
 })
 
@@ -32,7 +33,7 @@ fetchComments()
 </script>
 
 <template>
-  <div class="post-child-cont">
+  <div class="comment-reply-cont">
     <CommentThe
       v-for="commentView in comments"
       :comment-view="commentView"
@@ -42,11 +43,28 @@ fetchComments()
 </template>
 
 <style>
-.post-child-cont {
+.comment-reply-cont {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  padding-top: 3px;
-  padding-left: 36px;
+  border-left: 1px solid var(--color-border-mute);
+  margin-top: 8px;
+  padding-left: 12px;
+}
+
+.comment-reply-cont:hover {
+  border-left: 1px solid var(--color-border);
+}
+
+@media (max-width: 460px) {
+  .comment-reply-cont {
+    padding-left: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .comment-reply-cont {
+    padding-left: 6px;
+  }
 }
 </style>
