@@ -18,19 +18,24 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 let identifier = route.params.identifier?.toString()
-let listingType = route.query.listingType?.toString()
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+
+let comm = await fetchComm()
+const sortType = ref<SortType>('Active')
+const feedLayout = ref<FeedLayoutType>('Grid')
+const feedLocation = ref<FeedLocation>(generateFeedLocation(route.query.listingType?.toString()))
+
 const posts = ref<PostView[]>([])
+const postRefs = ref<InstanceType<typeof PostTile>[]>([])
+const openedPostId = ref<number | null>()
 let feedCursor: PaginationCursor | undefined = undefined
 let feedEnded = false
 let isFetchingMorePosts = false
-const sortType = ref<SortType>('Active')
-const feedLayout = ref<FeedLayoutType>('Grid')
-const feedLocation = ref<FeedLocation>(generateFeedLocation())
-let comm = await fetchComm()
 
-function generateFeedLocation(): FeedLocation {
+const morePostsDetector = ref<HTMLElement | null>(null)
+
+function generateFeedLocation(listingType?: string): FeedLocation {
   if (identifier) {
     return { type: 'Community', identifier }
   }
@@ -56,25 +61,6 @@ async function fetchComm(): Promise<GetCommunityResponse | null> {
   }
   return await client.getCommunity(getCommunityForm)
 }
-
-watch(
-  () => route.query.listingType,
-  (newValue) => {
-    listingType = newValue?.toString()
-    feedLocation.value = generateFeedLocation()
-    resetFeed()
-  },
-)
-
-watch(
-  () => route.params.identifier,
-  async (newValue) => {
-    identifier = newValue?.toString()
-    feedLocation.value = generateFeedLocation()
-    comm = await fetchComm()
-    resetFeed()
-  },
-)
 
 function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType
@@ -122,16 +108,32 @@ async function loadMorePosts() {
   }
 }
 
-async function resetFeed(): Promise<void> {
+function resetFeed(): void {
+  openedPostId.value = null
   posts.value = []
   feedCursor = undefined
   feedEnded = false
   loadMorePosts()
 }
 
-const morePostsDetector = ref<HTMLElement | null>(null)
+function onOpenThread(postId: number): void {
+  closeThread()
+  openedPostId.value = postId
+}
 
-const onIntersect = (entries: IntersectionObserverEntry[]) => {
+function closeThread(): void {
+  if (!openedPostId.value) {
+    return
+  }
+  const opened = postRefs.value.find((postTile) => postTile.postId === openedPostId.value)
+  openedPostId.value = null
+  if (!opened) {
+    console.error('Got openedPostId but found no post?!')
+  }
+  opened?.closeComments()
+}
+
+function onIntersect(entries: IntersectionObserverEntry[]) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       loadMorePosts()
@@ -145,6 +147,24 @@ onMounted(() => {
     observer.observe(morePostsDetector.value)
   }
 })
+
+watch(
+  () => route.query.listingType,
+  (newValue) => {
+    feedLocation.value = generateFeedLocation(newValue?.toString())
+    resetFeed()
+  },
+)
+
+watch(
+  () => route.params.identifier,
+  async (newValue) => {
+    identifier = newValue?.toString()
+    feedLocation.value = generateFeedLocation()
+    comm = await fetchComm()
+    resetFeed()
+  },
+)
 
 loadMorePosts()
 </script>
@@ -170,6 +190,15 @@ export type FeedLocation =
     </div>
     <div v-else>
       <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+
+      <div v-if="openedPostId" :key="openedPostId" class="thread-close-elevator-cont">
+        <div class="thread-close-elevator-subcont">
+          <div class="thread-close-elevator" @click="closeThread()">
+            <p>Close thread</p>
+          </div>
+        </div>
+      </div>
+
       <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
         <PostTile
           v-for="postView in posts"
@@ -177,6 +206,8 @@ export type FeedLocation =
           :key="postView.post.id"
           :id="postView.post.id"
           :feed-location="feedLocation"
+          @opened="onOpenThread"
+          ref="postRefs"
         />
         <div ref="morePostsDetector">
           <p v-if="feedEnded">You have reached the end.</p>
@@ -217,6 +248,32 @@ export type FeedLocation =
 
 .feed-grid {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.thread-close-elevator-cont {
+  height: 0;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+.thread-close-elevator-subcont {
+  float: right;
+  width: 0;
+}
+
+.thread-close-elevator {
+  background: #0009;
+  position: relative;
+  right: 64px;
+  width: 64px;
+  padding: 8px;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.thread-close-elevator:hover {
+  color: white;
 }
 
 .more-posts-link {

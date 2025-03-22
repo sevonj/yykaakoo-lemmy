@@ -6,13 +6,7 @@ import UserMeta from './common/UserMeta.vue'
 import { nextTick, ref, type Ref } from 'vue'
 import VueMarkdown from 'vue-markdown-render'
 import CommentsThread from './CommentsThread.vue'
-import {
-  XMarkIcon,
-  ChatBubbleLeftIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  LinkIcon,
-} from '@heroicons/vue/24/solid'
+import { ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon, LinkIcon } from '@heroicons/vue/24/solid'
 import ExternalLink from './links/ExternalLink.vue'
 import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
@@ -29,10 +23,11 @@ const emit = defineEmits({
   },
 })
 
-defineExpose({ closeComments })
+const postId = props.postView.post.id
+
+defineExpose({ closeComments, postId })
 
 const htmlPostArticle = ref<HTMLElement | null>(null)
-
 const isOpen: Ref<boolean, boolean> = ref(false)
 
 async function openComments(): Promise<void> {
@@ -137,10 +132,6 @@ function isExternalLink(): boolean {
       </template>
     </UserMeta>
 
-    <div @click="closeComments" v-if="isOpen" class="thread-close-div">
-      <p>Close thread</p>
-      <XMarkIcon />
-    </div>
     <CommentsThread v-if="isOpen" :post_id="postView.post.id" />
   </article>
 </template>
@@ -158,11 +149,6 @@ article {
   grid-column: 1/-1;
   margin-left: auto;
   margin-right: auto;
-}
-
-.post-not-expanded:hover {
-  transform: translate(0, -1px);
-  transition: 0.3s;
 }
 
 .post-not-expanded:active {
@@ -202,25 +188,6 @@ article {
 .post-title-closed {
   max-height: 3.2em;
   height: 3.2em;
-}
-
-.thread-close-div {
-  color: lightgrey;
-  height: 24px;
-  max-height: 24px;
-  float: right;
-  display: flex;
-  justify-content: end;
-  transition: 0.2s;
-}
-
-.thread-close-div:hover {
-  background-color: #fff7;
-  color: black;
-}
-
-.thread-close-div > * {
-  max-height: 24px;
 }
 
 .post-preview {
