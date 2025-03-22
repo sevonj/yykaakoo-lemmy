@@ -135,7 +135,7 @@ function isExternalLink(): boolean {
     <CommentsThread v-if="isOpen" :post_id="postView.post.id" />
   </article>
 </template>
-<style scoped>
+<style>
 article {
   max-width: 1000px;
   width: 100%;
@@ -158,8 +158,14 @@ article {
 
 @media (max-width: 460px) {
   .post-bubble-expanded {
-    margin-left: -9px;
-    margin-right: -9px;
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+
+  .post-bubble-expanded .speechbub {
+    border-radius: 0px;
+    border-left: 0;
+    border-right: 0;
   }
 }
 
