@@ -230,7 +230,7 @@ export type FeedLocation =
 
 <style>
 .feed-header {
-  padding: 8px 0 12px 8px;
+  padding: 0 8px 12px 8px;
   background: var(--color-background-soft);
 }
 

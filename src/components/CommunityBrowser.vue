@@ -103,7 +103,7 @@ export type CommunityLocation = 'All' | 'Local' | 'Subscribed' | 'ModeratorView'
 
 <template>
   <div class="comm-browser">
-    <form class="comm-browser-tabs" @change="fetchCommunities">
+    <form class="comm-browser-tabs nav" @change="fetchCommunities">
       <input type="radio" class="hide" id="All" value="All" v-model="location" />
       <label for="All">Everywhere</label>
 
