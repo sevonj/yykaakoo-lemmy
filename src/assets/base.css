@@ -56,6 +56,8 @@
 
   --color-navlink: var(--vt-c-text-dark-2);
   --color-navlink-active: var(--vt-c-text-dark-1);
+  --color-navlink-active-bg: #ffffff0f;
+  --color-navlink-hover-bg: #ffffff07;
 
   --color-metalink: var(--vt-c-text-dark-2);
   --color-metalink-hover: var(--vt-c-text-dark-1);

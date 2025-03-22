@@ -21,11 +21,11 @@ function isRouteBrowse(): boolean {
 </script>
 
 <template>
-  <nav>
+  <nav class="site-nav">
     <RouterLink
-      to="/"
-      class="nav-instance-home"
+      class="nav-router site-nav-home"
       :class="isRouteBrowse() ? 'router-link-active' : ''"
+      to="/"
     >
       <img
         v-if="site.site_view.site.icon"
@@ -34,18 +34,18 @@ function isRouteBrowse(): boolean {
       />
       <p>Browse</p>
     </RouterLink>
-    <RouterLink to="/messages">Messages</RouterLink>
-    <RouterLink to="/profile">Profile</RouterLink>
-    <RouterLink to="/settings">Settings</RouterLink>
-    <RouterLink to="/about">About</RouterLink>
+    <RouterLink class="nav-router" to="/messages">Messages</RouterLink>
+    <RouterLink class="nav-router" to="/profile">Profile</RouterLink>
+    <RouterLink class="nav-router" to="/settings">Settings</RouterLink>
+    <RouterLink class="nav-router" to="/about">About</RouterLink>
   </nav>
 </template>
 
-<style scoped>
-nav {
+<style>
+.site-nav {
+  padding: 8px;
   display: flex;
   align-items: center;
-  gap: 8px;
   font-size: x-large;
   flex-grow: 0;
   background: var(--color-background-soft);
@@ -53,23 +53,17 @@ nav {
   overflow: scroll;
 }
 
-nav * {
-  text-decoration: none;
+.site-nav-home {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.nav-instance-home {
-  display: flex;
-  height: 48px;
-  align-items: center;
-  padding: 8px 0 8px 8px;
-  gap: 4px;
+.nav-instance-logo {
+  max-height: 1em;
 }
 
 .nav-instance-home > img {
   max-height: 100%;
-}
-
-.router-link-active {
-  color: var(--color-navlink-active);
 }
 </style>
