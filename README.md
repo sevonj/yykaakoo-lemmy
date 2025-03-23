@@ -1,4 +1,5 @@
-[![GH Pages Deployment](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml) [![CI](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml)
+[![CI](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/ci.yml)
+[![GH Pages Deployment](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/sevonj/yykaakoo-lemmy/actions/workflows/deploy-pages.yml)
 ___
 # yykaakoo-lemmy
 
@@ -12,7 +13,9 @@ A bad frontend for lemmy.
 
 # Development
 
-(Vue 3 template readme)
+[➜ Project management](https://github.com/users/sevonj/projects/17)
+
+Vue 3 template readme:
 
 This template should help get you started developing with Vue 3 in Vite.
 
