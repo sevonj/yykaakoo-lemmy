@@ -100,7 +100,13 @@ async function loadMorePosts() {
   }
 
   const response = await client.getPosts(getPostsForm)
-  posts.value = posts.value.concat(response.posts)
+
+  // fancy load effect
+  for (const post of response.posts) {
+    posts.value.push(post)
+    await new Promise((resolve) => setTimeout(resolve, 40))
+  }
+
   feedCursor = response.next_page
   isFetchingMorePosts = false
   if (!response.next_page) {
