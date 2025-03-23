@@ -16,40 +16,55 @@ import {
 import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+export type FeedLayoutType = 'Grid' | 'List'
+export type FeedLocation =
+  | { v: 'All' }
+  | { v: 'Local' }
+  | { v: 'Subscribed' }
+  | { v: 'Community'; identifier: string }
+
+type FeedState =
+  | { v: 'Init' }
+  | { v: 'Open'; cursor: PaginationCursor }
+  | { v: 'Busy' }
+  | { v: 'Ended' }
+
 const route = useRoute()
-let identifier = route.params.identifier?.toString()
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+let identifier = route.params.identifier?.toString()
 
 let comm = await fetchComm()
 const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
-const feedLocation = ref<FeedLocation>(generateFeedLocation(route.query.listingType?.toString()))
+const feedLocation = ref<FeedLocation>(buildFeedLocation(route.query.listingType?.toString()))
+const feedState = ref<FeedState>({ v: 'Init' })
 
 const posts = ref<PostView[]>([])
 const postRefs = ref<InstanceType<typeof PostTile>[]>([])
-const openedPostId = ref<number | null>()
-let feedCursor: PaginationCursor | undefined = undefined
-let feedEnded = false
-let isFetchingMorePosts = false
-
+const expandedPostId = ref<number | null>()
 const morePostsDetector = ref<HTMLElement | null>(null)
 
-function generateFeedLocation(listingType?: string): FeedLocation {
+function setSort(payload: { sortType: SortType }) {
+  sortType.value = payload.sortType
+  resetFeed()
+}
+
+function buildFeedLocation(listingType?: string): FeedLocation {
   if (identifier) {
-    return { type: 'Community', identifier }
+    return { v: 'Community', identifier }
   }
   if (listingType) {
     switch (listingType) {
       case 'All':
-        return { type: 'All' }
+        return { v: 'All' }
       case 'Local':
-        return { type: 'Local' }
+        return { v: 'Local' }
       case 'Subscribed':
-        return { type: 'Subscribed' }
+        return { v: 'Subscribed' }
     }
   }
-  return { type: 'Local' }
+  return { v: 'Local' }
 }
 
 async function fetchComm(): Promise<GetCommunityResponse | null> {
@@ -62,13 +77,18 @@ async function fetchComm(): Promise<GetCommunityResponse | null> {
   return await client.getCommunity(getCommunityForm)
 }
 
-function setSort(payload: { sortType: SortType }) {
-  sortType.value = payload.sortType
-  resetFeed()
-}
+async function fetchMorePosts() {
+  if (feedState.value.v != 'Open' && feedState.value.v != 'Init') {
+    return
+  }
+  const page_cursor = feedState.value.v == 'Open' ? feedState.value.cursor : undefined
+  feedState.value = { v: 'Busy' }
 
-function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
-  switch (feedLocation.value.type) {
+  const getPostsForm: GetPosts = {
+    sort: sortType.value,
+    page_cursor,
+  }
+  switch (feedLocation.value.v) {
     case 'All':
       getPostsForm.type_ = 'All'
       break
@@ -82,22 +102,6 @@ function mapFeedLocation(getPostsForm: GetPosts): GetPosts {
       getPostsForm.community_name = feedLocation.value.identifier
       break
   }
-  return getPostsForm
-}
-
-async function loadMorePosts() {
-  if (isFetchingMorePosts || feedEnded) {
-    return
-  }
-  isFetchingMorePosts = true
-
-  const getPostsForm = mapFeedLocation({
-    sort: sortType.value,
-  })
-
-  if (feedCursor) {
-    getPostsForm.page_cursor = feedCursor
-  }
 
   const response = await client.getPosts(getPostsForm)
 
@@ -107,49 +111,48 @@ async function loadMorePosts() {
     await new Promise((resolve) => setTimeout(resolve, 40))
   }
 
-  feedCursor = response.next_page
-  isFetchingMorePosts = false
-  if (!response.next_page) {
-    feedEnded = true
+  if (response.next_page) {
+    feedState.value = { v: 'Open', cursor: response.next_page }
+  } else {
+    feedState.value = { v: 'Ended' }
   }
 }
 
 function resetFeed(): void {
-  openedPostId.value = null
+  expandedPostId.value = null
   posts.value = []
-  feedCursor = undefined
-  feedEnded = false
-  loadMorePosts()
+  feedState.value = { v: 'Init' }
+  fetchMorePosts()
 }
 
-function onOpenThread(postId: number): void {
-  closeThread()
-  openedPostId.value = postId
-}
-
-function closeThread(): void {
-  if (!openedPostId.value) {
+function closeOpenedPost(): void {
+  if (!expandedPostId.value) {
     return
   }
-  const opened = postRefs.value.find((postTile) => postTile.postId === openedPostId.value)
-  openedPostId.value = null
+  const opened = postRefs.value.find((postTile) => postTile.postId === expandedPostId.value)
+  expandedPostId.value = null
   if (!opened) {
     console.error('Got openedPostId but found no post?!')
   }
   opened?.closeComments()
 }
 
-function onIntersect(entries: IntersectionObserverEntry[]) {
+function onPostOpened(postId: number): void {
+  closeOpenedPost()
+  expandedPostId.value = postId
+}
+
+function onScrollDetectorIntersect(entries: IntersectionObserverEntry[]) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      loadMorePosts()
+      fetchMorePosts()
     }
   })
 }
 
 onMounted(() => {
   if (morePostsDetector.value) {
-    const observer = new IntersectionObserver(onIntersect, { threshold: 0.5 })
+    const observer = new IntersectionObserver(onScrollDetectorIntersect, { threshold: 0.5 })
     observer.observe(morePostsDetector.value)
   }
 })
@@ -157,7 +160,7 @@ onMounted(() => {
 watch(
   () => route.query.listingType,
   (newValue) => {
-    feedLocation.value = generateFeedLocation(newValue?.toString())
+    feedLocation.value = buildFeedLocation(newValue?.toString())
     resetFeed()
   },
 )
@@ -166,22 +169,13 @@ watch(
   () => route.params.identifier,
   async (newValue) => {
     identifier = newValue?.toString()
-    feedLocation.value = generateFeedLocation()
+    feedLocation.value = buildFeedLocation()
     comm = await fetchComm()
     resetFeed()
   },
 )
 
-loadMorePosts()
-</script>
-
-<script lang="ts">
-export type FeedLayoutType = 'Grid' | 'List'
-export type FeedLocation =
-  | { type: 'All' }
-  | { type: 'Local' }
-  | { type: 'Subscribed' }
-  | { type: 'Community'; identifier: string }
+fetchMorePosts()
 </script>
 
 <template>
@@ -191,15 +185,15 @@ export type FeedLocation =
   </div>
 
   <main>
-    <div v-if="feedLocation.type == 'Subscribed'">
+    <div v-if="feedLocation.v == 'Subscribed'">
       <p>You are not logged in.</p>
     </div>
     <div v-else>
       <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
 
-      <div v-if="openedPostId" :key="openedPostId" class="thread-close-elevator-cont">
+      <div v-if="expandedPostId" :key="expandedPostId" class="thread-close-elevator-cont">
         <div class="thread-close-elevator-subcont">
-          <div class="thread-close-elevator" @click="closeThread()">
+          <div class="thread-close-elevator" @click="closeOpenedPost()">
             <p>Close thread</p>
           </div>
         </div>
@@ -212,14 +206,14 @@ export type FeedLocation =
           :key="postView.post.id"
           :id="postView.post.id"
           :feed-location="feedLocation"
-          @opened="onOpenThread"
+          @opened="onPostOpened"
           ref="postRefs"
           class="pop-in"
         />
         <div ref="morePostsDetector">
-          <p v-if="feedEnded">You have reached the end.</p>
-          <p v-else-if="isFetchingMorePosts">Loading...</p>
-          <a v-else class="more-posts-link" @click="loadMorePosts">Get more posts</a>
+          <p v-if="feedState.v == 'Ended'">You have reached the end.</p>
+          <p v-else-if="feedState.v == 'Busy'">Loading...</p>
+          <a v-else class="more-posts-link" @click="fetchMorePosts">Get more posts</a>
         </div>
 
         <div></div>
@@ -247,6 +241,7 @@ export type FeedLocation =
   max-width: 1500px;
   max-width: 100vw;
   margin: auto;
+  z-index: -1;
 }
 
 .feed-list {
@@ -262,6 +257,8 @@ export type FeedLocation =
   position: sticky;
   top: 0;
   width: 100%;
+  z-index: 10;
+  transform: translateZ(10);
 }
 
 .thread-close-elevator-subcont {
@@ -275,7 +272,6 @@ export type FeedLocation =
   right: 64px;
   width: 64px;
   padding: 8px;
-  z-index: 10;
   cursor: pointer;
 }
 
