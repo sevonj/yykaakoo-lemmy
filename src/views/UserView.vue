@@ -5,7 +5,7 @@ import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const identifier = route.params.identifier?.toString()
+const identifier = route.params.personIdentifier?.toString()
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
@@ -18,7 +18,7 @@ const user = await client.getPersonDetails(getPersonForm)
 
 <template>
   <main>
-    <UserHeader :user :identifier />
+    <UserHeader :user />
   </main>
 
   <div style="min-height: 100vh"></div>
