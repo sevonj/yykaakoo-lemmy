@@ -11,9 +11,7 @@ import SiteNav from './components/SiteNav.vue'
     <SiteNav />
   </Suspense>
 
-  <Suspense>
-    <RouterView />
-  </Suspense>
+  <RouterView />
 </template>
 
 <!--style scoped>

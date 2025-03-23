@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import FeedThe, { type FeedLocation } from '@/components/FeedThe.vue'
-import { ref, watch } from 'vue'
+import { watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 
-const feedLocation = ref(buildFeedLocation(listingType()))
+let feedLocation = buildFeedLocation(listingType())
 
 function listingType(): string | undefined {
   return route.query.listingType?.toString()
@@ -28,7 +28,7 @@ function buildFeedLocation(listingType?: string): FeedLocation {
 watch(
   () => route.query.listingType,
   (newListingType) => {
-    feedLocation.value = buildFeedLocation(newListingType?.toString())
+    feedLocation = buildFeedLocation(newListingType?.toString())
   },
 )
 </script>
