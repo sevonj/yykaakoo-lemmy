@@ -123,7 +123,7 @@ function isExternalLink(): boolean {
     </SpeechBubble>
     <UserMeta
       :person="postView.creator"
-      :comm="feedLocation.type != 'Community' ? postView.community : undefined"
+      :comm="feedLocation.v != 'Community' ? postView.community : undefined"
     >
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />

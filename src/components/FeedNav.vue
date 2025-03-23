@@ -30,29 +30,29 @@ watch(
       <RouterLink
         to="/?listingType=All"
         class="nav"
-        :class="location.value.type == 'All' ? 'selected feed-nav-link-selected' : ''"
+        :class="location.value.v == 'All' ? 'selected feed-nav-link-selected' : ''"
         >All</RouterLink
       >
 
       <RouterLink
         to="/?listingType=Local"
         class="nav"
-        :class="location.value.type == 'Local' ? 'selected feed-nav-link-selected' : ''"
+        :class="location.value.v == 'Local' ? 'selected feed-nav-link-selected' : ''"
         >Local</RouterLink
       >
 
       <RouterLink
         to="/?listingType=Subscribed"
         class="nav"
-        :class="location.value.type == 'Subscribed' ? 'selected feed-nav-link-selected' : ''"
+        :class="location.value.v == 'Subscribed' ? 'selected feed-nav-link-selected' : ''"
         >Followed</RouterLink
       >
 
       <a
         class="nav"
         :class="{
-          selected: location.value.type == 'Community',
-          'feed-nav-link-selected': location.value.type == 'Community',
+          selected: location.value.v == 'Community',
+          'feed-nav-link-selected': location.value.v == 'Community',
           'pseudo-active': showCommBrowser,
         }"
         @click="toggleCommBrowser"
