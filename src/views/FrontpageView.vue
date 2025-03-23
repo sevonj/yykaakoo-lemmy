@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import FeedThe, { type FeedLocation } from '@/components/FeedThe.vue'
+import FeedNav from '@/components/FeedNav.vue'
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { toRef } from 'vue'
 
 const route = useRoute()
 
@@ -34,7 +36,12 @@ watch(
 </script>
 
 <template>
-  <FeedThe :feed-location />
+  <div v-if="feedLocation">
+    <div class="feed-header">
+      <FeedNav :location="toRef(feedLocation)" />
+    </div>
+    <FeedThe :feed-location />
+  </div>
 </template>
 
 <style></style>

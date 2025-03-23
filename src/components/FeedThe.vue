@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import FeedNav from '@/components/FeedNav.vue'
 import FeedSortBar from '@/components/FeedSortBar.vue'
 import PostTile from '@/components/PostTile.vue'
-import CommunityHeader from './headers/CommunityHeader.vue'
 
 import {
   LemmyHttp,
@@ -149,11 +147,6 @@ fetchMorePosts()
 </script>
 
 <template>
-  <div class="feed-header">
-    <FeedNav :location="toRef(feedLocation)" />
-    <CommunityHeader v-if="feedLocation.v == 'Community'" :comm="feedLocation.data" />
-  </div>
-
   <main>
     <div v-if="feedLocation.v == 'Subscribed'">
       <p>You are not logged in.</p>
@@ -192,11 +185,6 @@ fetchMorePosts()
 </template>
 
 <style>
-.feed-header {
-  padding: 0 8px 12px 8px;
-  background: var(--color-background-soft);
-}
-
 .feed {
   display: grid;
   gap: 0.5rem;
