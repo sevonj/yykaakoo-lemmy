@@ -208,6 +208,7 @@ export type FeedLocation =
           :feed-location="feedLocation"
           @opened="onOpenThread"
           ref="postRefs"
+          class="pop-in"
         />
         <div ref="morePostsDetector">
           <p v-if="feedEnded">You have reached the end.</p>
