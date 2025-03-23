@@ -15,6 +15,7 @@ import {
 } from 'lemmy-js-client'
 import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import { communityRequestIdentifier } from '@/lib/actors'
 
 export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
@@ -32,9 +33,10 @@ type FeedState =
 const route = useRoute()
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
-let identifier = route.params.identifier?.toString()
 
-let comm = await fetchComm()
+let comm = route.params.communityIdentifier
+  ? await fetchComm(route.params.communityIdentifier.toString())
+  : null
 const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
 const feedLocation = ref<FeedLocation>(buildFeedLocation(route.query.listingType?.toString()))
@@ -51,7 +53,8 @@ function setSort(payload: { sortType: SortType }) {
 }
 
 function buildFeedLocation(listingType?: string): FeedLocation {
-  if (identifier) {
+  if (comm) {
+    const identifier = communityRequestIdentifier(comm.community_view.community)
     return { v: 'Community', identifier }
   }
   if (listingType) {
@@ -67,7 +70,7 @@ function buildFeedLocation(listingType?: string): FeedLocation {
   return { v: 'Local' }
 }
 
-async function fetchComm(): Promise<GetCommunityResponse | null> {
+async function fetchComm(identifier: string): Promise<GetCommunityResponse | null> {
   if (!identifier) {
     return null
   }
@@ -166,11 +169,14 @@ watch(
 )
 
 watch(
-  () => route.params.identifier,
+  () => route.params.communityIdentifier,
   async (newValue) => {
-    identifier = newValue?.toString()
     feedLocation.value = buildFeedLocation()
-    comm = await fetchComm()
+    if (newValue) {
+      comm = await fetchComm(newValue?.toString())
+    } else {
+      comm = null
+    }
     resetFeed()
   },
 )

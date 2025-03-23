@@ -20,7 +20,7 @@ const identifier = communityIdentifier(props.comm.community_view.community)
 
       <div class="community-header-title">
         <h1>{{ comm.community_view.community.title }}</h1>
-        <p>!{{ identifier }}</p>
+        <p>{{ identifier }}</p>
       </div>
     </div>
 

@@ -5,7 +5,7 @@ import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const identifier = route.params.identifier?.toString()
+const identifier = route.params.personIdentifier?.toString()
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client

@@ -34,7 +34,7 @@ function displayName(): string {
 
       <div class="community-header-title">
         <h1>{{ displayName() }}</h1>
-        <p>!{{ identifier }}</p>
+        <p>{{ identifier }}</p>
       </div>
     </div>
 
