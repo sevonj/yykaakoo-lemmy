@@ -11,7 +11,7 @@ const site = await client.getSite()
 
 function isRouteBrowse(): boolean {
   switch (route.name) {
-    case 'frontpage':
+    case 'browse_frontpage':
       return true
     case 'community':
       return true
