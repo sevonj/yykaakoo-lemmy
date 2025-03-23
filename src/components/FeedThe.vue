@@ -170,8 +170,16 @@ fetchMorePosts()
       </div>
 
       <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-        <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id"
-          :feed-location="feedLocation" @opened="onPostOpened" ref="postRefs" class="pop-in" />
+        <PostTile
+          v-for="postView in posts"
+          :post-view="postView"
+          :key="postView.post.id"
+          :id="postView.post.id"
+          :feed-location="feedLocation"
+          @opened="onPostOpened"
+          ref="postRefs"
+          class="pop-in"
+        />
         <div ref="morePostsDetector">
           <p v-if="feedState.v == 'Ended'">You have reached the end.</p>
           <p v-else-if="feedState.v == 'Busy'">Loading...</p>

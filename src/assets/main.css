@@ -73,6 +73,10 @@ a.nav:active,
   flex-shrink: 0;
 }
 
+h1 {
+  color: var(--color-heading);
+}
+
 .meta {
   font-size: small;
   color: var(--color-meta);
