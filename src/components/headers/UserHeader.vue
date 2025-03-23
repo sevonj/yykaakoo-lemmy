@@ -3,11 +3,13 @@ import type { GetPersonDetailsResponse } from 'lemmy-js-client'
 import VueMarkdown from 'vue-markdown-render'
 import { ref } from 'vue'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid'
+import { personIdentifier } from '@/lib/actors'
 
 const props = defineProps<{
   user: GetPersonDetailsResponse
-  identifier: string
 }>()
+
+const identifier = personIdentifier(props.user.person_view.person)
 
 const showDescription = ref(false)
 

@@ -2,11 +2,13 @@
 import type { GetCommunityResponse } from 'lemmy-js-client'
 import UserMeta from '../common/UserMeta.vue'
 import Badge from '../common/BadgeThe.vue'
+import { communityIdentifier } from '@/lib/actors'
 
-defineProps<{
+const props = defineProps<{
   comm: GetCommunityResponse
-  identifier: string
 }>()
+
+const identifier = communityIdentifier(props.comm.community_view.community)
 </script>
 
 <template>

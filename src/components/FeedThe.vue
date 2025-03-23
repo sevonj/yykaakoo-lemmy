@@ -181,7 +181,7 @@ fetchMorePosts()
 <template>
   <div class="feed-header">
     <FeedNav :location="toRef(feedLocation)" />
-    <CommunityHeader v-if="comm" :comm :identifier />
+    <CommunityHeader v-if="comm" :comm />
   </div>
 
   <main>

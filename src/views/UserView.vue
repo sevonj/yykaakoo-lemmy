@@ -18,7 +18,7 @@ const user = await client.getPersonDetails(getPersonForm)
 
 <template>
   <main>
-    <UserHeader :user :identifier />
+    <UserHeader :user />
   </main>
 
   <div style="min-height: 100vh"></div>

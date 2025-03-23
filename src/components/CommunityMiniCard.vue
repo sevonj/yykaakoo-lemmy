@@ -3,22 +3,17 @@ import type { CommunityView } from 'lemmy-js-client'
 import AvatarMiniBase from './common/AvatarMiniBase.vue'
 import AvatarMiniPlaceholder from './common/AvatarMiniPlaceholder.vue'
 import CommunityHandle from './textformat/CommunityHandle.vue'
+import { communityIdentifier } from '@/lib/actors'
 
 const props = defineProps<{
   comm: CommunityView
 }>()
 
-function hostname(): string {
-  return new URL(props.comm.community.actor_id).hostname
-}
-
-function identifier(): string {
-  return `!${props.comm.community.name}@${hostname()}`
-}
+const identifier = communityIdentifier(props.comm.community)
 </script>
 
 <template>
-  <RouterLink :to="identifier()" class="comm-minicard-cont meta-link">
+  <RouterLink :to="identifier" class="comm-minicard-cont meta-link">
     <div>
       <AvatarMiniBase v-if="comm.community.icon" :src="comm.community.icon" />
       <AvatarMiniPlaceholder v-else />

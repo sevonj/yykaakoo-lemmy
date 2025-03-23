@@ -1,22 +1,17 @@
 <script setup lang="ts">
 import type { Person } from 'lemmy-js-client'
 import UserHandle from '../textformat/UserHandle.vue'
+import { personIdentifier } from '@/lib/actors'
 
 const props = defineProps<{
   person: Person
 }>()
 
-function hostname(): string {
-  return new URL(props.person.actor_id).hostname
-}
-
-function identifier(): string {
-  return `@${props.person.name}@${hostname()}`
-}
+const identifier = personIdentifier(props.person)
 </script>
 
 <template>
-  <RouterLink class="meta" :to="identifier()">
+  <RouterLink class="meta" :to="identifier">
     <UserHandle :person />
   </RouterLink>
 </template>
