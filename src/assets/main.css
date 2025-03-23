@@ -121,6 +121,21 @@ a.meta:hover,
   display: none;
 }
 
+@keyframes popIn {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.pop-in {
+  animation: popIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
 
 input + label {
   color: var(--color-navlink);

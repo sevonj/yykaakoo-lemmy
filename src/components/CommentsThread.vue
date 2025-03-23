@@ -38,6 +38,7 @@ fetchComments()
       v-for="commentView in comments"
       :comment-view="commentView"
       :key="commentView.comment.id"
+      class="pop-in"
     />
   </div>
 </template>

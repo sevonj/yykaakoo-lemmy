@@ -2,11 +2,20 @@
 ___
 # yykaakoo-lemmy
 
-a bad frontend for lemmy.
+A bad frontend for lemmy. 
 
 ![image](https://github.com/user-attachments/assets/f3da7d63-fd83-4901-9db9-0c7b287e4385)
 
+## Acknowledgements
+
+- Not based on, but borrows a few lines of code from [Photon](https://github.com/Xyphyn/photon).
+
+# Development
+
+(Vue 3 template readme)
+
 This template should help get you started developing with Vue 3 in Vite.
+
 
 ## Recommended IDE Setup
 
