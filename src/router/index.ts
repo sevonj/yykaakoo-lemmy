@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CommunityView from '@/views/CommunityView.vue'
-import FeedView from '../views/FeedView.vue'
+import FrontpageView from '../views/FrontpageView.vue'
 import TempNotLoggedInView from '@/views/TempNotLoggedInView.vue'
 import TodoView from '@/views/TodoView.vue'
 
@@ -10,7 +10,7 @@ const router = createRouter({
     {
       path: '',
       name: 'browse_frontpage',
-      component: FeedView,
+      component: FrontpageView,
     },
     {
       path: '/!:communityIdentifier?',

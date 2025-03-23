@@ -6,7 +6,6 @@ import CommunityHeader from './headers/CommunityHeader.vue'
 
 import {
   LemmyHttp,
-  type GetCommunity,
   type GetCommunityResponse,
   type GetPosts,
   type PaginationCursor,
@@ -14,15 +13,13 @@ import {
   type SortType,
 } from 'lemmy-js-client'
 import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { communityRequestIdentifier } from '@/lib/actors'
 
 export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
   | { v: 'All' }
   | { v: 'Local' }
   | { v: 'Subscribed' }
-  | { v: 'Community'; identifier: string }
+  | { v: 'Community'; identifier: string; data: GetCommunityResponse }
 
 type FeedState =
   | { v: 'Init' }
@@ -30,16 +27,15 @@ type FeedState =
   | { v: 'Busy' }
   | { v: 'Ended' }
 
-const route = useRoute()
+const props = defineProps<{
+  feedLocation: FeedLocation
+}>()
+
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
 
-let comm = route.params.communityIdentifier
-  ? await fetchComm(route.params.communityIdentifier.toString())
-  : null
 const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
-const feedLocation = ref<FeedLocation>(buildFeedLocation(route.query.listingType?.toString()))
 const feedState = ref<FeedState>({ v: 'Init' })
 
 const posts = ref<PostView[]>([])
@@ -50,34 +46,6 @@ const morePostsDetector = ref<HTMLElement | null>(null)
 function setSort(payload: { sortType: SortType }) {
   sortType.value = payload.sortType
   resetFeed()
-}
-
-function buildFeedLocation(listingType?: string): FeedLocation {
-  if (comm) {
-    const identifier = communityRequestIdentifier(comm.community_view.community)
-    return { v: 'Community', identifier }
-  }
-  if (listingType) {
-    switch (listingType) {
-      case 'All':
-        return { v: 'All' }
-      case 'Local':
-        return { v: 'Local' }
-      case 'Subscribed':
-        return { v: 'Subscribed' }
-    }
-  }
-  return { v: 'Local' }
-}
-
-async function fetchComm(identifier: string): Promise<GetCommunityResponse | null> {
-  if (!identifier) {
-    return null
-  }
-  const getCommunityForm: GetCommunity = {
-    name: identifier,
-  }
-  return await client.getCommunity(getCommunityForm)
 }
 
 async function fetchMorePosts() {
@@ -91,7 +59,7 @@ async function fetchMorePosts() {
     sort: sortType.value,
     page_cursor,
   }
-  switch (feedLocation.value.v) {
+  switch (props.feedLocation.v) {
     case 'All':
       getPostsForm.type_ = 'All'
       break
@@ -102,7 +70,7 @@ async function fetchMorePosts() {
       getPostsForm.type_ = 'Subscribed'
       break
     case 'Community':
-      getPostsForm.community_name = feedLocation.value.identifier
+      getPostsForm.community_name = props.feedLocation.identifier
       break
   }
 
@@ -161,24 +129,8 @@ onMounted(() => {
 })
 
 watch(
-  () => route.query.listingType,
-  (newValue) => {
-    feedLocation.value = buildFeedLocation(newValue?.toString())
-    resetFeed()
-  },
-)
-
-watch(
-  () => route.params.communityIdentifier,
-  async (newValue) => {
-    feedLocation.value = buildFeedLocation()
-    if (newValue) {
-      comm = await fetchComm(newValue?.toString())
-    } else {
-      comm = null
-    }
-    resetFeed()
-  },
+  () => props.feedLocation,
+  () => resetFeed(),
 )
 
 fetchMorePosts()
@@ -187,7 +139,7 @@ fetchMorePosts()
 <template>
   <div class="feed-header">
     <FeedNav :location="toRef(feedLocation)" />
-    <CommunityHeader v-if="comm" :comm />
+    <CommunityHeader v-if="feedLocation.v == 'Community'" :comm="feedLocation.data" />
   </div>
 
   <main>
