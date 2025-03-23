@@ -8,7 +8,9 @@ import {
   type ListingType,
   type Search,
 } from 'lemmy-js-client'
-import { getCurrentInstance, ref } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref } from 'vue'
+
+export type CommunityLocation = 'All' | 'Local' | 'Subscribed' | 'ModeratorView' | 'Search'
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
@@ -19,6 +21,7 @@ const communities = ref<CommunityView[]>([])
 let fetchingMoreCommunities = false
 let endReached = false
 const searchQuery = ref<string>('')
+const moreCommsDetector = ref<HTMLElement | null>(null)
 
 function mapLocation(location: CommunityLocation): ListingType | undefined {
   switch (location) {
@@ -66,6 +69,16 @@ async function fetchMoreCommunities(): Promise<void> {
   }
   communities.value = communities.value.concat(result)
   fetchingMoreCommunities = false
+
+  // recurse
+  if (!moreCommsDetector.value) {
+    console.log('detektor didnt exist')
+    return
+  }
+  const rect = moreCommsDetector.value.getBoundingClientRect()
+  if (rect.top < window.innerHeight) {
+    fetchMoreCommunities()
+  }
 }
 
 async function fetchByList(): Promise<CommunityView[]> {
@@ -94,11 +107,25 @@ async function fetchBySearch(): Promise<CommunityView[]> {
   return result.communities
 }
 
-fetchCommunities()
-</script>
+function onScroll(): void {
+  if (!moreCommsDetector.value) {
+    return
+  }
+  const rect = moreCommsDetector.value.getBoundingClientRect()
+  if (rect.top < window.innerHeight) {
+    fetchMoreCommunities()
+  }
+}
 
-<script lang="ts">
-export type CommunityLocation = 'All' | 'Local' | 'Subscribed' | 'ModeratorView' | 'Search'
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+})
+
+fetchCommunities()
 </script>
 
 <template>
@@ -136,6 +163,7 @@ export type CommunityLocation = 'All' | 'Local' | 'Subscribed' | 'ModeratorView'
         <a @click="fetchMoreCommunities">More</a>
       </div>
     </div>
+    <div ref="moreCommsDetector"></div>
   </div>
 </template>
 
