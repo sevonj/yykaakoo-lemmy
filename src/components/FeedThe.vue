@@ -12,7 +12,7 @@ import {
   type PostView,
   type SortType,
 } from 'lemmy-js-client'
-import { getCurrentInstance, onMounted, ref, toRef, watch } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref, toRef, watch } from 'vue'
 
 export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
@@ -87,6 +87,15 @@ async function fetchMorePosts() {
   } else {
     feedState.value = { v: 'Ended' }
   }
+
+  // recurse
+  if (!morePostsDetector.value) {
+    return
+  }
+  const rect = morePostsDetector.value.getBoundingClientRect()
+  if (rect.top < window.innerHeight) {
+    fetchMorePosts()
+  }
 }
 
 function resetFeed(): void {
@@ -113,19 +122,22 @@ function onPostOpened(postId: number): void {
   expandedPostId.value = postId
 }
 
-function onScrollDetectorIntersect(entries: IntersectionObserverEntry[]) {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      fetchMorePosts()
-    }
-  })
+function onScroll() {
+  const scrollHeight = document.documentElement.scrollHeight
+  const scrollTop = document.documentElement.scrollTop
+  const clientHeight = document.documentElement.clientHeight
+
+  if (scrollTop + clientHeight >= scrollHeight - 400) {
+    fetchMorePosts()
+  }
 }
 
 onMounted(() => {
-  if (morePostsDetector.value) {
-    const observer = new IntersectionObserver(onScrollDetectorIntersect, { threshold: 0.5 })
-    observer.observe(morePostsDetector.value)
-  }
+  window.addEventListener('scroll', onScroll)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
 })
 
 watch(
@@ -158,32 +170,16 @@ fetchMorePosts()
       </div>
 
       <div class="feed" :class="feedLayout == 'Grid' ? 'feed-grid' : 'feed-list'">
-        <PostTile
-          v-for="postView in posts"
-          :post-view="postView"
-          :key="postView.post.id"
-          :id="postView.post.id"
-          :feed-location="feedLocation"
-          @opened="onPostOpened"
-          ref="postRefs"
-          class="pop-in"
-        />
+        <PostTile v-for="postView in posts" :post-view="postView" :key="postView.post.id" :id="postView.post.id"
+          :feed-location="feedLocation" @opened="onPostOpened" ref="postRefs" class="pop-in" />
         <div ref="morePostsDetector">
           <p v-if="feedState.v == 'Ended'">You have reached the end.</p>
           <p v-else-if="feedState.v == 'Busy'">Loading...</p>
           <a v-else class="more-posts-link" @click="fetchMorePosts">Get more posts</a>
         </div>
-
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
       </div>
     </div>
-    <div style="min-height: 100vh"></div>
+    <div style="min-height: 300px"></div>
   </main>
 </template>
 
