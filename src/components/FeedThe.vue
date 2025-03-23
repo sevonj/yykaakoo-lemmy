@@ -185,9 +185,9 @@ fetchMorePosts()
           <p v-else-if="feedState.v == 'Busy'">Loading...</p>
           <a v-else class="more-posts-link" @click="fetchMorePosts">Get more posts</a>
         </div>
+        <div style="min-height: 300px; grid-column: 1/-1"></div>
       </div>
     </div>
-    <div style="min-height: 300px"></div>
   </main>
 </template>
 
