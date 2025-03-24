@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
-    "@tsconfig/node22": "^22.0.0",
+    "@tsconfig/node22": "^22.0.1",
     "@types/jsdom": "^21.1.7",
     "@types/markdown-it": "^14.1.2",
     "@types/node": "^22.13.9",
