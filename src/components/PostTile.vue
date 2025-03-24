@@ -11,6 +11,7 @@ import ExternalLink from './links/ExternalLink.vue'
 import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 import VoteBlock from './common/VoteBlock.vue'
+import { optimizeThumbnailUrl } from '@/lib/url'
 
 const props = defineProps<{
   postView: PostView
@@ -25,11 +26,17 @@ const emit = defineEmits({
 })
 
 const postId = props.postView.post.id
+const thumbnailUrl = props.postView.post.thumbnail_url
+  ? optimizeThumbnailUrl(props.postView.post.thumbnail_url)
+  : undefined
+const fullImageUrl = isImage() ? props.postView.post.url : null
+const externalUrl = isExternalLink() ? props.postView.post.url : null
 
-defineExpose({ closeComments, postId })
+const isOpen: Ref<boolean, boolean> = ref(false)
 
 const htmlPostArticle = ref<HTMLElement | null>(null)
-const isOpen: Ref<boolean, boolean> = ref(false)
+
+defineExpose({ closeComments, postId })
 
 async function openComments(): Promise<void> {
   if (isOpen.value) {
@@ -54,11 +61,15 @@ function scrollToSelf(): void {
   })
 }
 
-function isExternalLink(): boolean {
+function isImage(): boolean {
   if (!props.postView.post.url_content_type) {
     return false
   }
-  if (props.postView.post.url_content_type.startsWith('image/')) {
+  return props.postView.post.url_content_type?.startsWith('image/')
+}
+
+function isExternalLink(): boolean {
+  if (!props.postView.post.url_content_type || isImage()) {
     return false
   }
   return true
@@ -73,7 +84,7 @@ function isExternalLink(): boolean {
     >
       <template v-slot:content>
         <div v-if="!isOpen" class="post-preview">
-          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
+          <img v-if="thumbnailUrl" :src="thumbnailUrl" />
           <div v-else-if="isExternalLink()"></div>
           <VueMarkdown
             v-else-if="postView.post.body"
@@ -84,11 +95,17 @@ function isExternalLink(): boolean {
             <LinkIcon class="post-preview-link-badge" />
           </div>
         </div>
-        <div v-else-if="postView.post.thumbnail_url" class="full-image">
-          <img v-if="postView.post.thumbnail_url" :src="postView.post.thumbnail_url" />
+        <div v-else-if="fullImageUrl" class="full-image">
+          <img :src="fullImageUrl" />
         </div>
 
-        <ExternalLink v-if="postView.post.url && isOpen" :url="postView.post.url" />
+        <ExternalLink
+          v-if="externalUrl && isOpen"
+          :url="externalUrl"
+          :thumbnail-url
+          :title="postView.post.embed_title"
+          :desc="postView.post.embed_description"
+        />
 
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
           {{ postView.post.name }}
