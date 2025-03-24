@@ -6,10 +6,11 @@ import UserMeta from './common/UserMeta.vue'
 import { nextTick, ref, type Ref } from 'vue'
 import VueMarkdown from 'vue-markdown-render'
 import CommentsThread from './CommentsThread.vue'
-import { ChatBubbleLeftIcon, ArrowUpIcon, ArrowDownIcon, LinkIcon } from '@heroicons/vue/24/solid'
+import { ChatBubbleLeftIcon, LinkIcon } from '@heroicons/vue/24/solid'
 import ExternalLink from './links/ExternalLink.vue'
 import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
+import VoteBlock from './common/VoteBlock.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -103,13 +104,7 @@ function isExternalLink(): boolean {
       <template v-slot:below>
         <div class="flex-row flex-1" style="gap: 12px">
           <div class="flex-row no-shrink" style="">
-            <ArrowUpIcon class="meta-icon" />
-            <p>{{ postView.counts.upvotes }}</p>
-          </div>
-
-          <div class="flex-row no-shrink" style="">
-            <ArrowDownIcon class="meta-icon" />
-            <p>{{ postView.counts.downvotes }}</p>
+            <VoteBlock :upvotes="postView.counts.upvotes" :downvotes="postView.counts.downvotes" />
           </div>
 
           <div class="flex-row no-shrink" style="">

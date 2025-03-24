@@ -1,24 +1,29 @@
 <script setup lang="ts">
-import { ArrowUpCircleIcon, ArrowDownCircleIcon } from '@heroicons/vue/24/outline'
+import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/vue/24/solid'
+
+defineProps<{
+  upvotes: number
+  downvotes: number
+}>()
 </script>
 
 <template>
-  <div class="post-side">
-    <div style="width: 100%; flex-grow: 1; display: flex; flex-direction: column">
-      <ArrowUpCircleIcon />
-      <ArrowDownCircleIcon />
-    </div>
+  <div class="vote-block">
+    <a class="button-link">
+      <ArrowUpIcon class="meta-icon" />
+      <p>{{ upvotes }}</p>
+    </a>
+    <a class="button-link">
+      <ArrowDownIcon class="meta-icon" />
+      <p>{{ downvotes }}</p>
+    </a>
   </div>
 </template>
 
 <style>
-.post-side {
-  color: #6a6977;
-  flex-shrink: 0;
-  width: 32px;
+.vote-block {
+  color: var(--color-meta);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 3px;
 }
 </style>
