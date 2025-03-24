@@ -26,6 +26,7 @@ main {
 a {
   color: var(--color-text);
   cursor: pointer;
+  text-decoration: none;
 }
 
 a.nav,
