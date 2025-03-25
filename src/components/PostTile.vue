@@ -13,6 +13,7 @@ import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 import VoteBlock from './common/VoteBlock.vue'
 import { optimizeThumbnailUrl } from '@/lib/url'
 import MediaTypeIcon from './icons/MediaTypeIcon.vue'
+import ExternalUrl from './textformat/ExternalUrl.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -31,7 +32,8 @@ const thumbnailUrl = props.postView.post.thumbnail_url
   ? optimizeThumbnailUrl(props.postView.post.thumbnail_url)
   : undefined
 const fullImageUrl = isImage() ? props.postView.post.url : null
-const externalUrl = isExternalLink() ? props.postView.post.url : null
+const externalUrl =
+  isExternalLink() && props.postView.post.url ? new URL(props.postView.post.url) : null
 const mediaType = props.postView.post.url_content_type?.split('/')[0]
 
 const isOpen: Ref<boolean, boolean> = ref(false)
@@ -95,6 +97,9 @@ function isExternalLink(): boolean {
           />
           <div v-if="externalUrl" class="post-preview-link-badge-cont">
             <MediaTypeIcon :media-type class="post-preview-link-badge" />
+            <p>
+              <ExternalUrl :url="externalUrl" />
+            </p>
           </div>
         </div>
         <div v-else-if="fullImageUrl" class="full-image">
@@ -226,18 +231,24 @@ article {
 
 .post-preview-link-badge-cont {
   position: relative;
-  max-width: 0;
-  max-height: 0;
-  bottom: 34px;
-  left: 4px;
+  bottom: 30px;
+
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  height: 24px;
+
+  background: #000a;
+  backdrop-filter: blur(4px);
+  text-wrap-mode: nowrap;
+  font-size: small;
 }
 
 .post-preview-link-badge {
-  height: 24px;
-  width: 24px;
-  background: #000b;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  height: 100%;
   padding: 4px;
-  border-radius: 8px;
 }
 
 .full-image {
