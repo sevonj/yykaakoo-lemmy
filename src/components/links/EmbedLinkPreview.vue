@@ -1,27 +1,25 @@
 <script setup lang="ts">
 import MediaTypeIcon from '../icons/MediaTypeIcon.vue'
+import ExternalUrl from '../textformat/ExternalUrl.vue'
 
-const props = defineProps<{
-  url: string
+defineProps<{
+  url: URL
   thumbnailUrl?: string
   title?: string
   desc?: string
   mediaType?: string
 }>()
-
-const urlObj = new URL(props.url)
 </script>
 
 <template>
   <div class="ext-link-cont">
-    <a :href="url">
+    <a :href="url.toString()">
       <div class="ext-link-block">
         <div class="flex-1">
           <div class="flex-row">
             <MediaTypeIcon :media-type class="meta-icon ext-link-icon" />
             <p>
-              <span class="meta-highlight">{{ urlObj.hostname }}</span
-              >{{ urlObj.pathname }}
+              <ExternalUrl :url />
             </p>
           </div>
           <h1 v-if="title">{{ title }}</h1>
