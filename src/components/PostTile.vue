@@ -6,12 +6,13 @@ import UserMeta from './common/UserMeta.vue'
 import { nextTick, ref, type Ref } from 'vue'
 import VueMarkdown from 'vue-markdown-render'
 import CommentsThread from './CommentsThread.vue'
-import { ChatBubbleLeftIcon, LinkIcon } from '@heroicons/vue/24/solid'
-import ExternalLink from './links/ExternalLink.vue'
+import { ChatBubbleLeftIcon } from '@heroicons/vue/24/solid'
+import EmbedLinkPreview from './links/EmbedLinkPreview.vue'
 import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 import VoteBlock from './common/VoteBlock.vue'
 import { optimizeThumbnailUrl } from '@/lib/url'
+import MediaTypeIcon from './icons/MediaTypeIcon.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -31,6 +32,7 @@ const thumbnailUrl = props.postView.post.thumbnail_url
   : undefined
 const fullImageUrl = isImage() ? props.postView.post.url : null
 const externalUrl = isExternalLink() ? props.postView.post.url : null
+const mediaType = props.postView.post.url_content_type?.split('/')[0]
 
 const isOpen: Ref<boolean, boolean> = ref(false)
 
@@ -91,20 +93,21 @@ function isExternalLink(): boolean {
             class="post-body md"
             :source="postView.post.body"
           />
-          <div v-if="isExternalLink()" class="post-preview-link-badge-cont">
-            <LinkIcon class="post-preview-link-badge" />
+          <div v-if="externalUrl" class="post-preview-link-badge-cont">
+            <MediaTypeIcon :media-type class="post-preview-link-badge" />
           </div>
         </div>
         <div v-else-if="fullImageUrl" class="full-image">
           <img :src="fullImageUrl" />
         </div>
 
-        <ExternalLink
+        <EmbedLinkPreview
           v-if="externalUrl && isOpen"
           :url="externalUrl"
           :thumbnail-url
           :title="postView.post.embed_title"
           :desc="postView.post.embed_description"
+          :media-type
         />
 
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
@@ -235,33 +238,6 @@ article {
   background: #000b;
   padding: 4px;
   border-radius: 8px;
-}
-
-.post-preview-link-cont {
-  position: relative;
-  height: 0;
-}
-
-.post-preview-link {
-  text-wrap-mode: nowrap;
-  font-size: small;
-  position: relative;
-  top: 8px;
-  left: 8px;
-  height: 2em;
-  aspect-ratio: 1;
-  background: #000a;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.post-preview-link * {
-  max-height: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .full-image {

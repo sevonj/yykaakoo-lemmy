@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { LinkIcon } from '@heroicons/vue/24/solid'
+import MediaTypeIcon from '../icons/MediaTypeIcon.vue'
 
 const props = defineProps<{
   url: string
   thumbnailUrl?: string
   title?: string
   desc?: string
+  mediaType?: string
 }>()
 
 const urlObj = new URL(props.url)
@@ -17,7 +18,7 @@ const urlObj = new URL(props.url)
       <div class="ext-link-block">
         <div class="flex-1">
           <div class="flex-row">
-            <LinkIcon class="meta-icon ext-link-icon" />
+            <MediaTypeIcon :media-type class="meta-icon ext-link-icon" />
             <p>
               <span class="meta-highlight">{{ urlObj.hostname }}</span
               >{{ urlObj.pathname }}
