@@ -110,11 +110,22 @@ a.meta,
   text-overflow: ellipsis;
   text-wrap-mode: nowrap;
   max-width: 100%;
+  border-radius: 12px;
+  outline: 0 solid #fff2;
+}
+
+a.meta:hover,
+.meta-link:hover,
+a.meta:hover *,
+.meta-link:hover * {
+  transition: 0.2s;
+  color: var(--color-metalink-hover);
 }
 
 a.meta:hover,
 .meta-link:hover {
-  color: var(--color-metalink-hover);
+  outline-width: 2px;
+  background: #fff2;
 }
 
 .meta-icon {
