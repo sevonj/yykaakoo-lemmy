@@ -28,7 +28,7 @@ function displayName(): string {
 <template>
   <div class="community-header">
     <div class="community-header-titleblock">
-      <div class="community-header-icon">
+      <div class="community-header-icon avatar">
         <img v-if="user.person_view.person.avatar" :src="user.person_view.person.avatar" />
       </div>
 
