@@ -14,7 +14,7 @@ const identifier = communityIdentifier(props.comm.community_view.community)
 <template>
   <div class="community-header">
     <div class="community-header-titleblock">
-      <div class="community-header-icon">
+      <div class="community-header-icon avatar">
         <img v-if="comm.community_view.community.icon" :src="comm.community_view.community.icon" />
       </div>
 

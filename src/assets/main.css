@@ -127,7 +127,14 @@ a.meta:hover,
 .avatar {
   overflow: hidden;
   background: orangered;
-  border: 1px solid #444;
+  outline: 1px solid #0004;
+  border-radius: 22%;
+  transition: 0.2s;
+  margin: 4px;
+}
+
+a .avatar:hover {
+  outline: 4px solid #fff4;
 }
 
 .avatar > img {

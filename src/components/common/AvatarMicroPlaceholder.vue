@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AvatarMicroBase from './AvatarMicroBase .vue'
+import AvatarMicroBase from './AvatarMicroBase.vue'
 </script>
 
 <template>
