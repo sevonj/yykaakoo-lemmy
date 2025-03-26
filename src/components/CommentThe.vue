@@ -71,8 +71,4 @@ async function getReplies() {
   </div>
 </template>
 
-<style>
-.comment-cont {
-  margin-top: 4px;
-}
-</style>
+<style></style>
