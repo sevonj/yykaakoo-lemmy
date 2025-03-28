@@ -123,7 +123,7 @@ function isExternalLink(): boolean {
         />
 
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
-          {{ postView.community.instance_id }} - {{ postView.post.name }}
+          {{ postView.post.name }}
         </h1>
 
         <div v-if="isOpen">

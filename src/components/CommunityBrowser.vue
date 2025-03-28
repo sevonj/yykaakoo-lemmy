@@ -72,7 +72,7 @@ async function fetchMoreCommunities(): Promise<void> {
 
   // recurse
   if (!moreCommsDetector.value) {
-    console.log('detektor didnt exist')
+    console.error('detektor didnt exist')
     return
   }
   const rect = moreCommsDetector.value.getBoundingClientRect()

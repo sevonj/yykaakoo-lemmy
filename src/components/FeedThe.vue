@@ -109,8 +109,6 @@ async function fetchMorePosts() {
       }
   }
 
-  console.log('form:', form.v)
-
   let response: GetPostsResponse | GetPersonDetailsResponse | undefined
   let next_page: string | undefined
 
