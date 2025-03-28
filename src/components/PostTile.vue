@@ -8,7 +8,6 @@ import MarkdownView from './markdown/MarkdownView.vue'
 import CommentsThread from './CommentsThread.vue'
 import { ChatBubbleLeftIcon } from '@heroicons/vue/24/solid'
 import EmbedLinkPreview from './links/EmbedLinkPreview.vue'
-import type { FeedLocation } from './FeedThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
 import VoteBlock from './common/VoteBlock.vue'
 import { optimizeThumbnailUrl } from '@/lib/url'
@@ -17,7 +16,8 @@ import ExternalUrl from './textformat/ExternalUrl.vue'
 
 const props = defineProps<{
   postView: PostView
-  feedLocation: FeedLocation
+  showComm?: boolean
+  startOpen?: boolean
 }>()
 
 const emit = defineEmits({
@@ -36,7 +36,7 @@ const externalUrl =
   isExternalLink() && props.postView.post.url ? new URL(props.postView.post.url) : null
 const mediaType = props.postView.post.url_content_type?.split('/')[0]
 
-const isOpen: Ref<boolean, boolean> = ref(false)
+const isOpen: Ref<boolean, boolean> = ref(props.startOpen)
 
 const htmlPostArticle = ref<HTMLElement | null>(null)
 
@@ -139,10 +139,7 @@ function isExternalLink(): boolean {
         <RelativeTimestamp :timestamp="postView.counts.published" />
       </template>
     </SpeechBubble>
-    <UserMeta
-      :person="postView.creator"
-      :comm="feedLocation.v != 'Community' ? postView.community : undefined"
-    >
+    <UserMeta :person="postView.creator" :comm="showComm ? postView.community : undefined">
       <template v-slot:user_badges>
         <Badge v-if="postView.creator_is_moderator" text="mod" />
         <Badge v-if="postView.creator_is_admin" text="admin" />
