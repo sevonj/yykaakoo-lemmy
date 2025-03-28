@@ -168,7 +168,7 @@ fetchMorePosts()
           :post-view="postView"
           :key="postView.post.id"
           :id="postView.post.id"
-          :feed-location="feedLocation"
+          :show-comm="feedLocation.v != 'Community'"
           @opened="onPostOpened"
           ref="postRefs"
           class="pop-in"
