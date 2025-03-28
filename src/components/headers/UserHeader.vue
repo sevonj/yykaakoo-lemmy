@@ -1,21 +1,13 @@
 <script setup lang="ts">
 import type { GetPersonDetailsResponse } from 'lemmy-js-client'
-import MarkdownView from '../markdown/MarkdownView.vue'
-import { ref } from 'vue'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid'
 import { personIdentifier } from '@/lib/actors'
+import MarkdownExpander from '../common/MarkdownExpander.vue'
 
 const props = defineProps<{
   user: GetPersonDetailsResponse
 }>()
 
 const identifier = personIdentifier(props.user.person_view.person)
-
-const showDescription = ref(false)
-
-function toggleDescription(): void {
-  showDescription.value = !showDescription.value
-}
 
 function displayName(): string {
   if (props.user.person_view.person.display_name) {
@@ -54,18 +46,12 @@ function displayName(): string {
       </div>
     </div-->
 
-    <div v-if="user.person_view.person.bio" class="community-header-descblock">
-      <a @click="toggleDescription" style="display: flex; align-items: center">
-        <h3 style="margin-right: 4px">Bio</h3>
-        <ChevronUpIcon class="expand-icon" v-if="showDescription" />
-        <ChevronDownIcon class="expand-icon" v-else />
-      </a>
-      <MarkdownView
-        v-if="showDescription"
-        class="md community-header-desc"
-        :source="user.person_view.person.bio"
-      />
-    </div>
+    <MarkdownExpander
+      title="Bio"
+      class="person-header-bio"
+      v-if="user.person_view.person.bio"
+      :source="user.person_view.person.bio"
+    />
   </div>
 </template>
 
@@ -127,16 +113,7 @@ function displayName(): string {
   flex-wrap: wrap;
 }
 
-.community-header-descblock {
+.person-header-bio {
   width: 100%;
-  background: #232323;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 4px;
-}
-
-.expand-icon {
-  max-height: 1.2em;
-  margin-top: 6px;
 }
 </style>

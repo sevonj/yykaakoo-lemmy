@@ -3,6 +3,7 @@ import type { GetCommunityResponse } from 'lemmy-js-client'
 import UserMeta from '../common/UserMeta.vue'
 import Badge from '../common/BadgeThe.vue'
 import { communityIdentifier } from '@/lib/actors'
+import MarkdownExpander from '../common/MarkdownExpander.vue'
 
 const props = defineProps<{
   comm: GetCommunityResponse
@@ -48,15 +49,12 @@ const identifier = communityIdentifier(props.comm.community_view.community)
       </div>
     </div>
 
-    <!--div v-if="comm.community_view.community.description" class="community-header-descblock">
-      <a @click="toggleDescription" style="display: flex; align-items: center;">
-        <h3 style="margin-right: 4px;">Description</h3>
-        <ChevronUpIcon class="expand-icon" v-if="showDescription" />
-        <ChevronDownIcon class="expand-icon" v-else />
-      </a>
-      <VueMarkdown v-if="showDescription" class="md community-header-desc"
-        :source="comm.community_view.community.description" />
-    </div-->
+    <MarkdownExpander
+      title="Description"
+      class="community-header-desc"
+      v-if="comm.community_view.community.description"
+      :source="comm.community_view.community.description"
+    />
   </div>
 </template>
 
@@ -118,12 +116,8 @@ const identifier = communityIdentifier(props.comm.community_view.community)
   flex-wrap: wrap;
 }
 
-.community-header-descblock {
+.community-header-desc {
   width: 100%;
-  background: #232323;
-  border: 1px solid #444;
-  border-radius: 8px;
-  padding: 4px;
 }
 
 .expand-icon {
