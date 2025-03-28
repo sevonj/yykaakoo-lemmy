@@ -1,13 +1,10 @@
 <script setup lang="ts">
-import { LemmyHttp } from 'lemmy-js-client'
 import { getCurrentInstance } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
 
 const instance = getCurrentInstance()
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
-
-const site = await client.getSite()
+const site = instance?.appContext.config.globalProperties.$localSite
 
 function isRouteBrowse(): boolean {
   switch (route.name) {

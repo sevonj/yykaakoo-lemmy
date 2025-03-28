@@ -1,17 +1,42 @@
 <script setup lang="ts">
+import type { LemmyHttp } from 'lemmy-js-client'
 import SiteNav from './components/SiteNav.vue'
+import { getCurrentInstance, ref } from 'vue'
+
+const appInstance = getCurrentInstance()
+const client: LemmyHttp = appInstance?.appContext.config.globalProperties.$client
+
+const loaded = ref(false)
+
+async function loadSite(): Promise<void> {
+  if (!appInstance) {
+    return
+  }
+  appInstance.appContext.config.globalProperties.$localSite = await client.getSite()
+
+  const federatedInstances = (await client.getFederatedInstances()).federated_instances
+  if (!federatedInstances) {
+    console.error('Failed to get feredatedInstances')
+  }
+  appInstance.appContext.config.globalProperties.$federatedInstances = federatedInstances
+  loaded.value = true
+}
+
+loadSite()
 </script>
 
 <template>
-  <!--Suspense>
+  <div v-if="loaded">
+    <!--Suspense>
     <SiteHead />
   </Suspense-->
 
-  <Suspense>
-    <SiteNav />
-  </Suspense>
+    <Suspense>
+      <SiteNav />
+    </Suspense>
 
-  <RouterView />
+    <RouterView />
+  </div>
 </template>
 
 <!--style scoped>

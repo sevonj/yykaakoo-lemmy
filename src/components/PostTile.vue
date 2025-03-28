@@ -13,6 +13,7 @@ import VoteBlock from './common/VoteBlock.vue'
 import { optimizeThumbnailUrl } from '@/lib/url'
 import MediaTypeIcon from './icons/MediaTypeIcon.vue'
 import ExternalUrl from './textformat/ExternalUrl.vue'
+import ForeignInstanceHeader from './headers/ForeignInstanceHeader.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -82,6 +83,12 @@ function isExternalLink(): boolean {
 
 <template>
   <article :class="isOpen ? 'post-expanded' : 'post-not-expanded'" ref="htmlPostArticle">
+    <div v-if="isOpen">
+      <Suspense>
+        <ForeignInstanceHeader :id="postView.community.instance_id" />
+      </Suspense>
+    </div>
+
     <SpeechBubble
       @click="openComments"
       :class="isOpen ? 'post-bubble-expanded' : 'post-bubble-not-expanded'"
@@ -116,7 +123,7 @@ function isExternalLink(): boolean {
         />
 
         <h1 class="post-title" :class="isOpen ? '' : 'post-title-closed'">
-          {{ postView.post.name }}
+          {{ postView.community.instance_id }} - {{ postView.post.name }}
         </h1>
 
         <div v-if="isOpen">
