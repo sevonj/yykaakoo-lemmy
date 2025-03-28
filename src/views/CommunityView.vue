@@ -40,17 +40,12 @@ fetchFeedLocation()
 
 <template>
   <div v-if="feedLocation">
-    <div class="feed-header">
+    <header>
       <FeedNav :location="toRef(feedLocation)" />
       <CommunityHeader v-if="feedLocation.v == 'Community'" :comm="feedLocation.data" />
-    </div>
+    </header>
     <FeedThe :feed-location />
   </div>
 </template>
 
-<style>
-.feed-header {
-  padding: 0 8px 12px 8px;
-  background: var(--color-background-soft);
-}
-</style>
+<style></style>

@@ -37,9 +37,9 @@ watch(
 
 <template>
   <div v-if="feedLocation">
-    <div class="feed-header">
+    <header>
       <FeedNav :location="toRef(feedLocation)" />
-    </div>
+    </header>
     <FeedThe :feed-location />
   </div>
 </template>
