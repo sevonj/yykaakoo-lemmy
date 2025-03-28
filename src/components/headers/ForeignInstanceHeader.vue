@@ -15,13 +15,11 @@ const federatedInstances: FederatedInstances =
 
 async function getForeignSite(): Promise<GetSiteResponse | undefined> {
   if (props.id === localSite.site_view.site.id) {
-    console.log('bailed: id is local')
     return undefined
   }
 
   const inst = federatedInstances.linked.find((inst) => inst.id == props.id)
   if (!inst) {
-    console.log('bailed: failed to find federated inst')
     return undefined
   }
 
