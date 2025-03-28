@@ -5,7 +5,10 @@ import PostTile from '@/components/PostTile.vue'
 import {
   LemmyHttp,
   type GetCommunityResponse,
+  type GetPersonDetails,
+  type GetPersonDetailsResponse,
   type GetPosts,
+  type GetPostsResponse,
   type PaginationCursor,
   type PostView,
   type SortType,
@@ -18,12 +21,15 @@ export type FeedLocation =
   | { v: 'Local' }
   | { v: 'Subscribed' }
   | { v: 'Community'; identifier: string; data: GetCommunityResponse }
+  | { v: 'Person'; id: number }
 
 type FeedState =
   | { v: 'Init' }
   | { v: 'Open'; cursor: PaginationCursor }
   | { v: 'Busy' }
   | { v: 'Ended' }
+
+type FeedForm = { v: 'Posts'; form: GetPosts } | { v: 'Person'; form: GetPersonDetails }
 
 const props = defineProps<{
   feedLocation: FeedLocation
@@ -53,26 +59,73 @@ async function fetchMorePosts() {
   const page_cursor = feedState.value.v == 'Open' ? feedState.value.cursor : undefined
   feedState.value = { v: 'Busy' }
 
-  const getPostsForm: GetPosts = {
-    sort: sortType.value,
-    page_cursor,
-  }
+  let form: FeedForm | undefined
+
   switch (props.feedLocation.v) {
     case 'All':
-      getPostsForm.type_ = 'All'
+      form = {
+        v: 'Posts',
+        form: {
+          type_: 'All',
+          page_cursor,
+        },
+      }
       break
     case 'Local':
-      getPostsForm.type_ = 'Local'
+      form = {
+        v: 'Posts',
+        form: {
+          type_: 'Local',
+          page_cursor,
+        },
+      }
       break
     case 'Subscribed':
-      getPostsForm.type_ = 'Subscribed'
+      form = {
+        v: 'Posts',
+        form: {
+          type_: 'Subscribed',
+          page_cursor,
+        },
+      }
       break
     case 'Community':
-      getPostsForm.community_name = props.feedLocation.identifier
+      form = {
+        v: 'Posts',
+        form: {
+          community_name: props.feedLocation.identifier,
+          page_cursor,
+        },
+      }
       break
+    case 'Person':
+      const page = Number(page_cursor)
+      form = {
+        v: 'Person',
+        form: {
+          person_id: props.feedLocation.id,
+          page: isNaN(page) ? undefined : page,
+        },
+      }
   }
 
-  const response = await client.getPosts(getPostsForm)
+  console.log('form:', form.v)
+
+  let response: GetPostsResponse | GetPersonDetailsResponse | undefined
+  let next_page: string | undefined
+
+  switch (form.v) {
+    case 'Posts':
+      response = await client.getPosts(form.form)
+      next_page = response.next_page
+      break
+    case 'Person':
+      response = await client.getPersonDetails(form.form)
+      if (response.posts.length > 0) {
+        next_page = (Number(page_cursor) + 1).toString()
+      }
+      break
+  }
 
   // fancy load effect
   for (const post of response.posts) {
@@ -80,8 +133,8 @@ async function fetchMorePosts() {
     await new Promise((resolve) => setTimeout(resolve, 40))
   }
 
-  if (response.next_page) {
-    feedState.value = { v: 'Open', cursor: response.next_page }
+  if (next_page) {
+    feedState.value = { v: 'Open', cursor: next_page }
   } else {
     feedState.value = { v: 'Ended' }
   }

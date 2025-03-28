@@ -71,7 +71,6 @@ function displayName(): string {
 
 <style>
 .community-header {
-  margin: 8px 0;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;

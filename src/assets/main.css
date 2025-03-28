@@ -16,6 +16,11 @@ main {
   outline: 1px solid var(--color-border);
 }
 
+header {
+  background: var(--color-background-soft);
+  padding: 0 8px 8px 8px;
+}
+
 #app {
   max-width: 1920px;
   margin: 0 auto;
