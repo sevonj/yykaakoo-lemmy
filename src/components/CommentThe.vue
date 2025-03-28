@@ -1,12 +1,12 @@
 <script async setup lang="ts">
 import type { LemmyHttp, GetComments, CommentView } from 'lemmy-js-client'
 import { ref, getCurrentInstance, type Ref } from 'vue'
-import VueMarkdown from 'vue-markdown-render'
 import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
 import VoteBlock from './common/VoteBlock.vue'
 import Badge from './common/BadgeThe.vue'
 import RelativeTimestamp from './textformat/RelativeTimestamp.vue'
+import MarkdownView from './markdown/MarkdownView.vue'
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
@@ -40,7 +40,7 @@ async function getReplies() {
         <Badge v-if="commentView.comment.deleted" text="Deleted by author." />
         <Badge v-if="commentView.comment.removed" text="Removed by a mod or an admin." />
         <Badge v-if="commentView.comment.distinguished" text="distinguished" />
-        <VueMarkdown :source="commentView.comment.content" class="md" />
+        <MarkdownView :source="commentView.comment.content" />
       </template>
 
       <template v-slot:below>

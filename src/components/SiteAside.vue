@@ -2,7 +2,7 @@
 import AsideHead from './AsideHead.vue'
 
 import { LemmyHttp } from 'lemmy-js-client'
-import VueMarkdown from 'vue-markdown-render'
+import MarkdownView from './markdown/MarkdownView.vue'
 
 import { getCurrentInstance } from 'vue'
 import InstanceMeta from './InstanceMeta.vue'
@@ -18,7 +18,11 @@ const site = await client.getSite()
     <AsideHead :site_view="site.site_view" />
     <InstanceMeta :site />
     <div class="sidebar">
-      <VueMarkdown :source="site.site_view.site.sidebar" class="md" />
+      <MarkdownView
+        v-if="site.site_view.site.sidebar"
+        :source="site.site_view.site.sidebar"
+        class="md"
+      />
     </div>
   </aside>
 </template>
