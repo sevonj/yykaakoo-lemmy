@@ -37,7 +37,8 @@ a {
 a.nav,
 .nav a,
 .nav label,
-.nav-router {
+.nav-router,
+.button-link {
   transition: background 0.2s;
   border-radius: 4px;
   padding: 0 8px;
@@ -47,13 +48,16 @@ a.nav,
   color: var(--color-navlink);
 
   &:hover {
+    transition: 0.2s;
     background: var(--color-navlink-hover-bg);
+    color: var(--color-metalink-hover);
   }
 }
 
 a.nav:active,
 .nav-router:active,
-.pseudo-active {
+.pseudo-active,
+.button-link:active {
   background: var(--color-navlink-active-bg) !important;
   outline-width: 1px;
   transition: 0s;
@@ -62,16 +66,7 @@ a.nav:active,
 
 .button-link {
   display: flex;
-  transition: background 0.2s;
-  border-radius: 4px;
   padding: 0 8px;
-  transition: 0 0.2s;
-  color: var(--color-text);
-
-  &:hover {
-    background: var(--color-text);
-    color: var(--color-background);
-  }
 }
 
 .nav.selected,
