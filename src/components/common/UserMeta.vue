@@ -2,8 +2,9 @@
 import type { Community, Person } from 'lemmy-js-client'
 import UserLink from '../links/UserLink.vue'
 import CommunityLink from '../links/CommunityLink.vue'
-import AvatarMicroBase from './AvatarMicroBase.vue'
+import AvatarMicro from './AvatarMicro.vue'
 import { personIdentifier } from '@/lib/actors'
+import { UserIcon } from '@heroicons/vue/24/solid'
 
 defineProps<{
   person: Person
@@ -15,7 +16,9 @@ defineProps<{
 <template>
   <div class="meta user-meta-cont">
     <RouterLink :to="personIdentifier(person)">
-      <AvatarMicroBase :src="person.avatar" />
+      <AvatarMicro :src="person.avatar">
+        <UserIcon v-if="!person.avatar" class="avatar-user-icon" />
+      </AvatarMicro>
     </RouterLink>
     <div v-if="!avatarOnly" class="user-meta-links">
       <UserLink :person />
