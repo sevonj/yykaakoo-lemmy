@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { GetPersonDetailsResponse } from 'lemmy-js-client'
-import VueMarkdown from 'vue-markdown-render'
+import MarkdownView from '../markdown/MarkdownView.vue'
 import { ref } from 'vue'
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/vue/24/solid'
 import { personIdentifier } from '@/lib/actors'
@@ -60,7 +60,7 @@ function displayName(): string {
         <ChevronUpIcon class="expand-icon" v-if="showDescription" />
         <ChevronDownIcon class="expand-icon" v-else />
       </a>
-      <VueMarkdown
+      <MarkdownView
         v-if="showDescription"
         class="md community-header-desc"
         :source="user.person_view.person.bio"

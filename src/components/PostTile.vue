@@ -4,7 +4,7 @@ import Badge from './common/BadgeThe.vue'
 import SpeechBubble from './common/SpeechBubble.vue'
 import UserMeta from './common/UserMeta.vue'
 import { nextTick, ref, type Ref } from 'vue'
-import VueMarkdown from 'vue-markdown-render'
+import MarkdownView from './markdown/MarkdownView.vue'
 import CommentsThread from './CommentsThread.vue'
 import { ChatBubbleLeftIcon } from '@heroicons/vue/24/solid'
 import EmbedLinkPreview from './links/EmbedLinkPreview.vue'
@@ -90,10 +90,10 @@ function isExternalLink(): boolean {
         <div v-if="!isOpen" class="post-preview">
           <img v-if="thumbnailUrl" :src="thumbnailUrl" />
           <div v-else-if="isExternalLink()"></div>
-          <VueMarkdown
+          <MarkdownView
             v-else-if="postView.post.body"
-            class="post-body md"
             :source="postView.post.body"
+            class="post-body"
           />
           <div v-if="externalUrl" class="post-preview-link-badge-cont">
             <MediaTypeIcon :media-type class="post-preview-link-badge" />
@@ -120,9 +120,7 @@ function isExternalLink(): boolean {
         </h1>
 
         <div v-if="isOpen">
-          <div v-if="postView.post.body">
-            <VueMarkdown class="post-body md" :source="postView.post.body" />
-          </div>
+          <MarkdownView v-if="postView.post.body" :source="postView.post.body" class="post-body" />
         </div>
       </template>
 
