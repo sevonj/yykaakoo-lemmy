@@ -9,9 +9,17 @@ import router from './router'
 
 const app = createApp(App)
 
-const instance_url = 'https://sopuli.xyz'
-app.config.globalProperties.$instance_url = instance_url
-app.config.globalProperties.$client = new LemmyHttp(instance_url)
+const instanceUrl = 'https://sopuli.xyz'
+app.config.globalProperties.$instanceUrl = instanceUrl
+app.config.globalProperties.$client = new LemmyHttp(instanceUrl)
+
+const client: LemmyHttp = app.config.globalProperties.$client
+app.config.globalProperties.$localSite = await client.getSite()
+const federatedInstances = (await client.getFederatedInstances()).federated_instances
+if (!federatedInstances) {
+  console.error('Failed to get feredatedInstances')
+}
+app.config.globalProperties.$federatedInstances = federatedInstances
 
 app.use(createPinia())
 app.use(router)

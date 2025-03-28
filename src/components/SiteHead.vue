@@ -5,7 +5,7 @@ import { getCurrentInstance } from 'vue'
 
 const instance = getCurrentInstance()
 const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
-const instance_url: string = instance?.appContext.config.globalProperties.$instance_url
+const instanceUrl: string = instance?.appContext.config.globalProperties.$instanceUrl
 
 const site = await client.getSite()
 </script>
@@ -13,7 +13,7 @@ const site = await client.getSite()
 <template>
   <header>
     <div class="subtitle-row">
-      <p>{{ instance_url }}</p>
+      <p>{{ instanceUrl }}</p>
       <p>-</p>
       <p>{{ site.site_view.site.description }}</p>
       <div class="subtitle-end"></div>
