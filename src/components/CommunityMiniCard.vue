@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { CommunityView } from 'lemmy-js-client'
-import AvatarMiniBase from './common/AvatarMiniBase.vue'
-import AvatarMiniPlaceholder from './common/AvatarMiniPlaceholder.vue'
+import AvatarMini from './common/AvatarMini.vue'
 import CommunityHandle from './textformat/CommunityHandle.vue'
 import { communityIdentifier } from '@/lib/actors'
+import { Squares2X2Icon } from '@heroicons/vue/24/outline'
 
 const props = defineProps<{
   comm: CommunityView
@@ -15,8 +15,9 @@ const identifier = communityIdentifier(props.comm.community)
 <template>
   <RouterLink :to="identifier" class="comm-minicard-cont meta-link">
     <div>
-      <AvatarMiniBase v-if="comm.community.icon" :src="comm.community.icon" />
-      <AvatarMiniPlaceholder v-else />
+      <AvatarMini :src="comm.community.icon">
+        <Squares2X2Icon />
+      </AvatarMini>
     </div>
 
     <div class="comm-minicard-details">

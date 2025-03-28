@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { GetSiteResponse } from 'lemmy-js-client'
-import UserAvatar from './UserAvatar.vue'
 import StatBadge from './common/StatBadge.vue'
 
 defineProps<{
