@@ -3,6 +3,8 @@ import { LemmyHttp, type FederatedInstances, type GetSiteResponse } from 'lemmy-
 import { getCurrentInstance } from 'vue'
 import { InformationCircleIcon } from '@heroicons/vue/24/outline'
 import InstanceMeta from '../InstanceMeta.vue'
+import ActorTitleBlockMicro from '../common/ActorTitleBlockMicro.vue'
+import ExpanderComponent from '../common/ExpanderComponent.vue'
 
 const props = defineProps<{
   id: number
@@ -33,28 +35,38 @@ const foreignSite = await getForeignSite()
 <template>
   <div v-if="foreignSite" class="instance-header">
     <div class="instance-header-titlerow">
-      <InformationCircleIcon class="expand-icon" />
-      <h3>You're visiting another instance</h3>
+      <InformationCircleIcon class="instance-header-titlerow-icon" />
+      <h4>You're now visiting another instance</h4>
     </div>
 
     <div class="instance-header-content">
-      <InstanceMeta :site="foreignSite" />
+      <ExpanderComponent>
+        <template v-slot:title>
+          <ActorTitleBlockMicro
+            :title="foreignSite.site_view.site.name"
+            :img-src="foreignSite.site_view.site.icon"
+          />
+        </template>
+        <template v-slot:content>
+          <InstanceMeta :site="foreignSite" />
+        </template>
+      </ExpanderComponent>
     </div>
   </div>
 </template>
 
 <style>
-.instance-header {
-  padding: 4px 0;
-  margin-bottom: 8px;
-}
-
 .instance-header-titlerow {
   display: flex;
+  align-items: center;
   gap: 4px;
 }
 
-.instance-header -icon {
+.instance-header-titlerow-icon {
+  height: 20px;
+}
+
+.instance-header-icon {
   max-height: 1.2em;
   margin-top: 4px;
 }
