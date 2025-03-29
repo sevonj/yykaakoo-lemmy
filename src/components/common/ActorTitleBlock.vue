@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ServerIcon } from '@heroicons/vue/24/solid'
-import AvatarMini from './AvatarMini.vue'
+import AvatarLarge from './AvatarLarge.vue'
 
 defineProps<{
   imgSrc?: string
@@ -11,9 +11,9 @@ defineProps<{
 
 <template>
   <div class="actor-title-block">
-    <AvatarMini :src="imgSrc" class="actor-title-block-avatar">
+    <AvatarLarge :src="imgSrc" class="actor-title-block-avatar">
       <ServerIcon v-if="!imgSrc" />
-    </AvatarMini>
+    </AvatarLarge>
 
     <div class="actor-title-block-title">
       <h1>{{ title }}</h1>

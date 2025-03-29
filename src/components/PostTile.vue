@@ -13,7 +13,8 @@ import VoteBlock from './common/VoteBlock.vue'
 import { optimizeThumbnailUrl } from '@/lib/url'
 import MediaTypeIcon from './icons/MediaTypeIcon.vue'
 import ExternalUrl from './textformat/ExternalUrl.vue'
-import ForeignInstanceHeader from './headers/ForeignInstanceHeader.vue'
+import ForeignInstanceExpandHeader from './headers/ForeignInstanceExpandHeader.vue'
+import CommunityExpandHeader from './headers/CommunityExpandHeader.vue'
 
 const props = defineProps<{
   postView: PostView
@@ -83,12 +84,6 @@ function isExternalLink(): boolean {
 
 <template>
   <article :class="isOpen ? 'post-expanded' : 'post-not-expanded'" ref="htmlPostArticle">
-    <div v-if="isOpen">
-      <Suspense>
-        <ForeignInstanceHeader :id="postView.community.instance_id" />
-      </Suspense>
-    </div>
-
     <SpeechBubble
       @click="openComments"
       :class="isOpen ? 'post-bubble-expanded' : 'post-bubble-not-expanded'"
@@ -153,6 +148,13 @@ function isExternalLink(): boolean {
         <Badge v-if="postView.creator_banned_from_community" text="banned" />
       </template>
     </UserMeta>
+
+    <div v-if="isOpen && showComm" class="fullpost-comminfo">
+      <Suspense>
+        <ForeignInstanceExpandHeader :id="postView.community.instance_id" />
+      </Suspense>
+      <CommunityExpandHeader :comm="postView.community" />
+    </div>
 
     <CommentsThread v-if="isOpen" :post_id="postView.post.id" />
   </article>
@@ -266,5 +268,9 @@ article {
 .full-image > * {
   max-width: 100%;
   max-height: 60vh;
+}
+
+.fullpost-comminfo {
+  margin: 8px 0;
 }
 </style>

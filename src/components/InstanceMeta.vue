@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { GetSiteResponse } from 'lemmy-js-client'
 import ActorTitleBlock from './common/ActorTitleBlock.vue'
-import ExpanderComponent from './common/ExpanderComponent.vue'
 import MarkdownView from './markdown/MarkdownView.vue'
 
 const props = defineProps<{
@@ -14,18 +13,12 @@ const subtitle = props.site.site_view.site.description ? props.site.site_view.si
 </script>
 <template>
   <div class="instance-meta">
-    <ExpanderComponent>
-      <template v-slot:title>
-        <ActorTitleBlock
-          :img-src="site.site_view.site.icon"
-          :title="site.site_view.site.name"
-          :subtitle
-        />
-      </template>
-      <template v-slot:content>
-        <MarkdownView v-if="site.site_view.site.sidebar" :source="site.site_view.site.sidebar" />
-      </template>
-    </ExpanderComponent>
+    <ActorTitleBlock
+      :img-src="site.site_view.site.icon"
+      :title="site.site_view.site.name"
+      :subtitle
+    />
+    <MarkdownView v-if="site.site_view.site.sidebar" :source="site.site_view.site.sidebar" />
 
     <!--div style="display: flex; gap: 3px; flex-wrap: wrap">
     <StatBadge class="flex-1" title="software" :text="'lemmy_' + site.version" />
