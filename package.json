@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.2.0",
-    "@types/url-join": "^4.0.3",
+    "@types/url-join": "^5.0.0",
     "lemmy-js-client": "^0.19.9",
     "pinia": "^3.0.1",
     "url-join": "^5.0.0",
