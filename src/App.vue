@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { LemmyHttp } from 'lemmy-js-client'
-import SiteNav from './components/SiteNav.vue'
+import SiteHead from './components/SiteHead.vue'
 import { getCurrentInstance, ref } from 'vue'
 
 const appInstance = getCurrentInstance()
@@ -27,13 +27,7 @@ loadSite()
 
 <template>
   <div v-if="loaded">
-    <!--Suspense>
     <SiteHead />
-  </Suspense-->
-
-    <Suspense>
-      <SiteNav />
-    </Suspense>
 
     <RouterView />
   </div>
