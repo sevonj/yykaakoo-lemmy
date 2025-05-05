@@ -50,7 +50,7 @@
     "oxlint": "^0.16.8",
     "prettier": "3.5.3",
     "typescript": "~5.8.3",
-    "vite": "^6.3.3",
+    "vite": "^6.3.5",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-vue-devtools": "^7.7.6",
     "vitest": "^3.1.3",
