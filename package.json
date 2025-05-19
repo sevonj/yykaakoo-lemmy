@@ -23,7 +23,7 @@
     "lemmy-js-client": "^0.19.9",
     "pinia": "^3.0.2",
     "url-join": "^5.0.0",
-    "vue": "^3.5.13",
+    "vue": "^3.5.14",
     "vue-markdown-render": "^2.2.1",
     "vue-router": "^4.5.1"
   },
