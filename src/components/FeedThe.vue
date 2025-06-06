@@ -9,11 +9,12 @@ import {
   type GetPersonDetailsResponse,
   type GetPosts,
   type GetPostsResponse,
+  type GetSiteResponse,
   type PaginationCursor,
   type PostView,
   type SortType,
 } from 'lemmy-js-client'
-import { getCurrentInstance, onBeforeUnmount, onMounted, ref, toRef, watch } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref, toRef, watch, type Ref } from 'vue'
 
 export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
@@ -35,8 +36,9 @@ const props = defineProps<{
   feedLocation: FeedLocation
 }>()
 
-const instance = getCurrentInstance()
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+const appInstance = getCurrentInstance()
+const client: LemmyHttp = appInstance?.appContext.config.globalProperties.$client
+const site: Ref<GetSiteResponse> = appInstance?.appContext.config.globalProperties.$localSite
 
 const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
@@ -199,7 +201,7 @@ fetchMorePosts()
 
 <template>
   <main>
-    <div v-if="feedLocation.v == 'Subscribed'">
+    <div v-if="feedLocation.v == 'Subscribed' && !site.my_user">
       <p>You are not logged in.</p>
     </div>
     <div v-else>
