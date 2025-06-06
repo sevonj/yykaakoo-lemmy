@@ -57,11 +57,21 @@ async function openComments(): Promise<void> {
 function closeComments(): void {
   isOpen.value = false
 
-  nextTick(scrollToSelf)
+  nextTick(scrollToSelfUpwards)
 }
 
 function scrollToSelf(): void {
   htmlPostArticle.value?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
+}
+
+function scrollToSelfUpwards(): void {
+  if (!htmlPostArticle.value || htmlPostArticle.value.getBoundingClientRect().top > 0) {
+    return
+  }
+  htmlPostArticle.value.scrollIntoView({
     behavior: 'smooth',
     block: 'start',
   })
