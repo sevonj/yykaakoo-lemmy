@@ -3,17 +3,20 @@ import CommunityMiniCard from './CommunityMiniCard.vue'
 
 import {
   type CommunityView,
+  type GetSiteResponse,
   LemmyHttp,
   type ListCommunities,
   type ListingType,
   type Search,
 } from 'lemmy-js-client'
-import { getCurrentInstance, onBeforeUnmount, onMounted, ref } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref, type Ref } from 'vue'
 
 export type CommunityLocation = 'All' | 'Local' | 'Subscribed' | 'ModeratorView' | 'Search'
 
-const instance = getCurrentInstance()
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
+const appInstance = getCurrentInstance()
+const client: LemmyHttp = appInstance?.appContext.config.globalProperties.$client
+const site: Ref<GetSiteResponse> = appInstance?.appContext.config.globalProperties.$localSite
+
 const location = ref<CommunityLocation>('All')
 let page = 0
 const limit = 50
@@ -151,7 +154,7 @@ fetchCommunities()
       </form>
     </div>
 
-    <div v-if="location == 'Subscribed' || location == 'ModeratorView'">
+    <div v-if="(location == 'Subscribed' || location == 'ModeratorView') && !site.my_user">
       <p>You are not logged in.</p>
     </div>
     <div class="comm-browser-grid" v-else>
