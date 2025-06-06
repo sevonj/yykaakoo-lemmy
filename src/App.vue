@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { LemmyHttp } from 'lemmy-js-client'
-import SiteNav from './components/SiteNav.vue'
+import SiteHead from './components/SiteHead.vue'
 import { getCurrentInstance, ref } from 'vue'
 
 const appInstance = getCurrentInstance()
@@ -12,7 +12,7 @@ async function loadSite(): Promise<void> {
   if (!appInstance) {
     return
   }
-  appInstance.appContext.config.globalProperties.$localSite = await client.getSite()
+  appInstance.appContext.config.globalProperties.$localSite.value = await client.getSite()
 
   const federatedInstances = (await client.getFederatedInstances()).federated_instances
   if (!federatedInstances) {
@@ -27,13 +27,7 @@ loadSite()
 
 <template>
   <div v-if="loaded">
-    <!--Suspense>
     <SiteHead />
-  </Suspense-->
-
-    <Suspense>
-      <SiteNav />
-    </Suspense>
 
     <RouterView />
   </div>

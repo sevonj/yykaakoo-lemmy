@@ -1,77 +1,49 @@
-<script async setup lang="ts">
-import { LemmyHttp } from 'lemmy-js-client'
+<script setup lang="ts">
+import { type GetSiteResponse } from 'lemmy-js-client'
 
-import { getCurrentInstance } from 'vue'
+import { getCurrentInstance, type Ref } from 'vue'
+import ProfileMenu from './common/ProfileMenu.vue'
+import SiteNav from './SiteNav.vue'
 
 const instance = getCurrentInstance()
-const client: LemmyHttp = instance?.appContext.config.globalProperties.$client
-const instanceUrl: string = instance?.appContext.config.globalProperties.$instanceUrl
-
-const site = await client.getSite()
+const site: Ref<GetSiteResponse> = instance?.appContext.config.globalProperties.$localSite
 </script>
 
 <template>
   <header>
-    <div class="subtitle-row">
-      <p>{{ instanceUrl }}</p>
-      <p>-</p>
-      <p>{{ site.site_view.site.description }}</p>
-      <div class="subtitle-end"></div>
-    </div>
-    <div v-if="site.taglines.length > 0" class="subtitle-row">
-      <p>{{ site.taglines[Math.floor(Math.random() * site.taglines.length)].content }}</p>
-    </div>
+    <RouterLink class="title-row" to="/">
+      <img v-if="site.site_view.site.icon" class="site-logo" :src="site.site_view.site.icon" />
+      <h1>{{ site.site_view.site.name }}</h1>
+    </RouterLink>
+    <SiteNav />
+    <div class="flex-1"></div>
+    <ProfileMenu />
   </header>
 </template>
 
 <style scoped>
 header {
-  padding: 16px 0;
-  background: orange;
-  background: url(../assets/waves.svg);
-  background-size: auto 128px;
-  height: 128px;
-  min-height: 128px;
-  flex-grow: 0;
-  flex-shrink: 0;
+  padding-bottom: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: end;
+  align-items: end;
+  gap: 8px;
 }
 
-.subtitle-row {
-  margin-top: 2px;
-  padding-left: 8px;
-  color: #322918;
+.title-row {
   display: flex;
   align-items: center;
-  font-family: monospace;
-  font-size: 0.75em;
-  gap: 1em;
-}
-
-.subtitle-separator {
-  border-left: 1em solid orange;
-  border-top: 1em solid transparent;
-  background: black;
-  margin-right: 1em;
-}
-
-.subtitle-end {
-  border-left: 1em solid orange;
-  border-top: 1em solid transparent;
-  background: black;
-  flex-grow: 1;
+  gap: 8px;
 }
 
 .site-logo {
-  height: 32px;
+  height: 36px;
 }
 
 h1 {
   font-weight: 900;
-  font-variant: small-caps;
-  font-size: 2em;
+  font-size: 2.2em;
   color: white;
+  max-width: 24ch;
+  letter-spacing: -2px;
 }
 </style>
