@@ -15,7 +15,22 @@ A bad frontend for lemmy.
 
 [➜ Project management](https://github.com/users/sevonj/projects/17)
 
-Vue 3 template readme:
+## Building
+
+- Setup: `npm install`
+- Live test server: `npm run dev`
+- Build: `npm run build`
+
+## Continuous Integration
+
+Pull requests are gatekept by [this workflow.](.github/workflows/ci.yml) It will check if the code
+
+- builds (run `npm run build`)
+- has linter warnings (run `npm run lint`)
+- is formatted (run `npm run format`)
+
+
+<!-- Vue 3 default readme
 
 This template should help get you started developing with Vue 3 in Vite.
 
@@ -80,3 +95,4 @@ npm run test:e2e -- --debug
 ```sh
 npm run lint
 ```
+-->
