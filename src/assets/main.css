@@ -96,6 +96,42 @@ h1 {
   color: var(--color-heading);
 }
 
+.xxsmall {
+  font-size: xx-small;
+}
+
+.xsmall {
+  font-size: x-small;
+}
+
+.smaller {
+  font-size: smaller;
+}
+
+.small {
+  font-size: small;
+}
+
+.medium {
+  font-size: medium;
+}
+
+.large {
+  font-size: large;
+}
+
+.larger {
+  font-size: larger;
+}
+
+.xlarge {
+  font-size: x-large;
+}
+
+.xxlarge {
+  font-size: xx-large;
+}
+
 .meta {
   font-size: small;
   color: var(--color-meta);
