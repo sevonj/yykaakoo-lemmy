@@ -41,6 +41,11 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
     {
+      path: '/zoo',
+      name: 'zoo',
+      component: () => import('../views/ZooView.vue'),
+    },
+    {
       path: '/@:personIdentifier',
       name: 'user',
       component: () => import('../views/UserView.vue'),
