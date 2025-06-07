@@ -8,6 +8,7 @@ type Tab = {
   query?: { key: string; val: string; isDefault?: boolean }
   callback?: () => void
   highlight?: boolean
+  forceSelect?: boolean
 }
 
 const route = useRoute()
@@ -19,6 +20,10 @@ defineProps<{
 }>()
 
 function isSelected(tab: Tab): boolean {
+  if (tab.forceSelect != undefined) {
+    return tab.forceSelect
+  }
+
   if (tab.routeName) {
     if (Array.isArray(tab.routeName)) {
       if (route.name && !tab.routeName.includes(route.name.toString())) {
@@ -73,14 +78,8 @@ function select(tab: Tab): void {
   <div>
     <div class="tabcont">
       <p v-if="title" class="title">{{ title }}</p>
-      <a
-        v-for="tab in tabs"
-        v-bind:key="tab.label"
-        @click="select(tab)"
-        class="nav"
-        :class="cssClasses(tab)"
-        >{{ tab.label }}</a
-      >
+      <a v-for="tab in tabs" v-bind:key="tab.label" @click="select(tab)" class="nav" :class="cssClasses(tab)">{{
+        tab.label }}</a>
     </div>
   </div>
 </template>
