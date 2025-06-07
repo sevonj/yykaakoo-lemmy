@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FeedSortBar from '@/components/FeedSortBar.vue'
+import QueryTabs from '@/components/QueryTabs.vue'
 import PostTile from '@/components/PostTile.vue'
 
 import {
@@ -14,7 +14,8 @@ import {
   type PostView,
   type SortType,
 } from 'lemmy-js-client'
-import { getCurrentInstance, onBeforeUnmount, onMounted, ref, toRef, watch, type Ref } from 'vue'
+import { getCurrentInstance, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 export type FeedLayoutType = 'Grid' | 'List'
 export type FeedLocation =
@@ -39,8 +40,8 @@ const props = defineProps<{
 const appInstance = getCurrentInstance()
 const client: LemmyHttp = appInstance?.appContext.config.globalProperties.$client
 const site: Ref<GetSiteResponse> = appInstance?.appContext.config.globalProperties.$localSite
+const route = useRoute()
 
-const sortType = ref<SortType>('Active')
 const feedLayout = ref<FeedLayoutType>('Grid')
 const feedState = ref<FeedState>({ v: 'Init' })
 
@@ -49,9 +50,50 @@ const postRefs = ref<InstanceType<typeof PostTile>[]>([])
 const expandedPostId = ref<number | null>()
 const morePostsDetector = ref<HTMLElement | null>(null)
 
-function setSort(payload: { sortType: SortType }) {
-  sortType.value = payload.sortType
-  resetFeed()
+function sortType(): SortType {
+  const sort = route.query['sort']?.toString()
+  switch (sort) {
+    case 'Active':
+      return sort
+    case 'Hot':
+      return sort
+    case 'New':
+      return sort
+    case 'Old':
+      return sort
+    case 'TopDay':
+      return sort
+    case 'TopWeek':
+      return sort
+    case 'TopMonth':
+      return sort
+    case 'TopYear':
+      return sort
+    case 'TopAll':
+      return sort
+    case 'MostComments':
+      return sort
+    case 'NewComments':
+      return sort
+    case 'TopHour':
+      return sort
+    case 'TopSixHour':
+      return sort
+    case 'TopTwelveHour':
+      return sort
+    case 'TopThreeMonths':
+      return sort
+    case 'TopSixMonths':
+      return sort
+    case 'TopNineMonths':
+      return sort
+    case 'Controversial':
+      return sort
+    case 'Scaled':
+      return sort
+    default:
+      return 'New'
+  }
 }
 
 async function fetchMorePosts() {
@@ -62,6 +104,7 @@ async function fetchMorePosts() {
   feedState.value = { v: 'Busy' }
 
   let form: FeedForm | undefined
+  const sort = sortType()
 
   switch (props.feedLocation.v) {
     case 'All':
@@ -69,6 +112,7 @@ async function fetchMorePosts() {
         v: 'Posts',
         form: {
           type_: 'All',
+          sort,
           page_cursor,
         },
       }
@@ -78,6 +122,7 @@ async function fetchMorePosts() {
         v: 'Posts',
         form: {
           type_: 'Local',
+          sort,
           page_cursor,
         },
       }
@@ -87,6 +132,7 @@ async function fetchMorePosts() {
         v: 'Posts',
         form: {
           type_: 'Subscribed',
+          sort,
           page_cursor,
         },
       }
@@ -96,6 +142,7 @@ async function fetchMorePosts() {
         v: 'Posts',
         form: {
           community_name: props.feedLocation.identifier,
+          sort,
           page_cursor,
         },
       }
@@ -106,6 +153,7 @@ async function fetchMorePosts() {
         v: 'Person',
         form: {
           person_id: props.feedLocation.id,
+          sort,
           page: isNaN(page) ? undefined : page,
         },
       }
@@ -196,6 +244,11 @@ watch(
   () => resetFeed(),
 )
 
+watch(
+  () => route.query['sort'],
+  () => resetFeed(),
+)
+
 fetchMorePosts()
 </script>
 
@@ -205,7 +258,12 @@ fetchMorePosts()
       <p>You are not logged in.</p>
     </div>
     <div v-else>
-      <FeedSortBar :sort-type="toRef(sortType)" @changed="setSort" />
+      <QueryTabs
+        title="Sort:"
+        query_key="sort"
+        :values="['Active', 'Hot', 'New', 'Scaled', 'NewComments', 'TopDay']"
+        default="New"
+      />
 
       <div v-if="expandedPostId" :key="expandedPostId" class="thread-close-elevator-cont">
         <div class="thread-close-elevator-subcont">
