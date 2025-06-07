@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import QueryTabs from '@/components/QueryTabs.vue'
+import TabSelector from '@/components/TabSelector.vue'
 import PostTile from '@/components/PostTile.vue'
 
 import {
@@ -258,11 +258,16 @@ fetchMorePosts()
       <p>You are not logged in.</p>
     </div>
     <div v-else>
-      <QueryTabs
+      <TabSelector
         title="Sort:"
-        query_key="sort"
-        :values="['Active', 'Hot', 'New', 'Scaled', 'NewComments', 'TopDay']"
-        default="New"
+        :tabs="[
+          { query: { key: 'sort', val: 'Active' }, label: 'Active' },
+          { query: { key: 'sort', val: 'Hot' }, label: 'Hot' },
+          { query: { key: 'sort', val: 'New', isDefault: true }, label: 'New' },
+          { query: { key: 'sort', val: 'Scaled' }, label: 'Scaled' },
+          { query: { key: 'sort', val: 'NewComments' }, label: 'New Comments' },
+          { query: { key: 'sort', val: 'TopDay' }, label: 'Top Day' },
+        ]"
       />
 
       <div v-if="expandedPostId" :key="expandedPostId" class="thread-close-elevator-cont">
