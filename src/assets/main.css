@@ -81,7 +81,16 @@ a.nav:active,
 
 .flex-row {
   display: flex;
-  gap: 3px;
+  flex-direction: row;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  align-items: center;
 }
 
 .flex-1 {
@@ -196,7 +205,7 @@ a .avatar:hover {
   outline: 4px solid #fff4;
 }
 
-.avatar > img {
+.avatar>img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -249,12 +258,12 @@ input.no-decor {
   height: auto;
 }
 
-input + label {
+input+label {
   color: var(--color-navlink);
   cursor: pointer;
 }
 
-input:checked + label {
+input:checked+label {
   font-weight: bold;
   color: var(--color-navlink-active);
 }
@@ -264,6 +273,5 @@ input:checked + label {
 }
 
 @media (min-width: 1024px) {
-  #app {
-  }
+  #app {}
 }
