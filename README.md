@@ -3,9 +3,15 @@
 ___
 # yykaakoo-lemmy
 
-A bad frontend for lemmy. 
+A bad frontend for lemmy.
 
-![image](https://github.com/user-attachments/assets/f3da7d63-fd83-4901-9db9-0c7b287e4385)
+This experiment is unfinished and abandoned.
+
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/df3291ea-e2e7-4741-8e5d-68d36ef7defb" />
+
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/90224626-0cd9-48eb-89c5-d343608a6ebe" />
+
+<img width="1277" height="425" alt="image" src="https://github.com/user-attachments/assets/8943fcf8-4a6d-4010-b6c4-b2054e9edf3a" />
 
 ## Acknowledgements
 
